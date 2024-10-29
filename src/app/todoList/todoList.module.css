@@ -1,0 +1,42 @@
+/* todoList.module.css */
+
+.todoListContainer {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.todoListContainerh1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.todoTable {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* Space between columns */
+}
+
+.column {
+    flex: 1; /* Each column takes equal space */
+    background-color: #f9f9f9; /* Light background for columns */
+    border: 1px solid #ccc; /* Border around columns */
+    border-radius: 8px; /* Rounded corners */
+    padding: 15px; /* Padding inside columns */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.columnH2 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #333; /* Darker text color for headers */
+}
+
+.columnH2Ul {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0; /* Remove padding */
+}
+
+.columnH2Li {
+    margin-bottom: 10px; /* Space between Todo items */
+}

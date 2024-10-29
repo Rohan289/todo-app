@@ -1,0 +1,27 @@
+.todoCard {
+    display: grid;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px; /* Optional: adds rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+    width: auto; /* Allow the width to be based on content */
+    max-width: 300px; /* Optional: set a maximum width */
+ }
+ .todoCard:hover {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 1)); /* Fading effect on hover */
+}
+ .todoHeader {
+     display: flex;
+     flex-direction: column;
+     align-items: flex-start;
+     width: 100%;
+ }
+ 
+ .todoHeaderh1 {
+     margin: 0;
+     font-size: 1rem;
+     color: black;
+ }
+ 
+ 
