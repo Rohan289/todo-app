@@ -1,5 +1,5 @@
 
-import { TodoStatus, TodoType } from "../ui/todoCard/TodoCard.model";
+import { TodoStatus, TodoType } from "../todoCard/TodoCard.model";
 
 // types.ts
 export interface TodoColumnProps {
