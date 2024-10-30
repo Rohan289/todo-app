@@ -87,8 +87,17 @@ const TodoListPage: React.FC = () => {
     const moveTodo = (sourceIndex: number, destIndex: number, sourceColumn: keyof typeof todos, destColumn: keyof typeof todos) => {
         const sourceTodos = Array.from(todos[sourceColumn]);
         const destTodos = Array.from(todos[destColumn]);
-        const [movedTodo] = sourceTodos.splice(sourceIndex, 1);
-        destTodos.splice(destIndex, 0, movedTodo);
+    
+        // If moving within the same column
+        if (sourceColumn === destColumn) {
+            const [movedTodo] = sourceTodos.splice(sourceIndex, 1);
+            sourceTodos.splice(destIndex, 0, movedTodo);
+        } else {
+            // Moving between columns
+            const [movedTodo] = sourceTodos.splice(sourceIndex, 1);
+            destTodos.splice(destIndex, 0, movedTodo);
+        }
+    
         setTodos((prev) => ({
             ...prev,
             [sourceColumn]: sourceTodos,
