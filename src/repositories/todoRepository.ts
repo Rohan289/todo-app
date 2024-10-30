@@ -1,6 +1,6 @@
 import { AppDataSource } from "@/typeorm/datasource";
-import { Todo } from '@/app/models/Todo';
-import { User } from "../models/User";
+import { Todo } from "@/models/Todo";
+import { User } from "@/models/User";
 
 const todoRepository = AppDataSource.getRepository(Todo);
 const userRepository = AppDataSource.getRepository(User);

@@ -1,7 +1,7 @@
 // models/User.ts
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 import { User } from './User';
-import { TodoStatus } from '../ui/todoCard/TodoCard.model';
+import { TodoStatus } from '../app/ui/todoCard/TodoCard.model';
 
 @Entity('todos')
 export class Todo {

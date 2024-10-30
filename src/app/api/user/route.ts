@@ -1,4 +1,4 @@
-import { UserRepository } from "@/app/repositories/userRepository";
+import { UserRepository } from "@/repositories/userRepository";
 import { initializeDb } from "@/typeorm/datasource";
 import { NextRequest, NextResponse } from "next/server";
 

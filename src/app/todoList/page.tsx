@@ -7,6 +7,7 @@ import TodoCard from "../ui/todoCard/TodoCard"; // Assuming you have a TodoCard 
 import styles from './todoList.module.css';
 import { TodoCardComponentProps, TodoColumnProps } from './todoList.types';
 import { TodoStatus, TodoType } from '../ui/todoCard/TodoCard.model';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const ItemType = {
     TODO: 'TODO',
@@ -22,7 +23,7 @@ const TodoCardComponent: React.FC<TodoCardComponentProps> = ({ todo, index }) =>
     });
 
     return (
-        <div ref={drag as unknown as React.RefObject<HTMLDivElement>} style={{ opacity: isDragging ? 0.5 : 1 }}>
+        <div ref={drag as unknown as React.RefObject<HTMLDivElement>} style={{ margin : '10px', opacity: isDragging ? 0.5 : 1 }}>
             <TodoCard {...todo} />
         </div>
     );
@@ -43,8 +44,8 @@ const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, moveTodo }) => {
         <div ref={drop as unknown as React.RefObject<HTMLDivElement>} className={styles.column}>
             <h2>{status.charAt(0).toUpperCase() + status.slice(1)}</h2>
             <ul>
-                {todos.map((todo, index) => (
-                    <TodoCardComponent key={todo.id} index={index} todo={todo} />
+                {todos.map((todo) => (
+                    <TodoCardComponent key={todo.id} index={todo.id} todo={todo} />
                 ))}
             </ul>
         </div>
@@ -58,6 +59,8 @@ const TodoListPage: React.FC = () => {
     }>({
         [TodoStatus.OPEN]: [],[TodoStatus.IN_PROGRESS]: [],[TodoStatus.DONE]: [ ],
     });
+
+    const queryClient = new QueryClient(); // Initialize QueryClient here
 
     useEffect(() => {
       async function fetchData() { 
@@ -106,7 +109,9 @@ const TodoListPage: React.FC = () => {
     };
 
     return (
+        
         <DndProvider backend={HTML5Backend}>
+            <QueryClientProvider client={queryClient}>
             <div className={styles.todoListContainer}>
                 <h1>Your Todo List:</h1>
                 <div className={styles.todoTable}>
@@ -127,6 +132,7 @@ const TodoListPage: React.FC = () => {
                     })}
                 </div>
             </div>
+            </QueryClientProvider>
         </DndProvider>
     );
 };

@@ -3,7 +3,7 @@
 //     export async function PATCH(req : NextRequest,)
 
 
-import { TodoRepository } from '@/app/repositories/todoRepository';
+import { TodoRepository } from '@/repositories/todoRepository';
 import { initializeDb } from '@/typeorm/datasource';
 import { NextRequest, NextResponse } from 'next/server';
 
