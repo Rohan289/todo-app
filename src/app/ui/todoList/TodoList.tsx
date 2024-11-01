@@ -13,121 +13,106 @@ const ItemType = {
     TODO: 'TODO',
 };
 
-const TodoCardComponent: React.FC<TodoCardComponentProps> = ({ todo, index }) => {
+const TodoCardComponent: React.FC<TodoCardComponentProps> = ({ todo, key,index }) => {
     const [{ isDragging }, drag] = useDrag({
         type: ItemType.TODO,
-        item: { index },
+        item: { todo : todo },
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
         }),
     });
 
     return (
-        <div ref={drag as unknown as React.RefObject<HTMLDivElement>} style={{ margin : '10px', opacity: isDragging ? 0.5 : 1 }}>
+        <div ref={drag as unknown as React.RefObject<HTMLDivElement>} style={{ margin: '10px', opacity: isDragging ? 0.5 : 1 }}>
             <TodoCard {...todo} />
         </div>
     );
 };
 
-const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, moveTodo }) => {
+const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status }) => {
     const [, drop] = useDrop({
         accept: ItemType.TODO,
-        hover(item: { index: number }) {
-            const dropIndex = todos.length;
-            if (item.index !== dropIndex) {
-                moveTodo(item.index, dropIndex);
-                item.index = dropIndex;
+        drop(item: { todo: TodoType }) {
+            const {status : todoStatus} = item.todo as TodoType;
+            if(todoStatus !== status) {
+                moveTodo(item.todo, status);
             }
-        },    });
+        },
+    });
+
+    const moveTodo = (todo: TodoType, updatedStatus: TodoStatus) => {
+        console.log("todo",todo);
+         console.log("updatedStatus",updatedStatus);
+        //call the mutation
+    };
 
     return (
         <div ref={drop as unknown as React.RefObject<HTMLDivElement>} className={styles.column}>
             <h2>{status.charAt(0).toUpperCase() + status.slice(1)}</h2>
             <ul>
-                {todos.map((todo) => (
-                    <TodoCardComponent key={todo.id} index={todo.id} todo={todo} />
+                {todos.map((todo, index) => (
+                    <TodoCardComponent key={todo.id} index={index} todo={todo} />
                 ))}
             </ul>
         </div>
     );
 };
+
 const TodoList: React.FC = () => {
     const [todos, setTodos] = useState<{
         [TodoStatus.OPEN]: TodoType[];
         [TodoStatus.IN_PROGRESS]: TodoType[];
         [TodoStatus.DONE]: TodoType[];
     }>({
-        [TodoStatus.OPEN]: [],[TodoStatus.IN_PROGRESS]: [],[TodoStatus.DONE]: [ ],
+        [TodoStatus.OPEN]: [],
+        [TodoStatus.IN_PROGRESS]: [],
+        [TodoStatus.DONE]: [],
     });
 
-    const queryClient = new QueryClient(); // Initialize QueryClient here
-
-    const {isFetching : isTodoFetching, data : todoData , refetch : refetchTodo} = useTodos();
+    const queryClient = new QueryClient();
+    const { isFetching: isTodoFetching, data: todoData, refetch: refetchTodo } = useTodos();
 
     useEffect(() => {
-      async function fetchData() { 
-        if(todoData) {
-        const resultTodo = (todoData as []).reduce((acc: {
-          [TodoStatus.OPEN]: TodoType[];
-          [TodoStatus.IN_PROGRESS]: TodoType[];
-          [TodoStatus.DONE]: TodoType[];
-      }, todo: TodoType) => {
-            acc[todo.status] = acc[todo.status] || [];
-            acc[todo.status].push(todo);
-            return acc;
-        }, { [TodoStatus.OPEN]: [],[TodoStatus.IN_PROGRESS]: [],[TodoStatus.DONE]: [ ]});
-        setTodos(resultTodo);
-      }
-    }
-      fetchData();
+        async function fetchData() {
+            if (todoData) {
+                const resultTodo = (todoData as []).reduce((acc: {
+                    [TodoStatus.OPEN]: TodoType[];
+                    [TodoStatus.IN_PROGRESS]: TodoType[];
+                    [TodoStatus.DONE]: TodoType[];
+                }, todo: TodoType) => {
+                    acc[todo.status] = acc[todo.status] || [];
+                    acc[todo.status].push(todo);
+                    return acc;
+                }, { [TodoStatus.OPEN]: [], [TodoStatus.IN_PROGRESS]: [], [TodoStatus.DONE]: [] });
 
-    },[todoData])
-
-    const moveTodo = (sourceIndex: number, destIndex: number, sourceColumn: keyof typeof todos, destColumn: keyof typeof todos) => {
-        const sourceTodos = Array.from(todos[sourceColumn]);
-        const destTodos = Array.from(todos[destColumn]);
-    
-        // If moving within the same column
-        if (sourceColumn === destColumn) {
-            const [movedTodo] = sourceTodos.splice(sourceIndex, 1);
-            sourceTodos.splice(destIndex, 0, movedTodo);
-        } else {
-            // Moving between columns
-            const [movedTodo] = sourceTodos.splice(sourceIndex, 1);
-            destTodos.splice(destIndex, 0, movedTodo);
+                setTodos(resultTodo);
+            }
         }
-    
-        setTodos((prev) => ({
-            ...prev,
-            [sourceColumn]: sourceTodos,
-            [destColumn]: destTodos,
-        }));
-    };
+        fetchData();
+    }, [todoData]);
+
+
 
     return (
-        
         <DndProvider backend={HTML5Backend}>
             <QueryClientProvider client={queryClient}>
-            <div className={styles.todoListContainer}>
-                <h1>Your Todo List:</h1>
-                <div className={styles.todoTable}>
-                    {Object.keys(todos).map((status) => {
-                      if (!todos[status as keyof typeof todos].length) {
-                        return null;
-                      }
-                      return (
-                        (
-                          <TodoColumn
-                              key={status}
-                              todos={todos[status as keyof typeof todos]} // Type assertion
-                              status={todos[status as keyof typeof todos][0].status as TodoStatus} // Type assertion
-                              moveTodo={(sourceIndex, destIndex) => moveTodo(sourceIndex, destIndex, status as keyof typeof todos, status as keyof typeof todos)}
-                          />
-                      )
-                      )
-                    })}
+                <div className={styles.todoListContainer}>
+                    <h1>Your Todo List:</h1>
+                    <div className={styles.todoTable}>
+                        {Object.keys(todos).map((status) => {
+                            if (!todos[status as keyof typeof todos].length) {
+                                return null;
+                            }
+                            return (
+                                <TodoColumn
+                                    key={status}
+                                    todos={todos[status as keyof typeof todos]}
+                                    status={status as TodoStatus}
+                                />
+                            );
+                        })}
+                    </div>
                 </div>
-            </div>
             </QueryClientProvider>
         </DndProvider>
     );
