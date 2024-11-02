@@ -1,6 +1,6 @@
 // typeorm.ts
-import { Todo } from '@/app/models/Todo';
-import { User } from '@/app/models/User';
+import { Todo } from '@/models/Todo';
+import { User } from '@/models/User';
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 
