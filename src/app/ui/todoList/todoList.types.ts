@@ -5,6 +5,7 @@ import { TodoStatus, TodoType } from "../todoCard/TodoCard.model";
 export interface TodoColumnProps {
     todos: TodoType[];
     status: TodoStatus;
+    refetchTodo : () => void;
 }
 
 export interface TodoCardComponentProps {

@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query';
 const fetchTodos: () => Promise<unknown> = async () => {
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-    console.log('enter',baseUrl);
     const response = await fetch(`${baseUrl}/api/todo`, {
         cache: 'no-store',
     });

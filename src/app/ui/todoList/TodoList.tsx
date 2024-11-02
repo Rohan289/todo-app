@@ -4,10 +4,11 @@ import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styles from './todoList.module.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useTodos } from '@/hooks/rest-api';
 import { TodoCardComponentProps, TodoColumnProps } from '@/app/ui/todoList/todoList.types';
 import TodoCard from '../todoCard/TodoCard';
 import { TodoStatus, TodoType } from '../todoCard/TodoCard.model';
+import { useTodos } from '@/hooks/rest-api.query';
+import { useUpdateTodo } from '@/hooks/rest-api.mutation';
 
 const ItemType = {
     TODO: 'TODO',
@@ -29,7 +30,7 @@ const TodoCardComponent: React.FC<TodoCardComponentProps> = ({ todo, key,index }
     );
 };
 
-const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status }) => {
+const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, refetchTodo }) => {
     const [, drop] = useDrop({
         accept: ItemType.TODO,
         drop(item: { todo: TodoType }) {
@@ -40,10 +41,26 @@ const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status }) => {
         },
     });
 
+    const { mutate: updateTodo, isLoading, isError } = useUpdateTodo();
+
+    const handleUpdateTodo = (todoId: number, newStatus: TodoStatus) => {
+        updateTodo({ id: todoId, status: newStatus }, {
+            onSuccess: () => {
+                // Handle success (e.g., show a success message)
+                console.log('Todo updated successfully');
+                refetchTodo();
+            },
+            onError: (error) => {
+                // Handle error
+                console.error('Error updating todo:', error);
+            },
+        });
+    };
+
+
     const moveTodo = (todo: TodoType, updatedStatus: TodoStatus) => {
-        console.log("todo",todo);
-         console.log("updatedStatus",updatedStatus);
-        //call the mutation
+        const {id}  =todo;
+        handleUpdateTodo(id,updatedStatus);         
     };
 
     return (
@@ -91,6 +108,10 @@ const TodoList: React.FC = () => {
         fetchData();
     }, [todoData]);
 
+    const handleRefetchTodo = () => {
+        refetchTodo();
+    }
+
 
 
     return (
@@ -105,6 +126,7 @@ const TodoList: React.FC = () => {
                             }
                             return (
                                 <TodoColumn
+                                    refetchTodo={handleRefetchTodo}
                                     key={status}
                                     todos={todos[status as keyof typeof todos]}
                                     status={status as TodoStatus}
