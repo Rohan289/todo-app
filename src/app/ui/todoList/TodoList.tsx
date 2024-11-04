@@ -119,8 +119,6 @@ const TodoList: React.FC = () => {
     return (
         <DndProvider backend={HTML5Backend}>
             <QueryClientProvider client={queryClient}>
-                <div className={styles.todoListContainer}>
-                    <h1>Your Todo List:</h1>
                     <div className={styles.todoTable}>
                         {Object.keys(todos).map((status) => {
                             return (
@@ -133,7 +131,7 @@ const TodoList: React.FC = () => {
                             );
                         })}
                     </div>
-                </div>
+               
             </QueryClientProvider>
         </DndProvider>
     );
