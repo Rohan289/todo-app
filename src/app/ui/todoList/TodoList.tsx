@@ -9,12 +9,13 @@ import TodoCard from '../todoCard/TodoCard';
 import { TodoStatus, TodoType } from '../todoCard/TodoCard.model';
 import { useTodos } from '@/hooks/rest-api.query';
 import { useUpdateTodo } from '@/hooks/rest-api.mutation';
+import Loader from '@/app/common/loader/Loader';
 
 const ItemType = {
     TODO: 'TODO',
 };
 
-const TodoCardComponent: React.FC<TodoCardComponentProps> = ({ todo, key,index }) => {
+const TodoCardComponent: React.FC<TodoCardComponentProps> = ({ todo}) => {
     const [{ isDragging }, drag] = useDrag({
         type: ItemType.TODO,
         item: { todo : todo },
@@ -41,13 +42,12 @@ const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, refetchTodo }) =
         },
     });
 
-    const { mutate: updateTodo, isLoading, isError } = useUpdateTodo();
+    const { mutate: updateTodo } = useUpdateTodo();
 
     const handleUpdateTodo = (todoId: number, newStatus: TodoStatus) => {
         updateTodo({ id: todoId, status: newStatus }, {
             onSuccess: () => {
                 // Handle success (e.g., show a success message)
-                console.log('Todo updated successfully');
                 refetchTodo();
             },
             onError: (error) => {
@@ -63,6 +63,7 @@ const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, refetchTodo }) =
         handleUpdateTodo(id,updatedStatus);         
     };
 
+
     return (
         <div ref={drop as unknown as React.RefObject<HTMLDivElement>} className={styles.column}>
             <h2>{status.charAt(0).toUpperCase() + status.slice(1)}</h2>
@@ -74,7 +75,6 @@ const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, refetchTodo }) =
         </div>
     );
 };
-
 const TodoList: React.FC = () => {
     const [todos, setTodos] = useState<{
         [TodoStatus.OPEN]: TodoType[];
@@ -112,6 +112,8 @@ const TodoList: React.FC = () => {
         refetchTodo();
     }
 
+    if(isTodoFetching) return <Loader />
+
 
 
     return (
@@ -121,9 +123,6 @@ const TodoList: React.FC = () => {
                     <h1>Your Todo List:</h1>
                     <div className={styles.todoTable}>
                         {Object.keys(todos).map((status) => {
-                            if (!todos[status as keyof typeof todos].length) {
-                                return null;
-                            }
                             return (
                                 <TodoColumn
                                     refetchTodo={handleRefetchTodo}
