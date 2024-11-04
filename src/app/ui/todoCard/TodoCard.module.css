@@ -1,27 +1,119 @@
+/* TodoCard.module.css */
 .todoCard {
-    display: grid;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px; /* Optional: adds rounded corners */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
-    transition: background-color 0.3s ease; /* Smooth transition for background color */
-    width: auto; /* Allow the width to be based on content */
-    max-width: 300px; /* Optional: set a maximum width */
- }
- .todoCard:hover {
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 1)); /* Fading effect on hover */
+    border: 1px solid #e1e4e8;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    margin: 8px;
+    transition: box-shadow 0.2s ease;
+    cursor: pointer;
 }
- .todoHeader {
-     display: flex;
-     flex-direction: column;
-     align-items: flex-start;
-     width: 100%;
- }
- 
- .todoHeaderh1 {
-     margin: 0;
-     font-size: 1rem;
-     color: black;
- }
- 
- 
+
+.todoCard:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.todoHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.todoHeaderh1 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #172b4d; /* Darker color for title */
+}
+
+.priorityIndicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: transparent; /* Default background */
+    margin-left: 8px;
+}
+
+.priorityIndicator[data-priority="high"] {
+    background-color: #d50000; /* Red for high priority */
+}
+
+.priorityIndicator[data-priority="medium"] {
+    background-color: #ff9800; /* Orange for medium priority */
+}
+
+.priorityIndicator[data-priority="low"] {
+    background-color: #4caf50; /* Green for low priority */
+}
+
+.todoDetails {
+    margin-top: 8px;
+}
+
+.status {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #0052cc; /* Blue for status */
+}
+
+.createdBy {
+    font-size: 0.875rem;
+    color: #6b778c; /* Gray for createdBy */
+}
+
+.priorityLabel {
+    display: inline-block;
+    margin-top: 4px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #fff; /* White text */
+}
+
+/* Priority Styles */
+.highPriority {
+    background-color: #d50000; /* Red for high priority */
+}
+
+.mediumPriority {
+    background-color: #ff9800; /* Orange for medium priority */
+}
+
+.lowPriority {
+    background-color: #4caf50; /* Green for low priority */
+}
+
+.done {
+    color: green; /* Example style for completed */
+}
+
+.inProgress {
+    color: orange; /* Example style for in-progress */
+}
+
+.open {
+    color: red; /* Example style for pending */
+}
+
+.statusBadge {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 12px;
+    width: fit-content;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+    border: 1px solid transparent; /* Add border */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Add shadow */
+}
+
+.statusText {
+    margin-left: 4px; /* Space between icon and text */
+}
+
+.statusIcon {
+    font-size: 1.2rem; /* Adjust icon size */
+    color: black;
+}

@@ -11,10 +11,17 @@ export enum TodoStatus {
     DONE = 'DONE'
 }
 
+export enum TodoPriority {
+    LOW = 'LOW',
+    MEDIUM = 'MEDIUM',
+    HIGH = 'HIGH'
+}
+
 export interface TodoType {
     id: number;
     title: string;
     completed: boolean;  
     createdBy : UserType;
-    status : TodoStatus; 
+    status : TodoStatus;
+    priority : TodoPriority; 
 }
