@@ -1,0 +1,21 @@
+
+.errorContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 20px;
+    border: 1px solid #e74c3c; /* Red border */
+    background-color: #f8d7da; /* Light red background */
+    color: #721c24; /* Dark red text */
+    border-radius: 5px;
+  }
+  
+  .errorHeader {
+    margin: 0;
+  }
+  
+  .errorText {
+    margin: 10px 0 0;
+  }
