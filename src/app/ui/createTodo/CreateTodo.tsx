@@ -41,23 +41,23 @@ const CreateTodo = ({ onClose, users,createTodo }: CreateTodoProps) => {
         </div>
         <form onSubmit={handleSubmit} className={styles.modalContent}>
           <div className={styles.field}>
-            <label className={styles.label}>Todo Title:</label>
+            <label className={styles.label}>Task Title:</label>
             <input
               className={styles.input}
               type="text"
               id="todoTitle"
-              placeholder="Enter todo title..."
+              placeholder="Enter task title..."
               value={title}
               name={title}
               onChange={(e) => setTitle(e.target.value)} // Update state on input change
             />
           </div>
           <div className={styles.field}>
-            <label className={styles.label}>Todo Content:</label>
+            <label className={styles.label}>Task Content:</label>
             <textarea
               className={styles.textArea}
               id="todoContent"
-              placeholder="Enter todo content..."
+              placeholder="Enter task content..."
               rows={4}
               value={content}
               onChange={(e) => setContent(e.target.value)} // Update state on input change
