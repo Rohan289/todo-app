@@ -8,5 +8,8 @@ export const UserRepository = {
         const user = userRepository.create(userData);
         await userRepository.save(user);
         return user;
+    },
+    async getUser() : Promise<User[]> {
+        return await userRepository.find();
     }
 }
