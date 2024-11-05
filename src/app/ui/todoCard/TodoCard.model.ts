@@ -20,8 +20,18 @@ export enum TodoPriority {
 export interface TodoType {
     id: number;
     title: string;
+    content : string;
     completed: boolean;  
     createdBy : UserType;
     status : TodoStatus;
     priority : TodoPriority; 
+}
+
+export interface CreateTodoType {
+    title: string;
+    createdBy : {
+        id : number;
+    };
+    content : string;
+    priority : TodoPriority;
 }

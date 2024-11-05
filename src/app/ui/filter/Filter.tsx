@@ -107,8 +107,8 @@ const Filter = ({users} : FilterProps) => {
           <select className={styles.filterOptionsSelect} value={assignedTo} onChange={(e) => setAssignedTo(e.target.value)}>
             <option value="">All</option>
 
-            {(users as User[])?.map(({name}) => (
-              <option key={name} value={name}>
+            {(users as User[])?.map(({name,id}) => (
+              <option key={name} value={id}>
                 {name}
               </option>
             ))} 

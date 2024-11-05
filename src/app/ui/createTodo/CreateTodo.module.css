@@ -79,6 +79,7 @@
     padding: 8px;
     background: none;
     font-size: 14px;
+    color: black;
 }
 
 .select {
@@ -96,6 +97,7 @@
     padding: 8px;
     background: none;
     font-size: 14px;
+    color: black;
 }
 /* Submit Button */
 .submitButton {

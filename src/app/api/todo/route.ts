@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
   const todos = (await TodoRepository.getAllTodos()).filter(todo => 
     (!filters.status || todo.status.toLowerCase() === filters.status) &&
     (!filters.priority || todo.priority.toLowerCase() === filters.priority) &&
-    (!filters.assignedTo || todo.createdBy.name.toLowerCase() === filters.assignedTo)
+    (!filters.assignedTo || todo.createdBy.id.toString() === filters.assignedTo)
   );
 
   return NextResponse.json({ data: todos });

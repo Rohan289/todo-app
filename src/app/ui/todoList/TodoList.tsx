@@ -8,7 +8,7 @@ import { TodoCardComponentProps, TodoColumnProps } from '@/app/ui/todoList/todoL
 import TodoCard from '../todoCard/TodoCard';
 import { TodoStatus, TodoType } from '../todoCard/TodoCard.model';
 import { useTodos, useUsers } from '@/hooks/rest-api.query';
-import { useUpdateTodo } from '@/hooks/rest-api.mutation';
+import { useCreateTodo, useUpdateTodo } from '@/hooks/rest-api.mutation';
 import Loader from '@/app/common/loader/Loader';
 import Filter from '../filter/Filter';
 import { useSearchParams } from 'next/navigation';
@@ -73,7 +73,7 @@ const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, refetchTodo }) =
             <h2>{status.charAt(0).toUpperCase() + status.slice(1)}</h2>
             <ul>
                 {todos.map((todo, index) => (
-                    <TodoCardComponent key={todo.id} index={index} todo={todo} />
+                    <TodoCardComponent key={index} index={index} todo={todo} />
                 ))}
             </ul>
         </div>
@@ -98,6 +98,8 @@ const TodoList: React.FC = () => {
     const searchParams = useSearchParams(); // Access search parameters directly
 
     const { data: users } = useUsers();
+    const { mutate: createTodo } = useCreateTodo();
+
 
     useEffect(() => {
         if(users) {
@@ -160,7 +162,7 @@ const TodoList: React.FC = () => {
                         })}
                     </div>
                     <button onClick={() => setShowCreateTodoModal(true)} className={styles.floatingButton}>+</button>
-                    {showCreateTodoModal && <CreateTodo users={assignedUsers} onClose={() => setShowCreateTodoModal(false)} />}
+                    {showCreateTodoModal && <CreateTodo createTodo={(todo) => createTodo(todo)} users={assignedUsers} onClose={() => setShowCreateTodoModal(false)} />}
             </QueryClientProvider>
         </DndProvider>
     );
