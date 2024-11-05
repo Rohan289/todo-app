@@ -98,7 +98,10 @@ const TodoList: React.FC = () => {
     const searchParams = useSearchParams(); // Access search parameters directly
 
     const { data: users } = useUsers();
-    const { mutate: createTodo } = useCreateTodo();
+    const handleCreateTodoSuccess = () => {
+        refetchTodo();
+    }
+    const { mutate: createTodo } = useCreateTodo(handleCreateTodoSuccess);
 
 
     useEffect(() => {

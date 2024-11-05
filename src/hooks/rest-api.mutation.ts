@@ -1,5 +1,6 @@
 // hooks/useUpdateTodo.ts
 import { CreateTodoType, TodoStatus } from '@/app/ui/todoCard/TodoCard.model';
+import { User } from '@/models/User';
 import { useMutation } from '@tanstack/react-query';
 
 const updateTodo = async (id: number, status: TodoStatus) => {
@@ -44,8 +45,29 @@ export const useUpdateTodo = () => {
     });
 };
 
-export const useCreateTodo = () => {
-    return useMutation({
+export type TodoResponse = {
+    id: number; // or number
+    title: string;
+    createdAt: string;
+    updatedAt: string;
+    createdBy : User;
+    content : string;
+};
+
+export const useCreateTodo = (onSuccess?: (data: TodoResponse) => void) => {
+    return useMutation<TodoResponse, Error, CreateTodoType>({
         mutationFn: (todo : CreateTodoType) => createTodo(todo),
+        onSuccess: (data) => {
+            // Handle success here
+            console.log('Todo created successfully:', data);
+            // Call the onSuccess callback if provided
+            if (onSuccess) {
+                onSuccess(data);
+            }
+        },
+        onError: (error : Error) => {
+            // Handle error here
+            console.error('Error creating todo:', error);
+        },
     });
 };
