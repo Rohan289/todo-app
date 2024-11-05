@@ -10,3 +10,11 @@ export async function POST(req : NextRequest) {
         data : user
     })
 }       
+
+export async function GET() {
+    await initializeDb();
+    const user = await UserRepository.getUser();
+    return NextResponse.json({
+        data : user
+    })
+}       

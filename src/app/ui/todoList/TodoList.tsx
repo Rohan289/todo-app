@@ -10,6 +10,8 @@ import { TodoStatus, TodoType } from '../todoCard/TodoCard.model';
 import { useTodos } from '@/hooks/rest-api.query';
 import { useUpdateTodo } from '@/hooks/rest-api.mutation';
 import Loader from '@/app/common/loader/Loader';
+import Filter from '../filter/Filter';
+import { useSearchParams } from 'next/navigation';
 
 const ItemType = {
     TODO: 'TODO',
@@ -86,8 +88,20 @@ const TodoList: React.FC = () => {
         [TodoStatus.DONE]: [],
     });
 
+    const [queryString, setQueryString] = useState('');
     const queryClient = new QueryClient();
-    const { isFetching: isTodoFetching, data: todoData, refetch: refetchTodo } = useTodos();
+    const { isFetching: isTodoFetching, data: todoData, refetch: refetchTodo } = useTodos(queryString);
+    const searchParams = useSearchParams(); // Access search parameters directly
+
+    useEffect(() => {
+        const query = searchParams.toString(); // Get the full query string
+        if (query) {
+            setQueryString(query);
+        }
+        else {
+            setQueryString('');
+        }
+    }, [searchParams]); 
 
     useEffect(() => {
         async function fetchData() {
@@ -119,6 +133,7 @@ const TodoList: React.FC = () => {
     return (
         <DndProvider backend={HTML5Backend}>
             <QueryClientProvider client={queryClient}>
+            <Filter />
                     <div className={styles.todoTable}>
                         {Object.keys(todos).map((status) => {
                             return (

@@ -20,7 +20,7 @@ const fetchTodos: (queryString : string) => Promise<unknown> = async (queryStrin
 const fetchUsers: () => Promise<unknown> = async () => {
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-    const response = await fetch(`${baseUrl}/api/users`, {
+    const response = await fetch(`${baseUrl}/api/user`, {
         cache: 'no-store',
     });
 
@@ -34,7 +34,7 @@ const fetchUsers: () => Promise<unknown> = async () => {
 
 export const useTodos = (queryString = '') => {
     return useQuery({
-        queryKey: ['todos'],
+        queryKey: ['todos',queryString],
         queryFn: () =>  fetchTodos(queryString),
     });
 };
