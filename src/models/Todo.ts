@@ -21,7 +21,7 @@ export class Todo {
     enum: TodoStatus, // Inform TypeORM about the enum
     default: TodoStatus.OPEN, // Set a default value if needed
 })
-  status : string;
+  status? : string;
 
   @Column({
     type: 'varchar', // Specify the type as varchar

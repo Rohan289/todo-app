@@ -40,3 +40,20 @@
 .columnH2Li {
     margin-bottom: 10px; /* Space between Todo items */
 }
+.floatingButton {
+    position: fixed; /* Fix the button at the bottom right */
+    bottom: 20px; /* Distance from the bottom */
+    right: 20px; /* Distance from the right */
+    width: 60px; /* Button width */
+    height: 60px; /* Button height */
+    background-color: #28a745; /* Green background color */
+    color: white; /* Text color */
+    border-radius: 50%; /* Make the button circular */
+    display: flex; /* Center text horizontally and vertically */
+    justify-content: center; /* Center text horizontally */
+    align-items: center; /* Center text vertically */
+    font-size: 24px; /* Font size for the plus sign */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
+    cursor: pointer; 
+}

@@ -7,11 +7,13 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { TodoCardComponentProps, TodoColumnProps } from '@/app/ui/todoList/todoList.types';
 import TodoCard from '../todoCard/TodoCard';
 import { TodoStatus, TodoType } from '../todoCard/TodoCard.model';
-import { useTodos } from '@/hooks/rest-api.query';
+import { useTodos, useUsers } from '@/hooks/rest-api.query';
 import { useUpdateTodo } from '@/hooks/rest-api.mutation';
 import Loader from '@/app/common/loader/Loader';
 import Filter from '../filter/Filter';
 import { useSearchParams } from 'next/navigation';
+import CreateTodo from '../createTodo/CreateTodo';
+import { User } from '@/models/User';
 
 const ItemType = {
     TODO: 'TODO',
@@ -89,9 +91,20 @@ const TodoList: React.FC = () => {
     });
 
     const [queryString, setQueryString] = useState('');
+    const [assignedUsers, setAssignedUsers] = useState<User[]>([]);
+    const [showCreateTodoModal, setShowCreateTodoModal] = useState(false);
     const queryClient = new QueryClient();
     const { isFetching: isTodoFetching, data: todoData, refetch: refetchTodo } = useTodos(queryString);
     const searchParams = useSearchParams(); // Access search parameters directly
+
+    const { data: users } = useUsers();
+
+    useEffect(() => {
+        if(users) {
+        setAssignedUsers(users as unknown as User[]);
+        }
+      },[users])
+
 
     useEffect(() => {
         const query = searchParams.toString(); // Get the full query string
@@ -133,7 +146,7 @@ const TodoList: React.FC = () => {
     return (
         <DndProvider backend={HTML5Backend}>
             <QueryClientProvider client={queryClient}>
-            <Filter />
+            <Filter users={assignedUsers}/>
                     <div className={styles.todoTable}>
                         {Object.keys(todos).map((status) => {
                             return (
@@ -146,7 +159,8 @@ const TodoList: React.FC = () => {
                             );
                         })}
                     </div>
-               
+                    <button onClick={() => setShowCreateTodoModal(true)} className={styles.floatingButton}>+</button>
+                    {showCreateTodoModal && <CreateTodo users={assignedUsers} onClose={() => setShowCreateTodoModal(false)} />}
             </QueryClientProvider>
         </DndProvider>
     );

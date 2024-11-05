@@ -1,23 +1,23 @@
 'use client';
 import { useEffect, useState } from 'react';
 import styles from './Filter.module.css';
-import { useUsers } from '@/hooks/rest-api.query';
 import { TODO_PRIORITY_FILTER, TODO_STATUS_FILTER } from './Filter.util';
 import { User } from '@/models/User';
 import { useSearchParams } from 'next/navigation';
 
+interface FilterProps {
+  users : User[] |  [];
+}
 
-const Filter = () => {
+const Filter = ({users} : FilterProps) => {
   // State to hold filter values
   const querySearchParams = useSearchParams(); // Access search parameters directly
 
   const [status, setStatus] = useState(querySearchParams.get('status') || '');
   const [priority, setPriority] = useState(querySearchParams.get('priority') || '');
-  const [assignedUsers, setAssignedUsers] = useState<User[]>([]);
   const [assignedTo, setAssignedTo] = useState(querySearchParams.get('assignedTo') ? decodeURIComponent(decodeURIComponent(querySearchParams.get('assignedTo') as string)) : '');
   const [searchParams,setSearchParams]  = useState<string>('');
 
-  const { data: users } = useUsers();
 
   const resetQueryString = () => {
     // Create a new URL object based on the current URL
@@ -63,11 +63,7 @@ const Filter = () => {
     resetQueryString();
   }
 
-  useEffect(() => {
-    if(users) {
-    setAssignedUsers(users as unknown as User[]);
-    }
-  },[users])
+
 
   useEffect(() => {
     // Build the searchParams string based on the current state
@@ -111,7 +107,7 @@ const Filter = () => {
           <select className={styles.filterOptionsSelect} value={assignedTo} onChange={(e) => setAssignedTo(e.target.value)}>
             <option value="">All</option>
 
-            {(assignedUsers as User[])?.map(({name}) => (
+            {(users as User[])?.map(({name}) => (
               <option key={name} value={name}>
                 {name}
               </option>
