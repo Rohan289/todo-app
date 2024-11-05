@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
   const filters = {
     status: searchParams.get('status')?.toLowerCase(),
     priority: searchParams.get('priority')?.toLowerCase(),
-    assignedTo: searchParams.get('assignedTo')?.toLowerCase()
+    assignedTo: searchParams.get('assignedTo') ? decodeURIComponent(decodeURIComponent(searchParams.get('assignedTo') as string))?.toLowerCase() : undefined
   };
 
   const todos = (await TodoRepository.getAllTodos()).filter(todo => 
