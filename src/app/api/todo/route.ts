@@ -12,8 +12,8 @@ export async function GET(request: NextRequest) {
   };
 
   const todos = (await TodoRepository.getAllTodos()).filter(todo => 
-    (!filters.status || todo.status.toLowerCase() === filters.status) &&
-    (!filters.priority || todo.priority.toLowerCase() === filters.priority) &&
+    (!filters.status || (todo.status && todo.status.toLowerCase() === filters.status)) &&
+    (!filters.priority || (todo.priority && todo.priority.toLowerCase() === filters.priority)) &&
     (!filters.assignedTo || todo.createdBy.id.toString() === filters.assignedTo)
   );
 

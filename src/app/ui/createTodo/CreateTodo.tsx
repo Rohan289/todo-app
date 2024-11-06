@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { User } from '@/models/User';
 import styles from './CreateTodo.module.css';
 import { TODO_PRIORITY_FILTER } from '../filter/Filter.util';
-import { CreateTodoType, TodoPriority, TodoType } from '../todoCard/TodoCard.model';
+import { CreateTodoType, TodoPriority } from '../todoCard/TodoCard.model';
 
 interface CreateTodoProps {
   onClose: () => void;
