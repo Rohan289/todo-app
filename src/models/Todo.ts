@@ -8,7 +8,7 @@ export class Todo {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.todoList) // Establish a Many-to-One relationship
+  @ManyToOne(() => User, (user) => user.todoList, { nullable: false }) // Establish a Many-to-One relationship
   createdBy: User;
        
   @Column()
