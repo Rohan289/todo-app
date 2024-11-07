@@ -42,8 +42,7 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         source: "."
         target: "/home/ec2-user/app"
-      env:
-        DEBUG: "true"  # This might trigger more detailed logs from the action
+        debug: true  # Enable detailed debug logs
     # Step 5: Deploy on EC2 instance
     - name: Deploy with SSH
       uses: appleboy/ssh-action@v0.1.8
@@ -55,3 +54,5 @@ jobs:
           cd /home/ec2-user/app
           docker-compose down
           docker-compose up -d --build
+          docker-compose logs --tail=10  # Show the last 10 log lines of all containers
+
