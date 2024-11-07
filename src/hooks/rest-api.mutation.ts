@@ -1,5 +1,6 @@
 // hooks/useUpdateTodo.ts
-import { TodoStatus } from '@/app/ui/todoCard/TodoCard.model';
+import { CreateTodoType, TodoStatus } from '@/app/ui/todoCard/TodoCard.model';
+import { User } from '@/models/User';
 import { useMutation } from '@tanstack/react-query';
 
 const updateTodo = async (id: number, status: TodoStatus) => {
@@ -20,8 +21,53 @@ const updateTodo = async (id: number, status: TodoStatus) => {
     return data; // Adjust based on your API response structure
 };
 
+const createTodo = async (todo : CreateTodoType) => {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    const response = await fetch(`${baseUrl}/api/todo`, {
+        method: 'POST', 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(todo), // Pass the updated status in the request body
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to create todo');
+    }
+
+    const data = await response.json();
+    return data; // Adjust based on your API response structure
+};
+
 export const useUpdateTodo = () => {
     return useMutation({
         mutationFn: ({ id, status }: { id: number; status: TodoStatus }) => updateTodo(id, status),
+    });
+};
+
+export type TodoResponse = {
+    id: number; // or number
+    title: string;
+    createdAt: string;
+    updatedAt: string;
+    createdBy : User;
+    content : string;
+};
+
+export const useCreateTodo = (onSuccess?: (data: TodoResponse) => void) => {
+    return useMutation<TodoResponse, Error, CreateTodoType>({
+        mutationFn: (todo : CreateTodoType) => createTodo(todo),
+        onSuccess: (data) => {
+            // Handle success here
+            console.log('Todo created successfully:', data);
+            // Call the onSuccess callback if provided
+            if (onSuccess) {
+                onSuccess(data);
+            }
+        },
+        onError: (error : Error) => {
+            // Handle error here
+            console.error('Error creating todo:', error);
+        },
     });
 };

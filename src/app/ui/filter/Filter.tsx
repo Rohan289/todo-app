@@ -1,20 +1,23 @@
 'use client';
 import { useEffect, useState } from 'react';
 import styles from './Filter.module.css';
-import { useUsers } from '@/hooks/rest-api.query';
 import { TODO_PRIORITY_FILTER, TODO_STATUS_FILTER } from './Filter.util';
 import { User } from '@/models/User';
+import { useSearchParams } from 'next/navigation';
 
+interface FilterProps {
+  users : User[] |  [];
+}
 
-const Filter = () => {
+const Filter = ({users} : FilterProps) => {
   // State to hold filter values
-  const [status, setStatus] = useState('');
-  const [priority, setPriority] = useState('');
-  const [assignedUsers, setAssignedUsers] = useState<User[]>([]);
-  const [assignedTo, setAssignedTo] = useState('');
+  const querySearchParams = useSearchParams(); // Access search parameters directly
+
+  const [status, setStatus] = useState(querySearchParams.get('status') || '');
+  const [priority, setPriority] = useState(querySearchParams.get('priority') || '');
+  const [assignedTo, setAssignedTo] = useState(querySearchParams.get('assignedTo') ? decodeURIComponent(decodeURIComponent(querySearchParams.get('assignedTo') as string)) : '');
   const [searchParams,setSearchParams]  = useState<string>('');
 
-  const { data: users } = useUsers();
 
   const resetQueryString = () => {
     // Create a new URL object based on the current URL
@@ -25,9 +28,6 @@ const Filter = () => {
 
     // Update the URL without reloading the page
     window.history.pushState({}, '', url); // Use replaceState if you don't want to add to history
-
-    // Optional: You can also trigger any updates or state changes here
-    console.log('Query string reset. Updated URL:', url.toString());
 };
 
 
@@ -37,7 +37,6 @@ const Filter = () => {
 
     // Create URLSearchParams object from the current URL's query parameters
     const params = new URLSearchParams(url.search);
-
     // Add or update the query parameters based on the queryString
     queryString.split('&').forEach(param => {
         const [key, value] = param.split('=');
@@ -47,13 +46,14 @@ const Filter = () => {
             params.delete(key); // If no value is provided, remove the parameter
         }
     });
-
+    if(!queryString.length) {
+        params.delete('status');
+        params.delete('priority');
+        params.delete('assignedTo');
+    }
     // Update the URL without reloading the page
     url.search = params.toString();
     window.history.pushState({}, '', url); // Use replaceState if you don't want to add to history
-
-    // Optional: You can also trigger a refetch or update your state here
-    console.log('Updated URL:', url.toString());
 };
 
   const handleResetFilters = () => {
@@ -63,11 +63,7 @@ const Filter = () => {
     resetQueryString();
   }
 
-  useEffect(() => {
-    if(users) {
-    setAssignedUsers(users as unknown as User[]);
-    }
-  },[users])
+
 
   useEffect(() => {
     // Build the searchParams string based on the current state
@@ -75,7 +71,6 @@ const Filter = () => {
     if (status) params.push(`status=${encodeURIComponent(status)}`);
     if (priority) params.push(`priority=${encodeURIComponent(priority)}`);
     if (assignedTo) params.push(`assignedTo=${encodeURIComponent(assignedTo)}`);
-
     // Join the parameters with '&' and update the searchParams state
     setSearchParams(params.length ? params.join('&') : '');
 }, [status, priority, assignedTo]);
@@ -112,8 +107,8 @@ const Filter = () => {
           <select className={styles.filterOptionsSelect} value={assignedTo} onChange={(e) => setAssignedTo(e.target.value)}>
             <option value="">All</option>
 
-            {(assignedUsers as User[])?.map(({name}) => (
-              <option key={name} value={name}>
+            {(users as User[])?.map(({name,id}) => (
+              <option key={name} value={id}>
                 {name}
               </option>
             ))} 

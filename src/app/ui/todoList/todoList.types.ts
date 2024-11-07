@@ -11,5 +11,4 @@ export interface TodoColumnProps {
 export interface TodoCardComponentProps {
     todo: TodoType;
     index: number;
-    key : number;
 }
