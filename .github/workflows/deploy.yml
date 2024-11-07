@@ -8,6 +8,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 60  # Increase the timeout limit to 60 minutes
 
     steps:
     # Step 1: Checkout the repository
