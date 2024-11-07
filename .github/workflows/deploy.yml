@@ -25,7 +25,14 @@ jobs:
         yarn install
         yarn build
 
-    # Step 3: Transfer the code to EC2 instance
+    # Step 3: Install Docker Compose
+    - name: Install Docker Compose
+      run: |
+        sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
+        docker-compose --version
+
+    # Step 4: Transfer files to EC2
     - name: Copy files via SSH
       uses: appleboy/scp-action@v0.1.5
       with:
@@ -35,7 +42,7 @@ jobs:
         source: "."
         target: "/home/ec2-user/app"
 
-    # Step 4: Run Docker Compose on EC2
+    # Step 5: Deploy on EC2 instance
     - name: Deploy with SSH
       uses: appleboy/ssh-action@v0.1.8
       with:
