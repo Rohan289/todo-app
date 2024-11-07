@@ -42,7 +42,8 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         source: "."
         target: "/home/ec2-user/app"
-
+      env:
+        DEBUG: "true"  # This might trigger more detailed logs from the action
     # Step 5: Deploy on EC2 instance
     - name: Deploy with SSH
       uses: appleboy/ssh-action@v0.1.8
