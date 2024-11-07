@@ -59,7 +59,6 @@ export const useCreateTodo = (onSuccess?: (data: TodoResponse) => void) => {
         mutationFn: (todo : CreateTodoType) => createTodo(todo),
         onSuccess: (data) => {
             // Handle success here
-            console.log('Todo created successfully:', data);
             // Call the onSuccess callback if provided
             if (onSuccess) {
                 onSuccess(data);
