@@ -7,9 +7,9 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_URL=postgresql://postgres:1032@db:5432/collaborative-todo
+      - DATABASE_URL=postgresql://postgres:10321033@collaborative-todo-db.cbmgisugg4od.us-east-1.rds.amazonaws.com:5432/collaborative-todo
       - DATABASE_USER=postgres
-      - DATABASE_PASSWORD=1032
+      - DATABASE_PASSWORD=10321033
       - DATABASE_HOST=db  # Change to db for Docker networking
       - DATABASE_PORT=5432
     depends_on:
@@ -19,7 +19,7 @@ services:
     image: postgres:15
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1032
+      POSTGRES_PASSWORD: 10321033
       POSTGRES_DB: collaborative-todo
     volumes:
       - pgdata:/var/lib/postgresql/data
