@@ -10,7 +10,7 @@ services:
       - DATABASE_URL=postgresql://postgres:1032@db:5432/collaborative-todo
       - DATABASE_USER=postgres
       - DATABASE_PASSWORD=1032
-      - DATABASE_HOST=localhost
+      - DATABASE_HOST=db  # Change to db for Docker networking
       - DATABASE_PORT=5432
     depends_on:
       - db
@@ -23,6 +23,16 @@ services:
       POSTGRES_DB: collaborative-todo
     volumes:
       - pgdata:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
 
 volumes:
   pgdata:
