@@ -1,11 +1,26 @@
-import React from 'react'
+'use client';
+import TodoDetails from '@/app/ui/todoDetails/TodoDetails';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import React from 'react';
 
-const TodoDetailsPage = () => {
-  return (
-    <div>
-      Todo details page
-    </div>
-  )
+interface TodoDetailsPageProps {
+  params: {
+    id: string; // or number if you expect it to be a number
+  };
 }
 
-export default TodoDetailsPage
+const TodoDetailsPage: React.FC<TodoDetailsPageProps> = ({ params }) => {
+  const queryClient = new QueryClient(); // Initialize QueryClient here
+  const {id } = params;
+
+
+
+
+  return (
+      <QueryClientProvider client={queryClient}>
+      <TodoDetails id={id} />
+      </QueryClientProvider>
+  );
+};
+
+export default TodoDetailsPage;
