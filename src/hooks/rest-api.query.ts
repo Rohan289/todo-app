@@ -3,8 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const fetchTodos: (queryString : string) => Promise<unknown> = async (queryString : string) => {
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-    const url = queryString.length ? `${baseUrl}/api/todo?${queryString}` : `${baseUrl}/api/todo`;
+    const url = queryString.length ? `/api/todo?${queryString}` : '/api/todo';
     const response = await fetch(url, {
         cache: 'no-store',
     });
@@ -19,8 +18,7 @@ const fetchTodos: (queryString : string) => Promise<unknown> = async (queryStrin
 
 const fetchUsers: () => Promise<unknown> = async () => {
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-    const response = await fetch(`${baseUrl}/api/user`, {
+    const response = await fetch('/api/user', {
         cache: 'no-store',
     });
 
