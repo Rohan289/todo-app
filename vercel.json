@@ -1,10 +1,10 @@
 {
     "functions": {
-      "api/**/*.js": {
+      "src/app/api/**/*.js": {
         "maxDuration": 60,
         "memory": 1024
       },
-      "api/**/*.ts": {
+      "src/app/api/**/*.ts": {
         "maxDuration": 60,
         "memory": 1024
       }
