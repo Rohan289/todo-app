@@ -30,3 +30,20 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     return NextResponse.json({ message: 'Error updating todo' }, { status: 500 });
   }
 }
+
+export async function GET(request: NextRequest,{ params }: { params: { id: string } }) {
+  await initializeDb();
+
+  const todoId = params.id;
+
+  const filters = {
+    id: todoId ? parseInt(todoId) : undefined, // Parse the id as an integer
+  };
+
+  const todo = (await TodoRepository.getAllTodos()).find(todo =>
+    (!filters.id || todo.id === filters.id) 
+    
+  );
+
+  return NextResponse.json({ data: todo });
+}

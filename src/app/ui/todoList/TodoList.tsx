@@ -14,6 +14,7 @@ import Filter from '../filter/Filter';
 import { useSearchParams } from 'next/navigation';
 import CreateTodo from '../createTodo/CreateTodo';
 import { User } from '@/models/User';
+import { useRouter } from 'next/navigation';
 
 const ItemType = {
     TODO: 'TODO',
@@ -36,6 +37,13 @@ const TodoCardComponent: React.FC<TodoCardComponentProps> = ({ todo}) => {
 };
 
 const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, refetchTodo }) => {
+    const router = useRouter();
+
+    const handleTodoClick = (todoId : number) => {
+        // Navigate to the Todo details page using the todoId
+        router.push(`/todo/${todoId}`);
+    };
+
     const [, drop] = useDrop({
         accept: ItemType.TODO,
         drop(item: { todo: TodoType }) {
@@ -73,7 +81,9 @@ const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, refetchTodo }) =
             <h2>{status.charAt(0).toUpperCase() + status.slice(1)}</h2>
             <ul>
                 {todos.map((todo, index) => (
+                    <li key={index} onClick={() => handleTodoClick(todo.id)} style={{ cursor: 'pointer' }}>
                     <TodoCardComponent key={index} index={index} todo={todo} />
+                    </li>
                 ))}
             </ul>
         </div>
