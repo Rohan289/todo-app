@@ -6,12 +6,14 @@ export async function GET(request: NextRequest) {
   await initializeDb();
   const { searchParams } = new URL(request.url);
   const filters = {
+    id: searchParams.get('id') ? parseInt(searchParams.get('id') as string) : undefined, // Parse the id as an integer
     status: searchParams.get('status')?.toLowerCase(),
     priority: searchParams.get('priority')?.toLowerCase(),
     assignedTo: searchParams.get('assignedTo') ? decodeURIComponent(decodeURIComponent(searchParams.get('assignedTo') as string))?.toLowerCase() : undefined
   };
 
   const todos = (await TodoRepository.getAllTodos()).filter(todo => 
+    (!filters.id || todo.id === filters.id) && // Filter by id if provided
     (!filters.status || (todo.status && todo.status.toLowerCase() === filters.status)) &&
     (!filters.priority || (todo.priority && todo.priority.toLowerCase() === filters.priority)) &&
     (!filters.assignedTo || todo.createdBy.id.toString() === filters.assignedTo)
