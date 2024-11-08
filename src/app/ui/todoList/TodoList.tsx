@@ -104,7 +104,7 @@ const TodoList: React.FC = () => {
     const [assignedUsers, setAssignedUsers] = useState<User[]>([]);
     const [showCreateTodoModal, setShowCreateTodoModal] = useState(false);
     const queryClient = new QueryClient();
-    const { isFetching: isTodoFetching, data: todoData, refetch: refetchTodo } = useTodos(queryString);
+    const { isFetching: isTodoFetching, data: todoData, refetch: refetchTodo } = useTodos({queryString});
     const searchParams = useSearchParams(); // Access search parameters directly
 
     const { data: users } = useUsers();
