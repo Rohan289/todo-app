@@ -4,8 +4,7 @@ import { User } from '@/models/User';
 import { useMutation } from '@tanstack/react-query';
 
 const updateTodo = async (id: number, status: TodoStatus) => {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-    const response = await fetch(`${baseUrl}/api/todo/${id}`, {
+    const response = await fetch(`/api/todo/${id}`, {
         method: 'PUT', // Use PUT for updates
         headers: {
             'Content-Type': 'application/json',
@@ -22,8 +21,7 @@ const updateTodo = async (id: number, status: TodoStatus) => {
 };
 
 const createTodo = async (todo : CreateTodoType) => {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-    const response = await fetch(`${baseUrl}/api/todo`, {
+    const response = await fetch('/api/todo', {
         method: 'POST', 
         headers: {
             'Content-Type': 'application/json',
