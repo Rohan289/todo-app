@@ -37,8 +37,15 @@ const createTodo = async (todo : CreateTodoType) => {
     return data; // Adjust based on your API response structure
 };
 
-export const useUpdateTodo = () => {
+export const useUpdateTodo = (onSuccess?: () => void) => {
     return useMutation({
+        onSuccess: () => {
+            // Handle success here
+            // Call the onSuccess callback if provided
+            if (onSuccess) {
+                onSuccess();
+            }
+        },
         mutationFn: ({ id, todo }: { id: number; todo: Partial<TodoType> }) => updateTodo(id, todo),
     });
 };
