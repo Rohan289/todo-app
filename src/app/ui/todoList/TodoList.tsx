@@ -8,7 +8,7 @@ import { TodoCardComponentProps, TodoColumnProps } from '@/app/ui/todoList/todoL
 import TodoCard from '../todoCard/TodoCard';
 import { TodoStatus, TodoType } from '../todoCard/TodoCard.model';
 import { useTodos, useUsers } from '@/hooks/rest-api.query';
-import { useCreateTodo, useUpdateTodoStatus } from '@/hooks/rest-api.mutation';
+import { useCreateTodo, useUpdateTodo } from '@/hooks/rest-api.mutation';
 import Loader from '@/app/common/loader/Loader';
 import Filter from '../filter/Filter';
 import { useSearchParams } from 'next/navigation';
@@ -54,10 +54,10 @@ const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, refetchTodo }) =
         },
     });
 
-    const { mutate: updateTodo } = useUpdateTodoStatus();
+    const { mutate: updateTodo } = useUpdateTodo();
 
     const handleUpdateTodo = (todoId: number, newStatus: TodoStatus) => {
-        updateTodo({ id: todoId, status: newStatus }, {
+        updateTodo({ id: todoId, todo: {status : newStatus} }, {
             onSuccess: () => {
                 // Handle success (e.g., show a success message)
                 refetchTodo();

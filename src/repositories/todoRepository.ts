@@ -1,6 +1,7 @@
 import { AppDataSource } from "@/typeorm/datasource";
 import { Todo } from "@/models/Todo";
 import { User } from "@/models/User";
+import { TodoType } from "@/app/ui/todoCard/TodoCard.model";
 
 const todoRepository = AppDataSource.getRepository(Todo);
 const userRepository = AppDataSource.getRepository(User);
@@ -22,13 +23,12 @@ export const TodoRepository = {
         await todoRepository.save(todo);
         return todo;
     },
-    async updateTodoStatus(id: number, status: string): Promise<Todo> {
+    async updateTodo(id: number, todo: Partial<TodoType>): Promise<Todo> {
         const updatedTodo = await todoRepository.findOneBy({id : id});
         if (!updatedTodo) {
             throw new Error("Wrong todo id");
         }
-        updatedTodo.status = status;
-        await todoRepository.save(updatedTodo);
+        await todoRepository.save({...updatedTodo, ...todo});
         return updatedTodo;
     }
 }

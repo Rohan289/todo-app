@@ -1,15 +1,15 @@
 // hooks/useUpdateTodo.ts
-import { CreateTodoType, TodoStatus } from '@/app/ui/todoCard/TodoCard.model';
+import { CreateTodoType, TodoType } from '@/app/ui/todoCard/TodoCard.model';
 import { User } from '@/models/User';
 import { useMutation } from '@tanstack/react-query';
 
-const updateTodoStatus = async (id: number, status: TodoStatus) => {
+const updateTodo = async (id: number, todo: Partial<TodoType>) => {
     const response = await fetch(`/api/todo/${id}`, {
         method: 'PUT', // Use PUT for updates
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ status }), // Pass the updated status in the request body
+        body: JSON.stringify({ todo }), // Pass the updated status in the request body
     });
 
     if (!response.ok) {
@@ -37,9 +37,9 @@ const createTodo = async (todo : CreateTodoType) => {
     return data; // Adjust based on your API response structure
 };
 
-export const useUpdateTodoStatus = () => {
+export const useUpdateTodo = () => {
     return useMutation({
-        mutationFn: ({ id, status }: { id: number; status: TodoStatus }) => updateTodoStatus(id, status),
+        mutationFn: ({ id, todo }: { id: number; todo: Partial<TodoType> }) => updateTodo(id, todo),
     });
 };
 

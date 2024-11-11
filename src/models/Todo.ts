@@ -30,6 +30,13 @@ export class Todo {
 })
   priority : string;
 
+  @Column({
+    type: 'text',
+    array: true,
+    default: () => 'ARRAY[]::text[]', // Default to an empty array
+  })
+  comments?: string[];
+
   @CreateDateColumn({ type: 'timestamp' }) // Automatically sets the time of record creation
   createdAt!: Date;
 
