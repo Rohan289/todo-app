@@ -5,12 +5,13 @@ import { FaUser,FaPen ,FaCalendarAlt, FaCommentDots } from 'react-icons/fa';
 import styles from './TodoDetails.module.css';
 import { TodoPriority, TodoStatus, TodoType } from '../todoCard/TodoCard.model';
 import { useUpdateTodo } from '@/hooks/rest-api.mutation';
+import { TODO_PRIORITY_FILTER, TODO_STATUS_FILTER } from '../filter/Filter.util';
 
 const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [status, setStatus] = useState<TodoStatus>('');
-  const [priority, setPriority] = useState<TodoPriority>('');
+  const [status, setStatus] = useState<TodoStatus | ''>('');
+  const [priority, setPriority] = useState<TodoPriority | ''>('');
   const [comments, setComments] = useState<string[]>([]);
   const [newComment, setNewComment] = useState('');
   const [isEditing, setIsEditing] = useState(false); // State to track edit mode
@@ -42,8 +43,8 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
         todo: {
           title,
           content,
-          status,
-          priority,
+          ...(status.length > 0 && { status }), // Conditionally include status
+          ...(priority.length > 0 && { priority }), // Conditionally include priority
           comments, // You may want to ensure that the comments are not modified in the edit operation if you want to keep them intact
         },
       });
@@ -86,18 +87,22 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
         <div className={styles.editableFields}>
           <label>
             Status:
-            <select  disabled={!isEditing}  value={status} onChange={(e) => setStatus(e.target.value)} className={styles.select}>
-              <option value="OPEN">OPEN</option>
-              <option value="IN_PROGRESS">IN_PROGRESS</option>
-              <option value="CLOSED">CLOSED</option>
+            <select  disabled={!isEditing}  value={status} onChange={(e) => setStatus(e.target.value as TodoStatus)} className={styles.select}>
+              {
+                TODO_STATUS_FILTER.map((filter) => (
+                  <option value={filter.value} key={filter.value}>{filter.label}</option>
+                ))
+              }
             </select>
           </label>
           <label>
             Priority:
-            <select  disabled={!isEditing}  value={priority} onChange={(e) => setPriority(e.target.value)} className={styles.select}>
-              <option value="LOW">LOW</option>
-              <option value="MEDIUM">MEDIUM</option>
-              <option value="HIGH">HIGH</option>
+            <select  disabled={!isEditing}  value={priority} onChange={(e) => setPriority(e.target.value as TodoPriority)} className={styles.select}>
+            {
+                TODO_PRIORITY_FILTER.map((filter) => (
+                  <option value={filter.value} key={filter.value}>{filter.label}</option>
+                ))
+              }
             </select>
           </label>
         </div>
