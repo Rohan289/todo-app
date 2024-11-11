@@ -1,0 +1,99 @@
+.todoContainer {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 800px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header {
+    margin-bottom: 20px;
+  }
+  
+  .titleInput {
+    font-size: 24px;
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-bottom: 2px solid #4caf50;
+    background-color: transparent;
+    outline: none;
+    color: #333;
+  }
+  
+  .titleInput:focus {
+    border-bottom: 2px solid #008CBA;
+  }
+  
+  .details textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+  }
+  
+  .details p {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .details p svg {
+    margin-right: 8px;
+    color: #555;
+  }
+  
+  .editableFields {
+    margin-top: 20px;
+  }
+  
+  .editableFields label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  .select {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .commentsSection {
+    margin-top: 30px;
+  }
+  
+  .commentsList {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+  }
+  
+  .commentsList li {
+    background-color: #e8f5e9;
+    padding: 8px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+  }
+  
+  .commentInput {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .addButton {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #4caf
+  }
