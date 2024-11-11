@@ -57,7 +57,7 @@ const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, refetchTodo }) =
     const { mutate: updateTodo } = useUpdateTodo();
 
     const handleUpdateTodo = (todoId: number, newStatus: TodoStatus) => {
-        updateTodo({ id: todoId, status: newStatus }, {
+        updateTodo({ id: todoId, todo: {status : newStatus} }, {
             onSuccess: () => {
                 // Handle success (e.g., show a success message)
                 refetchTodo();
@@ -104,7 +104,7 @@ const TodoList: React.FC = () => {
     const [assignedUsers, setAssignedUsers] = useState<User[]>([]);
     const [showCreateTodoModal, setShowCreateTodoModal] = useState(false);
     const queryClient = new QueryClient();
-    const { isFetching: isTodoFetching, data: todoData, refetch: refetchTodo } = useTodos({queryString});
+    const { isFetching: isTodoFetching, data: todoData, refetch: refetchTodo } = useTodos<TodoType[]>({queryString});
     const searchParams = useSearchParams(); // Access search parameters directly
 
     const { data: users } = useUsers();

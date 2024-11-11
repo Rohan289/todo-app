@@ -10,8 +10,8 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
   try {
     // Parse the request body to get the new status
-    const { status } = await req.json();
-    const updatedTodo = await TodoRepository.updateTodo(parseInt(todoId), status);
+    const { todo } = await req.json();
+    const updatedTodo = await TodoRepository.updateTodo(parseInt(todoId), todo);
 
     return NextResponse.json({ todo: updatedTodo }, { status: 200 });
   } catch (error : unknown ) {

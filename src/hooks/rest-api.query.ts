@@ -35,10 +35,10 @@ interface UseTodosParams {
     pathParam?: string;
 }
 
-export const useTodos = ({ queryString = '', pathParam = '' }: UseTodosParams = {}) => {
-    return useQuery({
-        queryKey: ['todos', queryString, pathParam], // Include pathParam in the query key
-        queryFn: () => fetchTodos(queryString, pathParam), // Pass both parameters to the fetch function
+export const useTodos = <T>({ queryString = '', pathParam = '' }: UseTodosParams = {}) => {
+    return useQuery<T, Error, T, [string, string, string]>({
+        queryKey: ['todos', queryString, pathParam],
+        queryFn: () => fetchTodos(queryString, pathParam) as Promise<T>,
     });
 };
 
