@@ -139,8 +139,8 @@ const TodoList: React.FC = () => {
                     [TodoStatus.IN_PROGRESS]: TodoType[];
                     [TodoStatus.DONE]: TodoType[];
                 }, todo: TodoType) => {
-                    acc[todo.status] = acc[todo.status] || [];
-                    acc[todo.status].push(todo);
+                    acc[todo.status as TodoStatus] = acc[todo.status as TodoStatus] || [];
+                    acc[todo.status as TodoStatus].push(todo);
                     return acc;
                 }, { [TodoStatus.OPEN]: [], [TodoStatus.IN_PROGRESS]: [], [TodoStatus.DONE]: [] });
 

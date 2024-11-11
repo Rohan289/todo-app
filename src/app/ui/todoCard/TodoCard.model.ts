@@ -23,8 +23,8 @@ export interface TodoType {
     content : string;
     completed: boolean;  
     createdBy : UserType;
-    status : TodoStatus;
-    priority : TodoPriority;
+    status : TodoStatus | string;
+    priority : TodoPriority | string;
     comments?:string[];
     createdAt:string; 
 }
