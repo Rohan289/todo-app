@@ -25,7 +25,8 @@ export interface TodoType {
     createdBy : UserType;
     status : TodoStatus;
     priority : TodoPriority;
-    comments?:string[]; 
+    comments?:string[];
+    createdAt:string; 
 }
 
 export interface CreateTodoType {

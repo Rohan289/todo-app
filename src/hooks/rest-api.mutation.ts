@@ -3,7 +3,7 @@ import { CreateTodoType, TodoStatus } from '@/app/ui/todoCard/TodoCard.model';
 import { User } from '@/models/User';
 import { useMutation } from '@tanstack/react-query';
 
-const updateTodo = async (id: number, status: TodoStatus) => {
+const updateTodoStatus = async (id: number, status: TodoStatus) => {
     const response = await fetch(`/api/todo/${id}`, {
         method: 'PUT', // Use PUT for updates
         headers: {
@@ -37,9 +37,9 @@ const createTodo = async (todo : CreateTodoType) => {
     return data; // Adjust based on your API response structure
 };
 
-export const useUpdateTodo = () => {
+export const useUpdateTodoStatus = () => {
     return useMutation({
-        mutationFn: ({ id, status }: { id: number; status: TodoStatus }) => updateTodo(id, status),
+        mutationFn: ({ id, status }: { id: number; status: TodoStatus }) => updateTodoStatus(id, status),
     });
 };
 

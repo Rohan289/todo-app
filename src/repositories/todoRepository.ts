@@ -22,7 +22,7 @@ export const TodoRepository = {
         await todoRepository.save(todo);
         return todo;
     },
-    async updateTodo(id: number, status: string): Promise<Todo> {
+    async updateTodoStatus(id: number, status: string): Promise<Todo> {
         const updatedTodo = await todoRepository.findOneBy({id : id});
         if (!updatedTodo) {
             throw new Error("Wrong todo id");

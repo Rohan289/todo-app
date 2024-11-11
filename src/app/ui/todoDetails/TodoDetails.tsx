@@ -50,7 +50,7 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
           onChange={(e) => setContent(e.target.value)}
           className={styles.contentTextarea}
         />
-        <p><FaCalendarAlt /> Created At: {todoData && new Date(todoData.createdAt).toLocaleString()}</p>
+        <p><FaCalendarAlt /> Created At: {todoData && new Date(todoData?.createdAt).toLocaleString()}</p>
         <p><FaUser /> Created By: {todoData && todoData.createdBy.name}</p>
 
         <div className={styles.editableFields}>
