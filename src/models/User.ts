@@ -13,6 +13,9 @@ export class User {
   @Column()
   email: string;
 
+  @Column()
+  password: string;
+
   @CreateDateColumn({ type: 'timestamp' }) // Automatically sets the time of record creation
   createdAt!: Date;
 
