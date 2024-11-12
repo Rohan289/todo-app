@@ -92,7 +92,7 @@ const CreateTodo = ({ onClose, users,createTodo }: CreateTodoProps) => {
                 ))}
               </select>
             </div>
-            <button type="submit" className={styles.submitButton}>Submit</button>
+            <button disabled={!title.length || !content.length} type="submit" className={styles.submitButton}>Submit</button>
           </div>
         </form>
       </div>
