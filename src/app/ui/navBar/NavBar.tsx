@@ -12,7 +12,10 @@ export default function Navbar() {
                         <Link href="/" className={styles.navbarLink}>Home</Link>
                     </li>
                     <li className={styles.navbarItem}>
-                        <Link href="/todoList" className="navbar-link">Todo List</Link>
+                        <Link href="/todoList" className={styles.navbarLink}>Todo List</Link>
+                    </li>
+                    <li className={styles.navbarItem}>
+                        <Link href="/signup" className={styles.navbarLink}>Sign Up</Link>
                     </li>
                 </ul>
             </div>
