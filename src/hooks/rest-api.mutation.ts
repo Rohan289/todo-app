@@ -128,14 +128,14 @@ export const useCreateUser = (onSuccess?: () => void) => {
     });
 };
 
-export const useLoginUser = (onSuccess?: () => void) => {
+export const useLoginUser = (onSuccess?: (data: User) => void) => {
     return useMutation<User, Error, LoginUser>({
         mutationFn: (todo : LoginUser) => loginUser(todo),
-        onSuccess: () => {
+        onSuccess: (data) => {
             // Handle success here
             // Call the onSuccess callback if provided
             if (onSuccess) {
-                onSuccess();
+                onSuccess(data);
             }
         },
         onError: (error : Error) => {

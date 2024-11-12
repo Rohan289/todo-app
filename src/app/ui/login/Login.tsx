@@ -2,14 +2,16 @@
 import { useState } from 'react';
 import styles from './Login.module.css'; // Create a CSS module for styling
 import { useLoginUser } from '@/hooks/rest-api.mutation';
+import { User } from '@/models/User';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [successMessage, setSuccessMessage] = useState(''); // State for success message
 
-  const handleLoginUserSuccess = () => {
+  const handleLoginUserSuccess = (data : User) => {
     setSuccessMessage('User logged in successfully!'); // Set success message
+    localStorage.setItem('user',JSON.stringify(data));
     // Reset the form fields
     setEmail('');
     setPassword('');

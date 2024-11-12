@@ -119,6 +119,11 @@
     margin-bottom: 12px;
 }
 
+.error {
+    color: red; /* Red color for error messages */
+    font-size: 12px; /* Smaller font size */
+    margin-top: 4px; /* Space above the error message */
+  }
 
 /* Animation */
 /* @keyframes slideIn {

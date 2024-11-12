@@ -8,19 +8,34 @@ import { CreateTodoType, TodoPriority } from '../todoCard/TodoCard.model';
 interface CreateTodoProps {
   onClose: () => void;
   users: User[] | [];
-  createTodo : (todo : CreateTodoType) => void;
+  createTodo: (todo: CreateTodoType) => void;
 }
 
-const CreateTodo = ({ onClose, users,createTodo }: CreateTodoProps) => {
+const CreateTodo = ({ onClose, users, createTodo }: CreateTodoProps) => {
   // Define state variables
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [assignedTo, setAssignedTo] = useState(users[0]?.id || ''); // Default to the first user if available
   const [priority, setPriority] = useState(TODO_PRIORITY_FILTER[0]?.value || ''); // Default to the first priority if available
+  const [errors, setErrors] = useState({ title: '', content: '' }); // State for validation errors
 
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate fields
+    const newErrors = { title: '', content: '' };
+    if (!title) {
+      newErrors.title = 'Title is required';
+    }
+    if (!content) {
+      newErrors.content = 'Content is required';
+    }
+    
+    if (newErrors.title || newErrors.content) {
+      setErrors(newErrors);
+      return; // Stop form submission if there are errors
+    }
 
     const newTodo: CreateTodoType = {
       title,
@@ -43,25 +58,34 @@ const CreateTodo = ({ onClose, users,createTodo }: CreateTodoProps) => {
           <div className={styles.field}>
             <label className={styles.label}>Task Title:</label>
             <input
+              required
               className={styles.input}
               type="text"
               id="todoTitle"
               placeholder="Enter task title..."
               value={title}
-              name={title}
-              onChange={(e) => setTitle(e.target.value)} // Update state on input change
+              onChange={(e) => {
+                setTitle(e.target.value);
+                setErrors({ ...errors, title: '' }); // Clear error on change
+              }} 
             />
+            {errors.title && <span className={styles.error}>{errors.title}</span>} {/* Display error message */}
           </div>
           <div className={styles.field}>
             <label className={styles.label}>Task Content:</label>
             <textarea
+              required={true}
               className={styles.textArea}
               id="todoContent"
               placeholder="Enter task content..."
               rows={4}
               value={content}
-              onChange={(e) => setContent(e.target.value)} // Update state on input change
+              onChange={(e) => {
+                setContent(e.target.value);
+                setErrors({ ...errors, content: '' }); // Clear error on change
+              }} 
             ></textarea>
+            {errors.content && <span className={styles.error}>{errors.content}</span>} {/* Display error message */}
           </div>
           <div className={styles.modalFooter}>
             <div className={styles.assignField}>
@@ -92,7 +116,7 @@ const CreateTodo = ({ onClose, users,createTodo }: CreateTodoProps) => {
                 ))}
               </select>
             </div>
-            <button disabled={!title.length || !content.length} type="submit" className={styles.submitButton}>Submit</button>
+            <button type="submit" className={styles.submitButton}>Submit</button>
           </div>
         </form>
       </div>

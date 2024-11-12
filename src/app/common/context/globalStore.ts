@@ -1,11 +1,16 @@
 import { ContextName } from "./common.model"
 
 const storeConfig = {
-    initialialState : {},
+    initialState : {},
     actionsConfig : {
         setStore : (newState : object) => (previousState : object) => ({...previousState,...newState}),
         reset : () => () => ({})
     }
+}
+
+export interface Store<T> {
+    state : T;
+    actions : {setStore : (data : Partial<T>) => void, reset : () => void};
 }
 
 function createStore(storeName : string) {
