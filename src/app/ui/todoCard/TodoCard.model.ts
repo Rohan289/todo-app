@@ -42,3 +42,16 @@ export interface CreateTodoType {
     content : string;
     priority : TodoPriority;
 }
+
+export interface CreateUser {
+    name: string;
+    email : string;
+    password : string;
+    action : 'signup' | 'login';
+}
+
+export interface LoginUser {
+    email : string;
+    password : string;
+    action : 'signup' | 'login';
+}

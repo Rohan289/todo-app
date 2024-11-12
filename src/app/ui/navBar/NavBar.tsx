@@ -17,6 +17,9 @@ export default function Navbar() {
                     <li className={styles.navbarItem}>
                         <Link href="/signup" className={styles.navbarLink}>Sign Up</Link>
                     </li>
+                    <li className={styles.navbarItem}>
+                        <Link href="/login" className={styles.navbarLink}>Login</Link>
+                    </li>
                 </ul>
             </div>
         </nav>

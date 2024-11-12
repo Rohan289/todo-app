@@ -1,18 +1,16 @@
 'use client';
 import { useState } from 'react';
-import styles from './Signup.module.css'; // Create a CSS module for styling
-import { useCreateUser } from '@/hooks/rest-api.mutation';
+import styles from './Login.module.css'; // Create a CSS module for styling
+import { useLoginUser } from '@/hooks/rest-api.mutation';
 
-const Signup: React.FC = () => {
-  const [name, setName] = useState('');
+const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [successMessage, setSuccessMessage] = useState(''); // State for success message
 
-  const handleCreateUserSuccess = () => {
-    setSuccessMessage('User created successfully!'); // Set success message
+  const handleLoginUserSuccess = () => {
+    setSuccessMessage('User logged in successfully!'); // Set success message
     // Reset the form fields
-    setName('');
     setEmail('');
     setPassword('');
 
@@ -22,33 +20,22 @@ const Signup: React.FC = () => {
     }, 5000);
   };
 
-  const { mutate: createUser } = useCreateUser(handleCreateUserSuccess);
+  const { mutate: loginUser } = useLoginUser(handleLoginUserSuccess);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    createUser({ name, email, password, action: 'signup' });
+    loginUser({  email, password, action: 'login' });
   };
 
   return (
-    <div className={styles.signupContainer}>
-      <h1>Sign Up</h1>
+    <div className={styles.loginContainer}>
+      <h1>Login</h1>
       {successMessage && (
         <div className={styles.successBanner}>
           {successMessage}
         </div>
       )}
-      <form onSubmit={handleSubmit} className={styles.signupForm}>
-        <div className={styles.formGroup}>
-          <label className={styles.label} htmlFor="name">Name</label>
-          <input
-            className={styles.input}
-            type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
+      <form onSubmit={handleSubmit} className={styles.loginForm}>
         <div className={styles.formGroup}>
           <label className={styles.label}  htmlFor="email">Email</label>
           <input
@@ -71,11 +58,11 @@ const Signup: React.FC = () => {
             required
           />
         </div>
-        <button type="submit" className={styles.submitButton}>Sign Up</button>
+        <button type="submit" className={styles.submitButton}>Login</button>
       </form>
     </div>
    
   );
 };
 
-export default Signup;
+export default Login;
