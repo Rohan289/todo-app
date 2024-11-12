@@ -1,19 +1,21 @@
 'use client';
 import { useState,useEffect } from 'react';
+import { useRouter } from 'next/navigation'; // Import useRouter
 import { useTodos } from '@/hooks/rest-api.query';
 import { FaUser,FaPen ,FaCalendarAlt, FaCommentDots } from 'react-icons/fa';
 import styles from './TodoDetails.module.css';
-import { TodoPriority, TodoStatus, TodoType } from '../todoCard/TodoCard.model';
+import { TodoComment, TodoPriority, TodoStatus, TodoType } from '../todoCard/TodoCard.model';
 import { useUpdateTodo } from '@/hooks/rest-api.mutation';
 import { TODO_PRIORITY_FILTER, TODO_STATUS_FILTER } from '../filter/Filter.util';
 
 const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
+  const router = useRouter(); // Initialize useRouter
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [status, setStatus] = useState<TodoStatus | ''>('');
   const [priority, setPriority] = useState<TodoPriority | ''>('');
-  const [comments, setComments] = useState<string[]>([]);
-  const [newComment, setNewComment] = useState('');
+  const [comments, setComments] = useState<TodoComment[]>([]);
+  const [newComment, setNewComment] = useState<string>('');
   const [isEditing, setIsEditing] = useState(false); // State to track edit mode
 
 
@@ -55,14 +57,20 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
 
   const handleCommentAdd = () => {
     if (newComment.trim()) {
-      updateTodo({id : parseInt(id), todo : {comments : [...comments, newComment]}});
+      const newCommentValue : TodoComment = {userEmail : 'rohan1@gmail.com',commentText : newComment};
+      updateTodo({id : parseInt(id), todo : {comments : [...comments,newCommentValue ]}});
       setNewComment('');
     }
+  };
+
+  const handleBackClick = () => {
+    router.push('/todoList'); // Navigate back to the Todo list page
   };
 
   return (
     <div className={styles.todoContainer}>
       <div className={styles.header}>
+        <button className={styles.backButton} onClick={handleBackClick}>Back</button> {/* Back Button */}
         <input
           type="text"
           value={title}
@@ -70,7 +78,7 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
           className={styles.titleInput}
           disabled={!isEditing}  // Disable input if not in edit mode
         />
-         <button className={styles.editButton} onClick={handleEditClick}>
+        <button className={styles.editButton} onClick={handleEditClick}>
           <FaPen /> {isEditing ? 'Save' : 'Edit'}
         </button>
       </div>
@@ -98,7 +106,7 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
           <label>
             Priority:
             <select  disabled={!isEditing}  value={priority} onChange={(e) => setPriority(e.target.value as TodoPriority)} className={styles.select}>
-            {
+              {
                 TODO_PRIORITY_FILTER.map((filter) => (
                   <option value={filter.value} key={filter.value}>{filter.label}</option>
                 ))
@@ -111,12 +119,12 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
           <h3><FaCommentDots /> Comments</h3>
           <ul className={styles.commentsList}>
             {comments.length > 0 ? (
-              comments.map((comment, index) => <li key={index}>{comment}</li>)
+              comments.map((comment, index) => <li key={index}>{comment.commentText}</li>)
             ) : (
               <p>No comments yet.</p>
             )}
           </ul>
-          <textarea 
+          <textarea
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             placeholder="Add a comment"

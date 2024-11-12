@@ -128,3 +128,19 @@
   background-color: #f2f2f2;
   cursor: not-allowed;
 }
+
+.backButton {
+  background-color: #0070f3; /* Change to your desired background color */
+  color: white; /* Text color */
+  border: none; /* No border */
+  border-radius: 4px; /* Rounded corners */
+  padding: 8px 16px; /* Padding for the button */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 16px; /* Font size */
+  margin-right: 10px; /* Space between the button and title input */
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.backButton:hover {
+  background-color: #005bb5; /* Darker shade on hover */
+}

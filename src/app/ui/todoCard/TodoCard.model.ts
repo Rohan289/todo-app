@@ -17,6 +17,11 @@ export enum TodoPriority {
     HIGH = 'HIGH'
 }
 
+export interface TodoComment {
+    userEmail : string;
+    commentText : string;
+}
+
 export interface TodoType {
     id: number;
     title: string;
@@ -25,7 +30,7 @@ export interface TodoType {
     createdBy : UserType;
     status : TodoStatus | string;
     priority : TodoPriority | string;
-    comments?:string[];
+    comments?:TodoComment[];
     createdAt:string; 
 }
 
@@ -36,4 +41,17 @@ export interface CreateTodoType {
     };
     content : string;
     priority : TodoPriority;
+}
+
+export interface CreateUser {
+    name: string;
+    email : string;
+    password : string;
+    action : 'signup' | 'login';
+}
+
+export interface LoginUser {
+    email : string;
+    password : string;
+    action : 'signup' | 'login';
 }
