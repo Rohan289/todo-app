@@ -11,10 +11,10 @@ const {DATABASE_NAME,DATABASE_HOST,DATABASE_PORT,DATABASE_USER,DATABASE_PASSWORD
 
 console.log('DB**********************',DATABASE_NAME,DATABASE_HOST,DATABASE_PORT,DATABASE_USER,DATABASE_PASSWORD);
 export const AppDataSource = new DataSource({
-  // ssl: {
-  //   rejectUnauthorized: false, // Allows self-signed certificates; not recommended for production
-  // },
-  // url: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false, // Allows self-signed certificates; not recommended for production
+  },
+  url: process.env.DATABASE_URL,
   type: 'postgres',
   host: DATABASE_HOST,
   port: parseInt(DATABASE_PORT as string),
