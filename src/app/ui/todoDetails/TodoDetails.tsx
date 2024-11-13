@@ -104,11 +104,12 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
               className={styles.select}
             >
               <option value="" disabled>Select a user</option>
-              {users?.map((user : User) => (
-                <option key={user.id} value={user.id}>
-                  {user.name}
-                </option>
+              {Array.isArray(users) && users.length > 0 && users.map((user: User) => (
+                  <option key={user.id} value={user.id}>
+                      {user.name}
+                  </option>
               ))}
+
             </select>
           </label>
           <label>
