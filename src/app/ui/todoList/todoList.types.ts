@@ -1,10 +1,10 @@
 
-import { TodoStatus, TodoType } from "../todoCard/TodoCard.model";
+import {  TodoType } from "../todoCard/TodoCard.model";
 
 // types.ts
 export interface TodoColumnProps {
     todos: TodoType[];
-    status: TodoStatus;
+    status: string;
     refetchTodo : () => void;
     isAuthenticated: boolean;
 }

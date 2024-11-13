@@ -178,6 +178,9 @@
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
+  background-color: #c82333; /* Dark red */
+  color: white;
+  border : none;
 }
 
 .errorContainer {
@@ -223,4 +226,16 @@
   margin-top: 10px;
   padding: 10px 20px;
   background-color: #4caf
+}
+
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Full height of the viewport */
+  background-color: #f8d7da; /* Light red background */
+  color: #721c24; /* Dark red text color */
+  text-align: center;
+  padding: 20px;
 }
