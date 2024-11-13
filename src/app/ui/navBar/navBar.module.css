@@ -43,6 +43,12 @@
         flex-direction: column;
         gap: 15px;
     }
+    .navbarMenu {
+        flex-direction: column;
+        width: 100%;
+        padding: 0;
+        margin-top: 15px;
+    }
 
     .navLinks {
         width: 100%;
