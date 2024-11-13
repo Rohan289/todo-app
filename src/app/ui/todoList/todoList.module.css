@@ -41,21 +41,34 @@
     margin-bottom: 10px; /* Space between Todo items */
 }
 .floatingButton {
-    position: fixed; /* Fix the button at the bottom right */
-    bottom: 20px; /* Distance from the bottom */
-    right: 20px; /* Distance from the right */
-    width: 60px; /* Button width */
-    height: 60px; /* Button height */
-    background-color: #28a745; /* Green background color */
-    color: white; /* Text color */
-    border-radius: 50%; /* Make the button circular */
-    display: flex; /* Center text horizontally and vertically */
-    justify-content: center; /* Center text horizontally */
-    align-items: center; /* Center text vertically */
-    font-size: 24px; /* Font size for the plus sign */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
-    transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
-    cursor: pointer; 
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border: none;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+}
+
+.floatingButton:hover {
+    background-color: #0056b3;
+}
+
+.loginNote {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
 }
 
 .columnHeader {

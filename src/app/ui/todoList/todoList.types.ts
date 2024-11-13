@@ -6,9 +6,11 @@ export interface TodoColumnProps {
     todos: TodoType[];
     status: TodoStatus;
     refetchTodo : () => void;
+    isAuthenticated: boolean;
 }
 
 export interface TodoCardComponentProps {
     todo: TodoType;
+    isAuthenticated: boolean;
     index: number;
 }
