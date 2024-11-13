@@ -8,9 +8,12 @@ import { TodoComment, TodoPriority, TodoStatus, TodoType } from '../todoCard/Tod
 import { useUpdateTodo } from '@/hooks/rest-api.mutation';
 import { TODO_PRIORITY_FILTER, TODO_STATUS_FILTER } from '../filter/Filter.util';
 import { User } from '@/models/User';
+import { useUserDetails } from '@/app/common/context/UserDetailsContext';
 
 const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
+  const { state: {  isAuthenticated } } = useUserDetails();
   const router = useRouter(); // Initialize useRouter
+
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [status, setStatus] = useState<TodoStatus | ''>('');
@@ -70,6 +73,19 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
   const handleBackClick = () => {
     router.push('/todoList'); // Navigate back to the Todo list page
   };
+
+    // Check authentication
+    if (!isAuthenticated) {
+      return (
+        <div className={styles.errorContainer}>
+          <h1>404 Unauthorized</h1>
+          <p>You do not have permission to view this page.</p>
+          <button className={styles.backButton} onClick={() => router.push('/todoList')}>
+            Go Back to Todo List
+          </button>
+        </div>
+      );
+    }
 
   return (
     <div className={styles.todoContainer}>
