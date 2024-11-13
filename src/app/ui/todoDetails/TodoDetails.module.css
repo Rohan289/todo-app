@@ -180,3 +180,34 @@
 .backButton:hover {
   background-color: #bd2130; /* Darker red for hover effect */
 }
+
+.commentItem {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.avatarIcon {
+  font-size: 2rem;
+  color: #6c757d;
+  margin-right: 1rem;
+}
+
+.commentContent {
+  flex-grow: 1;
+}
+
+.commentContentStrong {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.commentContentP {
+  margin: 0;
+  color: #333;
+}
