@@ -144,3 +144,39 @@
 .backButton:hover {
   background-color: #005bb5; /* Darker shade on hover */
 }
+
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Full height of the viewport */
+  background-color: #f8d7da; /* Light red background */
+  color: #721c24; /* Dark red text color */
+  text-align: center;
+  padding: 20px;
+}
+
+.errorContainer h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.errorContainer p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.backButton {
+  padding: 10px 20px;
+  background-color: #c82333; /* Dark red */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.backButton:hover {
+  background-color: #bd2130; /* Darker red for hover effect */
+}
