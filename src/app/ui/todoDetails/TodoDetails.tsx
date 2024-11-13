@@ -1,12 +1,13 @@
 'use client';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter
-import { useTodos } from '@/hooks/rest-api.query';
-import { FaUser,FaPen ,FaCalendarAlt, FaCommentDots } from 'react-icons/fa';
+import { useTodos, useUsers } from '@/hooks/rest-api.query';
+import { FaPen, FaCalendarAlt, FaCommentDots } from 'react-icons/fa';
 import styles from './TodoDetails.module.css';
 import { TodoComment, TodoPriority, TodoStatus, TodoType } from '../todoCard/TodoCard.model';
 import { useUpdateTodo } from '@/hooks/rest-api.mutation';
 import { TODO_PRIORITY_FILTER, TODO_STATUS_FILTER } from '../filter/Filter.util';
+import { User } from '@/models/User';
 
 const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
   const router = useRouter(); // Initialize useRouter
@@ -17,13 +18,13 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
   const [comments, setComments] = useState<TodoComment[]>([]);
   const [newComment, setNewComment] = useState<string>('');
   const [isEditing, setIsEditing] = useState(false); // State to track edit mode
+  const [assignedTo, setAssignedTo] = useState<string>(''); // State for assigned user ID
 
-
-  const { isFetching: isTodoFetching, data: todoData , refetch : refetchTodo} = useTodos<TodoType>({ pathParam: id });
+  const { data: users } = useUsers(); // Fetch users
+  const { isFetching: isTodoFetching, data: todoData, refetch: refetchTodo } = useTodos<TodoType>({ pathParam: id });
   const { mutate: updateTodo } = useUpdateTodo(() => {
     refetchTodo();
   });
-
 
   useEffect(() => {
     if (todoData) {
@@ -32,6 +33,7 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
       setStatus(todoData.status as TodoStatus);
       setPriority(todoData.priority as TodoPriority);
       setComments(todoData.comments || []);
+      setAssignedTo((todoData?.assignedTo.id as unknown as string)?.toString()); // Set the assigned user ID
     }
   }, [todoData]);
 
@@ -47,6 +49,9 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
           content,
           ...(status.length > 0 && { status }), // Conditionally include status
           ...(priority.length > 0 && { priority }), // Conditionally include priority
+          assignedTo : {
+            id : parseInt(assignedTo),
+          }, // Include assigned user ID
           comments, // You may want to ensure that the comments are not modified in the edit operation if you want to keep them intact
         },
       });
@@ -54,11 +59,10 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
     setIsEditing(!isEditing); // Toggle edit mode
   };
 
-
   const handleCommentAdd = () => {
     if (newComment.trim()) {
-      const newCommentValue : TodoComment = {userEmail : 'rohan1@gmail.com',commentText : newComment};
-      updateTodo({id : parseInt(id), todo : {comments : [...comments,newCommentValue ]}});
+      const newCommentValue: TodoComment = { userEmail: 'rohan1@gmail.com', commentText: newComment };
+      updateTodo({ id: parseInt(id), todo: { comments: [...comments, newCommentValue] } });
       setNewComment('');
     }
   };
@@ -90,12 +94,26 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
           className={styles.contentTextarea}
         />
         <p><FaCalendarAlt /> Created At: {todoData && new Date(todoData?.createdAt).toLocaleString()}</p>
-        <p><FaUser /> Assigned To: {todoData && todoData.assignedTo.name}</p>
-
         <div className={styles.editableFields}>
           <label>
+            Assigned To:
+            <select
+              disabled={!isEditing}  // Disable input if not in edit mode
+              value={assignedTo}
+              onChange={(e) => setAssignedTo(e.target.value)} // Update assigned user
+              className={styles.select}
+            >
+              <option value="" disabled>Select a user</option>
+              {users?.map((user : User) => (
+                <option key={user.id} value={user.id}>
+                  {user.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
             Status:
-            <select  disabled={!isEditing}  value={status} onChange={(e) => setStatus(e.target.value as TodoStatus)} className={styles.select}>
+            <select disabled={!isEditing} value={status} onChange={(e) => setStatus(e.target.value as TodoStatus)} className={styles.select}>
               {
                 TODO_STATUS_FILTER.map((filter) => (
                   <option value={filter.value} key={filter.value}>{filter.label}</option>
@@ -105,7 +123,7 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
           </label>
           <label>
             Priority:
-            <select  disabled={!isEditing}  value={priority} onChange={(e) => setPriority(e.target.value as TodoPriority)} className={styles.select}>
+            <select disabled={!isEditing} value={priority} onChange={(e) => setPriority(e.target.value as TodoPriority)} className={styles.select}>
               {
                 TODO_PRIORITY_FILTER.map((filter) => (
                   <option value={filter.value} key={filter.value}>{filter.label}</option>
@@ -114,7 +132,6 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
             </select>
           </label>
         </div>
-        
         <div className={styles.commentsSection}>
           <h3><FaCommentDots /> Comments</h3>
           <ul className={styles.commentsList}>

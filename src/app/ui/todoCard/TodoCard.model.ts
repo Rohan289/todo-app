@@ -27,7 +27,7 @@ export interface TodoType {
     title: string;
     content : string;
     completed: boolean;  
-    assignedTo : UserType;
+    assignedTo : Partial<UserType>;
     status : TodoStatus | string;
     priority : TodoPriority | string;
     comments?:TodoComment[];
