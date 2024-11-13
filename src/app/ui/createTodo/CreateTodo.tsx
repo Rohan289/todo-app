@@ -40,7 +40,7 @@ const CreateTodo = ({ onClose, users, createTodo }: CreateTodoProps) => {
     const newTodo: CreateTodoType = {
       title,
       content,
-      createdBy: { id: assignedTo as number }, // Assuming you have a UserType that includes a name
+      assignedTo: { id: assignedTo as number }, // Assuming you have a UserType that includes a name
       priority,
     };
     createTodo(newTodo);

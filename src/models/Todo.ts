@@ -9,26 +9,27 @@ export class Todo {
   id: number;
 
   @ManyToOne(() => User, (user) => user.todoList, { nullable: false }) // Establish a Many-to-One relationship
-  createdBy: User;
-       
+  assignedTo: User; // Changed from createdBy to assignedTo
+
   @Column()
   content: string;
 
   @Column()
-  title : string;
+  title: string;
+
   @Column({
     type: 'varchar', // Specify the type as varchar
     enum: TodoStatus, // Inform TypeORM about the enum
     default: TodoStatus.OPEN, // Set a default value if needed
-})
-  status? : string;
+  })
+  status?: string;
 
   @Column({
     type: 'varchar', // Specify the type as varchar
     enum: TodoPriority, // Inform TypeORM about the enum
     default: TodoPriority.LOW, // Set a default value if needed
-})
-  priority : string;
+  })
+  priority: string;
 
   @Column({
     type: 'jsonb', // Use jsonb to store an array of objects
@@ -41,5 +42,4 @@ export class Todo {
 
   @UpdateDateColumn({ type: 'timestamp' }) // Automatically sets the time of record update
   updatedAt!: Date;
-
 }

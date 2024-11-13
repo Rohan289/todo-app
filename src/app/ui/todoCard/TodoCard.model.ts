@@ -27,7 +27,7 @@ export interface TodoType {
     title: string;
     content : string;
     completed: boolean;  
-    createdBy : UserType;
+    assignedTo : UserType;
     status : TodoStatus | string;
     priority : TodoPriority | string;
     comments?:TodoComment[];
@@ -36,7 +36,7 @@ export interface TodoType {
 
 export interface CreateTodoType {
     title: string;
-    createdBy : {
+    assignedTo : {
         id : number;
     };
     content : string;

@@ -1,5 +1,5 @@
 import { User } from "@/models/User";
-import { AppDataSource } from "@/typeorm/datasource";
+import { AppDataSource } from "@/typeorm/typeorm";
 import bcrypt from 'bcrypt';
 
 const userRepository = AppDataSource.getRepository(User);

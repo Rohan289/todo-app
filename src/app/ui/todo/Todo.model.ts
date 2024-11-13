@@ -10,6 +10,6 @@ export interface TodoType {
     id: number;
     title: string;
     completed: boolean;  
-    createdBy : UserType;
+    assignedTo : UserType;
     status : TodoStatus; 
 }
