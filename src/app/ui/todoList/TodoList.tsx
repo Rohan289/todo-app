@@ -16,6 +16,7 @@ import CreateTodo from '../createTodo/CreateTodo';
 import { User } from '@/models/User';
 import { useRouter } from 'next/navigation';
 import { useUserDetails } from '@/app/common/context/UserDetailsContext';
+import { TODO_STATUS_FILTER } from '../filter/Filter.util';
 
 const ItemType = {
     TODO: 'TODO',
@@ -176,7 +177,7 @@ const TodoList: React.FC = () => {
                                     refetchTodo={handleRefetchTodo}
                                     key={status}
                                     todos={todos[status as keyof typeof todos]}
-                                    status={status as TodoStatus}
+                                    status={TODO_STATUS_FILTER.find((statusFilter) => statusFilter.value === status)?.label || ''}
                                 />
                             );
                         })}
