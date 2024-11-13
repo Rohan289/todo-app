@@ -88,8 +88,9 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
 
   return (
     <div className={styles.todoContainer}>
-      <div className={styles.header}>
         <button className={styles.backButton} onClick={handleBackClick}>Back</button> {/* Back Button */}
+        <div className={styles.header}>
+
         <input
           type="text"
           value={title}

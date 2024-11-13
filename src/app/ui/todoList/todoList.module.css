@@ -76,3 +76,37 @@
     justify-content : center;
     color : black;
 }
+
+@media (max-width: 1024px) {
+    .filterSection {
+        flex-direction: column;
+    }
+    .todoTable {
+        flex-direction : column;
+    }
+    .searchInput {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .todoContainer {
+        grid-template-columns: 1fr;
+    }
+    
+    .column {
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .todoCard {
+        padding: 12px;
+    }
+    
+    .todoMeta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+}
