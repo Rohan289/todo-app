@@ -1,5 +1,5 @@
 import { TodoRepository } from '@/repositories/todoRepository';
-import { initializeDb } from '@/typeorm/datasource';
+import { initializeDb } from '@/typeorm/typeorm';
 import { NextRequest, NextResponse } from 'next/server';
 
 

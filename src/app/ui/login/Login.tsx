@@ -3,13 +3,16 @@ import { useState } from 'react';
 import styles from './Login.module.css'; // Create a CSS module for styling
 import { useLoginUser } from '@/hooks/rest-api.mutation';
 import { User } from '@/models/User';
+import { useRouter } from 'next/navigation'; // Import useRouter
 
 const Login: React.FC = () => {
+  const router = useRouter(); // Initialize useRouter
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [successMessage, setSuccessMessage] = useState(''); // State for success message
 
   const handleLoginUserSuccess = (data : User) => {
+    router.push('/'); // Navigate back to the home page
     setSuccessMessage('User logged in successfully!'); // Set success message
     localStorage.setItem('user',JSON.stringify(data));
     // Reset the form fields

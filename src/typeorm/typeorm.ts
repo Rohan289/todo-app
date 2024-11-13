@@ -14,7 +14,6 @@ export const AppDataSource = new DataSource({
   ssl: {
     rejectUnauthorized: false, // Allows self-signed certificates; not recommended for production
   },
-  url: process.env.DATABASE_URL, // Should already include ?sslmode=require
   type: 'postgres',
   host: DATABASE_HOST,
   port: parseInt(DATABASE_PORT as string),

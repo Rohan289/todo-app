@@ -1,7 +1,7 @@
-import { AppDataSource } from "@/typeorm/datasource";
 import { Todo } from "@/models/Todo";
 import { User } from "@/models/User";
 import { TodoType } from "@/app/ui/todoCard/TodoCard.model";
+import { AppDataSource } from "@/typeorm/typeorm";
 
 const todoRepository = AppDataSource.getRepository(Todo);
 const userRepository = AppDataSource.getRepository(User);
@@ -9,16 +9,16 @@ const userRepository = AppDataSource.getRepository(User);
 export const TodoRepository = {
     async getAllTodos() : Promise<Todo[]> {
         return await todoRepository.createQueryBuilder('todo')
-        .leftJoinAndSelect('todo.createdBy','createdBy').getMany();
+        .leftJoinAndSelect('todo.assignedTo','assignedTo').getMany();
     },
     async createTodo(todoData : Omit<Todo,'id'>): Promise<Todo> {
-        const user = await userRepository.findOneBy({id : todoData.createdBy.id});
+        const user = await userRepository.findOneBy({id : todoData.assignedTo.id});
         if(!user) {
             throw new Error("User not found");
         }
         const todo = todoRepository.create({
             ...todoData,
-            createdBy : user
+            assignedTo : user
         }); 
         await todoRepository.save(todo);
         return todo;

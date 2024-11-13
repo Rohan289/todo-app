@@ -55,7 +55,7 @@ export type TodoResponse = {
     title: string;
     createdAt: string;
     updatedAt: string;
-    createdBy : User;
+    assignedTo : User;
     content : string;
 };
 

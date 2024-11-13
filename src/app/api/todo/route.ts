@@ -1,5 +1,5 @@
 import { TodoRepository } from "@/repositories/todoRepository";
-import { initializeDb } from "@/typeorm/datasource";
+import { initializeDb } from "@/typeorm/typeorm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
   const todos = (await TodoRepository.getAllTodos()).filter(todo => 
     (!filters.status || (todo.status && todo.status.toLowerCase() === filters.status)) &&
     (!filters.priority || (todo.priority && todo.priority.toLowerCase() === filters.priority)) &&
-    (!filters.assignedTo || todo.createdBy.id.toString() === filters.assignedTo)
+    (!filters.assignedTo || todo.assignedTo.id.toString() === filters.assignedTo)
   );
 
   return NextResponse.json({ data: todos });
