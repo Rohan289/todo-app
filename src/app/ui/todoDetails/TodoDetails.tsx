@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter
 import { useTodos, useUsers } from '@/hooks/rest-api.query';
-import { FaPen, FaCalendarAlt, FaCommentDots } from 'react-icons/fa';
+import { FaPen,FaUser, FaCalendarAlt, FaCommentDots } from 'react-icons/fa';
 import styles from './TodoDetails.module.css';
 import { TodoComment, TodoPriority, TodoStatus, TodoType } from '../todoCard/TodoCard.model';
 import { useUpdateTodo } from '@/hooks/rest-api.mutation';
@@ -11,9 +11,8 @@ import { User } from '@/models/User';
 import { useUserDetails } from '@/app/common/context/UserDetailsContext';
 
 const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
-  const { state: {  isAuthenticated } } = useUserDetails();
+  const { state: {  isAuthenticated,user } } = useUserDetails();
   const router = useRouter(); // Initialize useRouter
-
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [status, setStatus] = useState<TodoStatus | ''>('');
@@ -64,7 +63,7 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
 
   const handleCommentAdd = () => {
     if (newComment.trim()) {
-      const newCommentValue: TodoComment = { userEmail: 'rohan1@gmail.com', commentText: newComment };
+      const newCommentValue: TodoComment = { userEmail: user?.email || 'Unknown', commentText: newComment };
       updateTodo({ id: parseInt(id), todo: { comments: [...comments, newCommentValue] } });
       setNewComment('');
     }
@@ -153,7 +152,15 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
           <h3><FaCommentDots /> Comments</h3>
           <ul className={styles.commentsList}>
             {comments.length > 0 ? (
-              comments.map((comment, index) => <li key={index}>{comment.commentText}</li>)
+              comments.map((comment, index) => (
+                <li key={index} className={styles.commentItem}>
+                  <FaUser className={styles.avatarIcon} />
+                  <div className={styles.commentContent}>
+                    <strong className={styles.commentContentStrong}>{comment.userEmail}</strong>
+                    <p className={styles.commentContentP}>{comment.commentText}</p>
+                  </div>
+                </li>
+              ))
             ) : (
               <p>No comments yet.</p>
             )}

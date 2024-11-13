@@ -6,6 +6,7 @@ import React, { createContext, useContext, useReducer } from 'react';
 interface User {
   id: number;
   name: string;
+  email : string;
 }
 
 // Define the context state type
