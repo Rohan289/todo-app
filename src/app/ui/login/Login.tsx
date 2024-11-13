@@ -4,17 +4,21 @@ import styles from './Login.module.css'; // Create a CSS module for styling
 import { useLoginUser } from '@/hooks/rest-api.mutation';
 import { User } from '@/models/User';
 import { useRouter } from 'next/navigation'; // Import useRouter
+import { useUserDetails } from '@/app/common/context/UserDetailsContext';
 
 const Login: React.FC = () => {
   const router = useRouter(); // Initialize useRouter
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [successMessage, setSuccessMessage] = useState(''); // State for success message
+  const [errorMessage, setErrorMessage] = useState(''); // State for success message
+  const { dispatch } = useUserDetails();
 
   const handleLoginUserSuccess = (data : User) => {
     router.push('/'); // Navigate back to the home page
     setSuccessMessage('User logged in successfully!'); // Set success message
     localStorage.setItem('user',JSON.stringify(data));
+    dispatch({ type: 'SET_USER', payload: data });
     // Reset the form fields
     setEmail('');
     setPassword('');
@@ -25,7 +29,14 @@ const Login: React.FC = () => {
     }, 5000);
   };
 
-  const { mutate: loginUser } = useLoginUser(handleLoginUserSuccess);
+  const handleLoginUserError= () => {
+    setErrorMessage('User log in failed!'); // Set success message
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 5000);
+  };
+
+  const { mutate: loginUser } = useLoginUser(handleLoginUserSuccess,handleLoginUserError);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,10 +45,15 @@ const Login: React.FC = () => {
 
   return (
     <div className={styles.loginContainer}>
-      <h1>Login</h1>
+      <h1 className={styles.header}>Login</h1>
       {successMessage && (
         <div className={styles.successBanner}>
           {successMessage}
+        </div>
+      )}
+      {errorMessage && (
+        <div className={styles.errorBanner}>
+          {errorMessage}
         </div>
       )}
       <form onSubmit={handleSubmit} className={styles.loginForm}>

@@ -1,60 +1,63 @@
+/* Login.module.css */
+
 .loginContainer {
-    max-width: 400px;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #f9f9f9; /* Light background */
-  }
-  
-  .loginForm {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .formGroup {
-    margin-bottom: 15px;
-  }
-  
-  .label {
-    margin: 5px;
-    font-weight: bold;
-  }
-  
-  .input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-  }
-  
-  .input:focus {
-    border-color: #0070f3; /* Blue border on focus */
-    outline: none;
-  }
-  
-  .submitButton {
-    padding: 10px;
-    background-color: #0070f3; /* Blue background */
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-  }
-  
-  .submitButton:hover {
-    background-color: #005bb5; /* Darker blue on hover */
-  }
-  
-  .successBanner {
-      background-color: #d4edda; /* Light green background */
-      color: #155724; /* Dark green text */
-      padding: 10px;
-      margin-bottom: 20px;
-      border: 1px solid #c3e6cb; /* Green border */
-      border-radius: 5px;
-      transition: opacity 0.5s ease-in-out;
-    }
+  display: flex; /* Use flexbox for centering */
+  flex-direction: column; /* Arrange children in a column */
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+  height: 100vh; /* Full viewport height */
+  padding: 20px; /* Optional padding */
+}
+
+.successBanner {
+  margin-bottom: 20px; /* Space between the success message and the form */
+  color: green; /* Color for the success message */
+}
+
+.errorBanner {
+  margin-bottom: 20px; /* Space between the error message and the form */
+  color: red; /* Color for the error message */
+}
+
+.loginForm {
+  width: 100%; /* Full width */
+  max-width: 400px; /* Limit the maximum width */
+  background: #f9f9f9; /* Light background for the form */
+  padding: 20px; /* Padding inside the form */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.formGroup {
+  margin-bottom: 15px; /* Space between form groups */
+}
+
+.label {
+  margin-bottom: 5px; /* Space between label and input */
+  font-weight: bold; /* Bold labels */
+}
+
+.input {
+  width: 100%; /* Full width */
+  padding: 10px; /* Padding inside input */
+  border: 1px solid #ccc; /* Border styling */
+  border-radius: 4px; /* Rounded corners for inputs */
+}
+
+.submitButton {
+  width: 100%; /* Full width */
+  padding: 10px; /* Padding inside button */
+  background-color: #0070f3; /* Button background color */
+  color: white; /* Button text color */
+  border: none; /* Remove border */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.submitButton:hover {
+  background-color: #005bb5; /* Darker shade on hover */
+}
+
+.header {
+  margin-bottom : 1rem;
+}

@@ -15,18 +15,20 @@ import { useSearchParams } from 'next/navigation';
 import CreateTodo from '../createTodo/CreateTodo';
 import { User } from '@/models/User';
 import { useRouter } from 'next/navigation';
+import { useUserDetails } from '@/app/common/context/UserDetailsContext';
 
 const ItemType = {
     TODO: 'TODO',
 };
 
-const TodoCardComponent: React.FC<TodoCardComponentProps> = ({ todo}) => {
+const TodoCardComponent: React.FC<TodoCardComponentProps> = ({ todo,isAuthenticated}) => {
     const [{ isDragging }, drag] = useDrag({
         type: ItemType.TODO,
         item: { todo : todo },
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
         }),
+        canDrag : isAuthenticated
     });
 
     return (
@@ -36,17 +38,20 @@ const TodoCardComponent: React.FC<TodoCardComponentProps> = ({ todo}) => {
     );
 };
 
-const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, refetchTodo }) => {
+const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, refetchTodo,isAuthenticated }) => {
     const router = useRouter();
 
     const handleTodoClick = (todoId : number) => {
         // Navigate to the Todo details page using the todoId
-        router.push(`/todo/${todoId}`);
+        if (isAuthenticated) {
+            router.push(`/todo/${todoId}`);
+        }
     };
 
     const [, drop] = useDrop({
         accept: ItemType.TODO,
         drop(item: { todo: TodoType }) {
+            if (!isAuthenticated) return; // Prevent drop if not authenticated
             const {status : todoStatus} = item.todo as TodoType;
             if(todoStatus !== status) {
                 moveTodo(item.todo, status);
@@ -82,7 +87,7 @@ const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, refetchTodo }) =
             <ul>
                 {todos.map((todo, index) => (
                     <li key={index} onClick={() => handleTodoClick(todo.id)} style={{ cursor: 'pointer' }}>
-                    <TodoCardComponent key={index} index={index} todo={todo} />
+                    <TodoCardComponent isAuthenticated={isAuthenticated} key={index} index={index} todo={todo} />
                     </li>
                 ))}
             </ul>
@@ -90,6 +95,7 @@ const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, refetchTodo }) =
     );
 };
 const TodoList: React.FC = () => {
+    const { state: {  isAuthenticated } } = useUserDetails();
     const [todos, setTodos] = useState<{
         [TodoStatus.OPEN]: TodoType[];
         [TodoStatus.IN_PROGRESS]: TodoType[];
@@ -166,6 +172,7 @@ const TodoList: React.FC = () => {
                         {Object.keys(todos).map((status) => {
                             return (
                                 <TodoColumn
+                                    isAuthenticated={isAuthenticated}
                                     refetchTodo={handleRefetchTodo}
                                     key={status}
                                     todos={todos[status as keyof typeof todos]}
@@ -174,8 +181,16 @@ const TodoList: React.FC = () => {
                             );
                         })}
                     </div>
-                    <button onClick={() => setShowCreateTodoModal(true)} className={styles.floatingButton}>+</button>
-                    {showCreateTodoModal && <CreateTodo createTodo={(todo) => createTodo(todo)} users={assignedUsers} onClose={() => setShowCreateTodoModal(false)} />}
+                    {isAuthenticated ? (
+                    <>
+                        <button onClick={() => setShowCreateTodoModal(true)} className={styles.floatingButton}>+</button>
+                        {showCreateTodoModal && <CreateTodo createTodo={(todo) => createTodo(todo)} users={assignedUsers} onClose={() => setShowCreateTodoModal(false)} />}
+                    </>
+                ) : (
+                    <div className={styles.loginNote}>
+                        <p>Please log in to create a ticket.</p>
+                    </div>
+                )}
             </QueryClientProvider>
         </DndProvider>
     );

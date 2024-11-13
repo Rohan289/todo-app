@@ -1,20 +1,15 @@
 'use client';
-import React, { useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import styles from './navBar.module.css';
 import { useUserDetails } from '@/app/common/context/UserDetailsContext';
+import useUserStorage from '@/hooks/useUserStorage';
 
 export default function Navbar() {
     const { state: { user, isAuthenticated }, dispatch } = useUserDetails();
 
-    useEffect(() => {
-        // Example: Load user from local storage
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            const user = JSON.parse(storedUser);
-            dispatch({ type: 'SET_USER', payload: user });
-        }
-    }, [dispatch]);
+    useUserStorage();
+
 
     const handleLogout = () => {
         localStorage.removeItem('user');
