@@ -37,3 +37,32 @@
 .navbarLink:hover {
     color: #61dafb; /* Change color on hover */
 }
+
+@media (max-width: 768px) {
+    .navbarContainer {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .navLinks {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .userSection {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .navLinks {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .userSection {
+        flex-direction: column;
+    }
+}
