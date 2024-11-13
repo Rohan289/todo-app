@@ -63,7 +63,7 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
 
   const handleCommentAdd = () => {
     if (newComment.trim()) {
-      const newCommentValue: TodoComment = { userEmail: user.email, commentText: newComment };
+      const newCommentValue: TodoComment = { userEmail: user?.email || 'Unknown', commentText: newComment };
       updateTodo({ id: parseInt(id), todo: { comments: [...comments, newCommentValue] } });
       setNewComment('');
     }
