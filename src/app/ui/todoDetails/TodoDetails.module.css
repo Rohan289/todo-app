@@ -28,6 +28,8 @@
   color: #333;
 }
 
+
+
 .details textarea {
   width: 100%;
   min-height: clamp(80px, 15vw, 100px);
@@ -86,6 +88,56 @@
   border-radius: 4px;
   font-size: clamp(14px, 1.6vw, 16px);
 }
+
+.commentsSection {
+  margin-top: clamp(20px, 4vw, 30px);
+  background: linear-gradient(to right, #f8f9fa, #ffffff);
+  border-radius: 12px;
+  padding: clamp(15px, 3vw, 25px);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+}
+
+.commentsList {
+  list-style: none;
+  padding: 0;
+  margin: clamp(8px, 1.5vw, 10px) 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.commentItem {
+  display: flex;
+  align-items: flex-start;
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease;
+}
+
+.commentItem:hover {
+  transform: translateX(5px);
+}
+
+
+.commentContent {
+  flex: 1;
+}
+
+.commentContentStrong {
+  color: #4b5563;
+  font-size: clamp(14px, 1.6vw, 16px);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.commentContentP {
+  color: #6b7280;
+  font-size: clamp(13px, 1.5vw, 15px);
+  line-height: 1.5;
+}
+
 .header {
   margin-bottom: clamp(15px, 3vw, 20px);
   display: flex;
