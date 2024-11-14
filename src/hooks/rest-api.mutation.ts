@@ -111,7 +111,7 @@ const loginUser = async (todo : LoginUser) => {
 };
 
 
-export const useCreateUser = (onSuccess?: () => void) => {
+export const useCreateUser = (onSuccess?: () => void,onError?: () => void) => {
     return useMutation<User, Error, CreateUser>({
         mutationFn: (todo : CreateUser) => createUser(todo),
         onSuccess: () => {
@@ -121,9 +121,9 @@ export const useCreateUser = (onSuccess?: () => void) => {
                 onSuccess();
             }
         },
-        onError: (error : Error) => {
+        onError: () => {
             // Handle error here
-            console.error('Error creating user:', error);
+            onError?.();
         },
     });
 };

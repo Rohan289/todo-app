@@ -8,6 +8,7 @@ const Signup: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [successMessage, setSuccessMessage] = useState(''); // State for success message
+  const [errorMessage, setErrorMessage] = useState(''); // State for success message
 
   const handleCreateUserSuccess = () => {
     setSuccessMessage('User created successfully!'); // Set success message
@@ -22,7 +23,15 @@ const Signup: React.FC = () => {
     }, 5000);
   };
 
-  const { mutate: createUser } = useCreateUser(handleCreateUserSuccess);
+  const handleCreateUserError= () => {
+    setErrorMessage('User creation failed!'); // Set success message
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 5000);
+  };
+
+
+  const { mutate: createUser } = useCreateUser(handleCreateUserSuccess,handleCreateUserError);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,6 +44,11 @@ const Signup: React.FC = () => {
       {successMessage && (
         <div className={styles.successBanner}>
           {successMessage}
+        </div>
+      )}
+      {errorMessage && (
+        <div className={styles.errorBanner}>
+          {errorMessage}
         </div>
       )}
       <form onSubmit={handleSubmit} className={styles.signupForm}>
