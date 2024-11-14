@@ -1,34 +1,36 @@
 .signupContainer {
-  max-width: 400px;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #f9f9f9; /* Light background */
+  display: flex; /* Use flexbox for centering */
+  flex-direction: column; /* Arrange children in a column */
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+  height: 100vh; /* Full viewport height */
+  padding: 20px; /* Optional padding */
 }
 
 .signupForm {
-  display: flex;
-  flex-direction: column;
+  width: 100%; /* Full width */
+  max-width: 400px; /* Limit the maximum width */
+  background: #f9f9f9; /* Light background for the form */
+  padding: 20px; /* Padding inside the form */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
 }
 
 .formGroup {
-  margin-bottom: 15px;
+  margin-bottom: 15px; /* Space between form groups */
 }
 
 .label {
-  margin: 5px;
-  font-weight: bold;
+  margin-bottom: 5px; /* Space between label and input */
+  font-weight: bold; /* Bold labels */
 }
 
 .input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
+  width: 100%; /* Full width */
+  padding: 10px; /* Padding inside input */
+  border: 1px solid #ccc; /* Border styling */
+  border-radius: 4px; /* Rounded corners for inputs */
 }
-
 .input:focus {
   border-color: #0070f3; /* Blue border on focus */
   outline: none;
@@ -50,11 +52,11 @@
 }
 
 .successBanner {
-    background-color: #d4edda; /* Light green background */
-    color: #155724; /* Dark green text */
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #c3e6cb; /* Green border */
-    border-radius: 5px;
-    transition: opacity 0.5s ease-in-out;
-  }
+  margin-bottom: 20px; /* Space between the success message and the form */
+  color: green; /* Color for the success message */
+}
+
+.errorBanner {
+  margin-bottom: 20px; /* Space between the error message and the form */
+  color: red; /* Color for the error message */
+}

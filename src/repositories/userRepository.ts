@@ -25,6 +25,10 @@ export const UserRepository = {
       },
     async createUser(userData : Partial<User>): Promise<User> {
         const {password,name,email} = userData;
+        const userFound = await userRepository.findOne({ where: { email } });
+        if(userFound) {
+            throw new Error('User already exists');
+        };
         const hashedPassword = await bcrypt.hash(password as string, saltRounds);
         const user = userRepository.create({
             name,
