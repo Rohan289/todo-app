@@ -24,7 +24,7 @@ const Chatbot = () => {
             });
 
             if (!response.ok) {
-                throw new Error("Failed to fetch chatbot response.");
+                throw new Error("Failed to fetch chatbot response from openai.");
             }
 
             const data: { message: string } = await response.json();
