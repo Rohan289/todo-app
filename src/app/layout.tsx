@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "./ui/navBar/NavBar";
 import { UserDetailsProvider } from "./common/context/UserDetailsContext";
+import Chatbot from "./ui/chatbot/Chatbot";
 
 
 const geistSans = localFont({
@@ -35,6 +36,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
       <Navbar />
         {children}
+        <Chatbot />
       </body>
     </html>
     </UserDetailsProvider>

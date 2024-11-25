@@ -6,7 +6,7 @@ import { useUserDetails } from '@/app/common/context/UserDetailsContext';
 import useUserStorage from '@/hooks/useUserStorage';
 
 export default function Navbar() {
-    const { state: { user, isAuthenticated }, dispatch } = useUserDetails();
+    const { state: { isAuthenticated }, dispatch } = useUserDetails();
 
     useUserStorage();
 
@@ -16,7 +16,6 @@ export default function Navbar() {
         dispatch({ type: 'LOGOUT' });
     };
 
-    console.log('Stateee : : : :', user,isAuthenticated);
 
     return (
         <nav className={styles.navbar}>
