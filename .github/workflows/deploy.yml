@@ -22,6 +22,8 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies and build
+        env:
+          NEXT_OPENAI_API_KEY: ${{ secrets.NEXT_OPENAI_API_KEY }}
         run: |
           yarn install
           yarn build
