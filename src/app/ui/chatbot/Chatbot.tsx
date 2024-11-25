@@ -10,7 +10,7 @@ type Message = {
 const Chatbot = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState<string>("");
-    const [isOpen, setIsOpen] = useState<boolean>(false); // State to toggle chatbot visibility
+    const [isOpen, setIsOpen] = useState<boolean>(false); // State to toggle chatbot icon visibility
 
     const sendMessage = async () => {
         const userMessage: Message = { role: "user", content: input };
