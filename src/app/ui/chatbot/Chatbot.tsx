@@ -13,6 +13,7 @@ const Chatbot = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false); // State to toggle chatbot icon visibility
 
     const sendMessage = async () => {
+        const localStorageData = localStorage.getItem("user");
         const userMessage: Message = { role: "user", content: input };
         setMessages([...messages, userMessage]);
 
@@ -20,13 +21,12 @@ const Chatbot = () => {
             const response = await fetch("/api/chatbot", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userMessage: input }),
+                body: JSON.stringify({ userMessage: input, user : localStorageData }),
             });
 
             if (!response.ok) {
                 throw new Error("Failed to fetch chatbot response from openai.");
             }
-
             const data: { message: string } = await response.json();
             const botMessage: Message = { role: "assistant", content: data.message };
             setMessages((prev) => [...prev, botMessage]);
