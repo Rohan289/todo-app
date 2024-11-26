@@ -1,5 +1,6 @@
 import { Todo } from "@/models/Todo";
 import { TodoRepository } from "@/repositories/todoRepository";
+import { initializeDb } from "@/typeorm/typeorm";
 import { NextRequest, NextResponse } from "next/server";
 import { OpenAI } from "openai";
 
@@ -15,14 +16,15 @@ type ChatbotRequestBody = {
 };
 
 // Example function to create a ticket
-async function createTicket(ticketDetails: Omit<Todo,'id'>): Promise<Todo> {
-    return TodoRepository.createTodo(ticketDetails);
+async function createTicket(ticketDetails: Omit<Todo,'id'>){
+     await TodoRepository.createTodo(ticketDetails);
 }
 
 // Define the handler function
 export async function POST(
     req: NextRequest
 ): Promise<NextResponse> {
+    await initializeDb();
     try {
         // Parse the request body and ensure it's of type `ChatbotRequestBody`
         const { userMessage,user } = await req.json() as ChatbotRequestBody;
