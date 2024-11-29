@@ -1,6 +1,7 @@
 // models/User.ts
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Todo } from './Todo';
+import { Epic } from './Epic';
   
 @Entity('users')
 export class User {
@@ -23,5 +24,7 @@ export class User {
   updatedAt!: Date;
 
   todoList: Todo[];
+
+  epicList : Epic[];
 
 }
