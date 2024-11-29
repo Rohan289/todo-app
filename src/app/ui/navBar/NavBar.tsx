@@ -20,7 +20,7 @@ export default function Navbar() {
     return (
         <nav className={styles.navbar}>
             <div className={styles.navbarContainer}>
-                <h1 className={styles.navbarTitle}>My App</h1>
+                <h1 className="text-xl font-medium text-white">My App</h1>
                 <ul className={styles.navbarMenu}>
                     <li className={styles.navbarItem}>
                         <Link href="/" className={styles.navbarLink}>Home</Link>
