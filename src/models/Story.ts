@@ -1,15 +1,18 @@
 // models/User.ts
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 import { User } from './User';
-import { Story } from './Story';
+import { Epic } from './Epic';
 
-@Entity('epic')
-export class Epic {
+@Entity('story')
+export class Story {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.epicList, { nullable: false }) // Establish a Many-to-One relationship
+  @ManyToOne(() => User, (user) => user.storyList, { nullable: false }) // Establish a Many-to-One relationship
   assignedTo: User; // Changed from createdBy to assignedTo
+
+  @ManyToOne(() => Epic, (epic) => epic.stories, { nullable: false }) // Establish a Many-to-One relationship
+  epic: Epic; 
 
   @Column()
   content: string;
@@ -23,6 +26,4 @@ export class Epic {
 
   @UpdateDateColumn({ type: 'timestamp' }) // Automatically sets the time of record update
   updatedAt!: Date;
-
-  stories : Story[];
 }
