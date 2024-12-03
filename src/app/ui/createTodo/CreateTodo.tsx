@@ -43,7 +43,8 @@ const CreateTodo = ({ onClose, users, createTodo }: CreateTodoProps) => {
       content,
       assignedTo: { id: assignedTo as number },
       priority,
-      type: taskType as TodoTaskType
+      type: taskType as TodoTaskType,
+      ...(taskType === TodoTaskType.TASK && { subTaskType }) // Conditionally add subTaskType
     };
     createTodo(newTodo);
     onClose();

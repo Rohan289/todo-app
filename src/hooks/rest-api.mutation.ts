@@ -1,5 +1,5 @@
 // hooks/useUpdateTodo.ts
-import { CreateTodoType, CreateUser, LoginUser, TodoType } from '@/app/ui/todoCard/TodoCard.model';
+import { CreateTodoType, CreateUser, LoginUser, TodoSubTaskType, TodoTaskType, TodoType } from '@/app/ui/todoCard/TodoCard.model';
 import { User } from '@/models/User';
 import { useMutation } from '@tanstack/react-query';
 
@@ -20,13 +20,34 @@ const updateTodo = async (id: number, todo: Partial<TodoType>) => {
     return data; // Adjust based on your API response structure
 };
 
-const createTodo = async (todo : CreateTodoType) => {
-    const response = await fetch('/api/todo', {
-        method: 'POST', 
+const createTodo = async (todo: CreateTodoType) => {
+    const { type, subType } = todo; // Use subTaskType instead of subType
+    let endpoint = '';
+
+    // Determine the endpoint based on type and subTaskType
+    if (type === TodoTaskType.TASK) {
+        if (subType === TodoSubTaskType.BUG) {
+            endpoint = '/api/bug';
+        } else if (subType === TodoSubTaskType.FEATURE) {
+            endpoint = '/api/feature';
+        } else {
+            throw new Error('Invalid subTaskType for TASK');
+        }
+    } else if (type === TodoTaskType.EPIC) {
+        endpoint = '/api/epic';
+    } else if (type === TodoTaskType.STORY) {
+        endpoint = '/api/story';
+    } else {
+        throw new Error('Invalid task type');
+    }
+
+    // Make the fetch request to the determined endpoint
+    const response = await fetch(endpoint, {
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(todo), // Pass the updated status in the request body
+        body: JSON.stringify(todo), // Pass the todo object in the request body
     });
 
     if (!response.ok) {
