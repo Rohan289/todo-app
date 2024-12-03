@@ -115,9 +115,18 @@
     color: #555;
 }
 
+
+
 .field {
-    margin-bottom: 12px;
-}
+    margin-bottom: 16px; /* Add spacing between fields */
+  }
+  
+  .label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  
 
 .error {
     color: red; /* Red color for error messages */

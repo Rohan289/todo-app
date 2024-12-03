@@ -5,6 +5,7 @@ import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import dotenv from 'dotenv';
 import { Epic } from '@/models/Epic';
+import { Story } from '@/models/Story';
 
 dotenv.config();
 
@@ -24,7 +25,7 @@ export const AppDataSource = new DataSource({
   database: DATABASE_NAME,  // replace with your PostgreSQL database name
   synchronize: true, // auto-sync entity schema with the database
   logging: false,
-  entities: [Todo,User,Epic],
+  entities: [Todo,User,Epic,Story],
   migrations: [],
   subscribers: [],
 });

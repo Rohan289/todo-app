@@ -2,8 +2,8 @@
 import { useState } from 'react';
 import { User } from '@/models/User';
 import styles from './CreateTodo.module.css';
-import { TODO_PRIORITY_FILTER } from '../filter/Filter.util';
-import { CreateTodoType, TodoPriority } from '../todoCard/TodoCard.model';
+import { TODO_PRIORITY_FILTER, TODO_SUB_TASK_FILTER, TODO_TASK_FILTER } from '../filter/Filter.util';
+import { CreateTodoType, TodoPriority, TodoSubTaskType, TodoTaskType } from '../todoCard/TodoCard.model';
 
 interface CreateTodoProps {
   onClose: () => void;
@@ -18,7 +18,8 @@ const CreateTodo = ({ onClose, users, createTodo }: CreateTodoProps) => {
   const [assignedTo, setAssignedTo] = useState(users[0]?.id || ''); // Default to the first user if available
   const [priority, setPriority] = useState(TODO_PRIORITY_FILTER[0]?.value || ''); // Default to the first priority if available
   const [errors, setErrors] = useState({ title: '', content: '' }); // State for validation errors
-
+  const [taskType, setTaskType] = useState<TodoTaskType | null>(null); // New state for task type
+  const [subTaskType, setSubTaskType] = useState<TodoSubTaskType | null>(null);
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,8 +41,9 @@ const CreateTodo = ({ onClose, users, createTodo }: CreateTodoProps) => {
     const newTodo: CreateTodoType = {
       title,
       content,
-      assignedTo: { id: assignedTo as number }, // Assuming you have a UserType that includes a name
+      assignedTo: { id: assignedTo as number },
       priority,
+      type: taskType as TodoTaskType
     };
     createTodo(newTodo);
     onClose();
@@ -52,9 +54,43 @@ const CreateTodo = ({ onClose, users, createTodo }: CreateTodoProps) => {
       <div className={styles.modal}>
         <div className={styles.modalHeader}>
           <h2 className={styles.modalTitle}>Create Task</h2>
-          <button onClick={onClose} className={styles.closeButton}>&times;</button>
+          <button onClick={onClose} className={styles.closeButton}>×</button>
         </div>
         <form onSubmit={handleSubmit} className={styles.modalContent}>
+          <div className={styles.field}>
+            <label className={styles.label}>Task Type:</label>
+            <select
+              className={styles.select}
+              value={taskType || ''}
+              onChange={(e) => setTaskType(e.target.value as TodoTaskType)} // Update state on selection change
+            >
+
+            {TODO_TASK_FILTER.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))} 
+            </select>
+          </div>
+          {
+            taskType === TodoTaskType.TASK && (
+              <div className={styles.field}>
+              <label className={styles.label}>Sub task type:</label>
+              <select
+                className={styles.select}
+                value={subTaskType || ''}
+                onChange={(e) => setSubTaskType(e.target.value as TodoSubTaskType)} // Update state on selection change
+              >
+  
+              {TODO_SUB_TASK_FILTER.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))} 
+              </select>
+            </div>
+            )
+          }
           <div className={styles.field}>
             <label className={styles.label}>Task Title:</label>
             <input
@@ -101,7 +137,7 @@ const CreateTodo = ({ onClose, users, createTodo }: CreateTodoProps) => {
                 ))}
               </select>
             </div>
-            <div className={styles.priorityField}>
+            {taskType === TodoTaskType.TASK && <div className={styles.priorityField}>
               <label className={styles.label}>Priority:</label>
               <select
                 className={styles.select}
@@ -115,7 +151,7 @@ const CreateTodo = ({ onClose, users, createTodo }: CreateTodoProps) => {
                   </option>
                 ))}
               </select>
-            </div>
+            </div>}
             <button type="submit" className={styles.submitButton}>Submit</button>
           </div>
         </form>
@@ -123,5 +159,4 @@ const CreateTodo = ({ onClose, users, createTodo }: CreateTodoProps) => {
     </div>
   );
 };
-
 export default CreateTodo;

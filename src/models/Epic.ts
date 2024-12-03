@@ -24,5 +24,5 @@ export class Epic {
   @UpdateDateColumn({ type: 'timestamp' }) // Automatically sets the time of record update
   updatedAt!: Date;
 
-  stories : Story[];
+  stories? : Story[];
 }

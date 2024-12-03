@@ -11,6 +11,17 @@ export enum TodoStatus {
     DONE = 'DONE'
 }
 
+export enum TodoTaskType {
+    TASK = 'TASK',
+    EPIC = 'EPIC',
+    STORY = 'STORY'
+}
+
+export enum TodoSubTaskType {
+    FEATURE = 'FEATURE',
+    BUG = 'BUG',
+}
+
 export enum TodoPriority {
     LOW = 'LOW',
     MEDIUM = 'MEDIUM',
@@ -41,6 +52,8 @@ export interface CreateTodoType {
     };
     content : string;
     priority : TodoPriority;
+    type : TodoTaskType;
+    subType?:TodoSubTaskType;
 }
 
 export interface CreateUser {
