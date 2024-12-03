@@ -8,11 +8,18 @@ const storyRepository = AppDataSource.getRepository(Story);
 const userRepository = AppDataSource.getRepository(User);
 const epicRepository = AppDataSource.getRepository(Epic);
 
-export const StoryRpository = {
+export const StoryRepository = {
     async getAllStory() : Promise<Story[]> {
         return await storyRepository.createQueryBuilder('story')
         .leftJoinAndSelect('story.assignedTo','assignedTo').leftJoinAndSelect
         ('story.epic','stories').getMany();
+    },
+    async getStoriesByEpicId(epicId: number): Promise<Story[]> {
+        return await storyRepository.createQueryBuilder('story')
+            .leftJoinAndSelect('story.assignedTo', 'assignedTo')
+            .leftJoinAndSelect('story.epic', 'epic')
+            .where('epic.id = :epicId', { epicId }) // Filter by epicId
+            .getMany();
     },
     async createStory(storyData : Omit<Story,'id'>): Promise<Story> {
         const user = await userRepository.findOneBy({id : storyData.assignedTo.id});

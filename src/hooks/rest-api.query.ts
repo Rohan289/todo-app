@@ -16,6 +16,21 @@ const fetchTodos: (queryString : string,pathParam: string) => Promise<unknown> =
     return data.data; // Adjust based on your API response structure
 };
 
+const fetchStories: (queryString : string,pathParam: string) => Promise<unknown> = async (queryString : string,pathParam: string) => {
+
+    const url = `/api/story${pathParam ? `/${pathParam}` : queryString ? `?${queryString}` : ''}`;
+    const response = await fetch(url, {
+        cache: 'no-store',
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch todos');
+    }
+
+    const data = await response.json();
+    return data.data; // Adjust based on your API response structure
+};
+
 const fetchUsers: () => Promise<unknown> = async () => {
 
     const response = await fetch('/api/user', {
@@ -39,6 +54,13 @@ export const useTodos = <T>({ queryString = '', pathParam = '' }: UseTodosParams
     return useQuery<T, Error, T, [string, string, string]>({
         queryKey: ['todos', queryString, pathParam],
         queryFn: () => fetchTodos(queryString, pathParam) as Promise<T>,
+    });
+};
+
+export const useStories = <T>({ queryString = '', pathParam = '' }: UseTodosParams = {}) => {
+    return useQuery<T, Error, T, [string, string, string]>({
+        queryKey: ['stories', queryString, pathParam],
+        queryFn: () => fetchStories(queryString, pathParam) as Promise<T>,
     });
 };
 
