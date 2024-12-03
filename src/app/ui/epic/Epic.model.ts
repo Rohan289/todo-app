@@ -1,4 +1,4 @@
-import { UserType } from "../todoCard/TodoCard.model";
+import { TodoStatus, UserType } from "../todoCard/TodoCard.model";
 
 export interface EpicType {
     id: number;
@@ -6,4 +6,5 @@ export interface EpicType {
     content : string;
     assignedTo : Partial<UserType>;
     createdAt:string; 
+    status : TodoStatus;
 }

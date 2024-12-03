@@ -1,5 +1,5 @@
 import { EpicType } from "../epic/Epic.model";
-import { UserType } from "../todoCard/TodoCard.model";
+import { TodoStatus, UserType } from "../todoCard/TodoCard.model";
 
 export interface StoryType {
     id: number;
@@ -8,4 +8,5 @@ export interface StoryType {
     assignedTo : Partial<UserType>;
     epic : Partial<EpicType>;
     createdAt:string; 
+    status : TodoStatus;
 }

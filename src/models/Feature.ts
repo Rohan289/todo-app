@@ -1,23 +1,22 @@
 // models/User.ts
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, Feature } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 import { User } from './User';
-import { Epic } from './Epic';
+import { Story } from './Story';
 import { TodoStatus } from '@/app/ui/todoCard/TodoCard.model';
-import { Bug } from './Bug';
 
-@Entity('story')
-export class Story {
+@Entity('feature')
+export class Feature {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.storyList, { nullable: false }) // Establish a Many-to-One relationship
+  @ManyToOne(() => User, (user) => user.featureList, { nullable: false }) // Establish a Many-to-One relationship
   assignedTo: User; // Changed from createdBy to assignedTo
-
-  @ManyToOne(() => Epic, (epic) => epic.stories, { nullable: false }) // Establish a Many-to-One relationship
-  epic: Epic; 
 
   @Column()
   content: string;
+
+  @Column()
+  title: string;
 
   @Column({
     type: 'varchar', // Specify the type as varchar
@@ -26,19 +25,13 @@ export class Story {
   })
   status?: string;
 
-
-  @Column()
-  title: string;
-
-
   @CreateDateColumn({ type: 'timestamp' }) // Automatically sets the time of record creation
   createdAt!: Date;
 
   @UpdateDateColumn({ type: 'timestamp' }) // Automatically sets the time of record update
   updatedAt!: Date;
 
-  bugs? : Bug[];
 
-  features? : Feature[];
-
+  @ManyToOne(() => Story, (story) => story.bugs, { nullable: false }) // Establish a Many-to-One relationship
+  story: Story; 
 }

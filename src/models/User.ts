@@ -1,8 +1,9 @@
 // models/User.ts
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, Feature } from 'typeorm';
 import { Todo } from './Todo';
 import { Epic } from './Epic';
 import { Story } from './Story';
+import { Bug } from './Bug';
   
 @Entity('users')
 export class User {
@@ -29,5 +30,9 @@ export class User {
   epicList : Epic[];
 
   storyList : Story[];
+
+  bugList : Bug[];
+
+  featureList : Feature[];
 
 }
