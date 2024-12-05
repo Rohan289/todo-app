@@ -2,6 +2,7 @@ import { TodoStatus, UserType } from "../todoCard/TodoCard.model";
 
 export interface EpicType {
     id: number;
+    formattedId : string;
     title: string;
     content : string;
     assignedTo : Partial<UserType>;

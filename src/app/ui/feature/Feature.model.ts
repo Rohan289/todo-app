@@ -4,6 +4,7 @@ import { TodoPriority, TodoStatus, UserType } from "../todoCard/TodoCard.model";
 export interface FeatureType {
     id: number;
     title: string;
+    formattedId : string;
     content : string;
     assignedTo : Partial<UserType>;
     story : Partial<StoryType>;

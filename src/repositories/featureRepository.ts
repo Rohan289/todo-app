@@ -21,6 +21,8 @@ export const FeatureRepository = {
             assignedTo : user
         }); 
         await featureRepository.save(feature);
+        feature.formattedId = `FEATURE-${feature.id}`;
+        await featureRepository.save(feature); // Save again to update the formattedId
         return feature;
     },
     async updateFeature(id: number, feature: Partial<FeatureType>): Promise<Feature> {

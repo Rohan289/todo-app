@@ -21,6 +21,8 @@ export const BugRepository = {
             assignedTo : user
         }); 
         await bugRepository.save(bug);
+        bug.formattedId = `BUG-${bug.id}`;
+        await bugRepository.save(bug); // Save again to update the formattedId
         return bug;
     },
     async updateBug(id: number, bug: Partial<BugType>): Promise<Bug> {

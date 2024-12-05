@@ -4,6 +4,7 @@ import { TodoStatus, UserType } from "../todoCard/TodoCard.model";
 export interface StoryType {
     id: number;
     title: string;
+    formattedId : string;
     content : string;
     assignedTo : Partial<UserType>;
     epic : Partial<EpicType>;

@@ -36,6 +36,8 @@ export const StoryRepository = {
             epic : epic
         }); 
         await storyRepository.save(story);
+        story.formattedId = `STORY-${story.id}`;
+        await storyRepository.save(story); // Save again to update the formattedId
         return story;
     },
     async updateStory(id: number, story: Partial<StoryType>): Promise<Story> {

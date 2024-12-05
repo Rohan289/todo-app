@@ -21,8 +21,10 @@ export const EpicRepository = {
             assignedTo : user
         }); 
         await epicRepository.save(epic);
+        epic.formattedId = `EPIC-${epic.id}`;
+        await epicRepository.save(epic); // Save again to update the formattedId
         return epic;
-    },
+        },
     async updateEpic(id: number, epic: Partial<EpicType>): Promise<Epic> {
         const updatedEpic = await epicRepository.findOneBy({id : id});
         if (!updatedEpic) {

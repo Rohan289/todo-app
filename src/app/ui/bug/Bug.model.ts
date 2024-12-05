@@ -3,6 +3,7 @@ import { TodoPriority, TodoStatus, UserType } from "../todoCard/TodoCard.model";
 
 export interface BugType {
     id: number;
+    formattedId : string;
     title: string;
     content : string;
     assignedTo : Partial<UserType>;
