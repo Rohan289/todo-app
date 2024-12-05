@@ -1,6 +1,5 @@
 import { User } from "@/models/User";
 import { AppDataSource } from "@/typeorm/typeorm";
-import { Epic } from "@/models/Epic";
 import { Bug } from "@/models/Bug";
 import { BugType } from "@/app/ui/bug/Bug.model";
 
@@ -8,7 +7,7 @@ const bugRepository = AppDataSource.getRepository(Bug);
 const userRepository = AppDataSource.getRepository(User);
 
 export const BugRepository = {
-    async getAllBugs() : Promise<Epic[]> {
+    async getAllBugs() : Promise<Bug[]> {
         return await bugRepository.createQueryBuilder('bug')
         .leftJoinAndSelect('bug.assignedTo','assignedTo').leftJoinAndSelect('bug.story','story').getMany();
     },
