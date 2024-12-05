@@ -19,8 +19,8 @@ const CreateTodo = ({ onClose, users, createTodo }: CreateTodoProps) => {
   const [content, setContent] = useState('');
   const [assignedTo, setAssignedTo] = useState(users[0]?.id || '');
   const [priority, setPriority] = useState(TODO_PRIORITY_FILTER[0]?.value || '');
-  const [errors, setErrors] = useState({ title: '', content: '', story: '' });
-  const [taskType, setTaskType] = useState<TodoTaskType | null>(null);
+  const [errors, setErrors] = useState({ title: '', content: '', story: '',epic : '' });
+  const [taskType, setTaskType] = useState<TodoTaskType>(TODO_TASK_FILTER[0].value);
   const [subTaskType, setSubTaskType] = useState<TodoSubTaskType | null>(null);
   const [callStoriesApi, setCallStoriesApi] = useState(false);
   const [storyId, setStoryId] = useState<number | null>(null);
@@ -84,11 +84,14 @@ const CreateTodo = ({ onClose, users, createTodo }: CreateTodoProps) => {
       title,
       content,
       assignedTo: { id: assignedTo as number },
-      priority,
+      ...(taskType === TodoTaskType.TASK && { priority }),
       type: taskType as TodoTaskType,
-      ...(taskType === TodoTaskType.TASK && { subTaskType })
-    };
+      ...(taskType === TodoTaskType.TASK && { subType : subTaskType as TodoSubTaskType }),
+      ...(taskType === TodoTaskType.TASK && { story: { id: storyId as number } }),
+      ...(taskType === TodoTaskType.STORY && { epic: { id: epicId as number } }),
 
+    };
+    console.log("New todo",newTodo);
     createTodo(newTodo);
     onClose();
   };
@@ -98,6 +101,12 @@ const CreateTodo = ({ onClose, users, createTodo }: CreateTodoProps) => {
       setCallStoriesApi(true);
     }
   }, [storiesData, taskType]);
+
+  useEffect(() => {
+    if (taskType === TodoTaskType.STORY && !epicsData) {
+      setCallEpicApi(true);
+    }
+  },[epicsData,taskType]);
 
   return (
     <div className={styles.modalOverlay}>
@@ -239,5 +248,5 @@ const CreateTodo = ({ onClose, users, createTodo }: CreateTodoProps) => {
       </div>
     </div>
   );
-};
-export default CreateTodo;
+
+};export default CreateTodo;

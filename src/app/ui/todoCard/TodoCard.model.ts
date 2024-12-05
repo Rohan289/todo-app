@@ -51,9 +51,15 @@ export interface CreateTodoType {
         id : number;
     };
     content : string;
-    priority : TodoPriority;
+    priority? : TodoPriority;
     type : TodoTaskType;
     subType?:TodoSubTaskType;
+    epic? : {
+        id? : number;
+    }
+    story?:{
+        id ? :number;
+    }
 }
 
 export interface CreateUser {
