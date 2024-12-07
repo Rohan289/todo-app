@@ -11,13 +11,14 @@ export async function GET(request: NextRequest) {
     assignedTo: searchParams.get('assignedTo') ? decodeURIComponent(decodeURIComponent(searchParams.get('assignedTo') as string))?.toLowerCase() : undefined
   };
 
-  const todos = (await TodoRepository.getAllTodos()).filter(todo => 
-    (!filters.status || (todo.status && todo.status.toLowerCase() === filters.status)) &&
-    (!filters.priority || (todo.priority && todo.priority.toLowerCase() === filters.priority)) &&
-    (!filters.assignedTo || todo.assignedTo.id.toString() === filters.assignedTo)
-  );
+  // const todos = (await TodoRepository.getAllTodos()).filter(todo => 
+  //   (!filters.status || (todo.status && todo.status.toLowerCase() === filters.status)) &&
+  //   (!filters.priority || (todo.priority && todo.priority.toLowerCase() === filters.priority)) &&
+  //   (!filters.assignedTo || todo.assignedTo.id.toString() === filters.assignedTo)
+  // );
 
-  return NextResponse.json({ data: todos });
+  const todoList = await  TodoRepository.fetchAllItems();
+  return NextResponse.json({ data: todoList });
 }
 
    export async function POST(req : NextRequest) {

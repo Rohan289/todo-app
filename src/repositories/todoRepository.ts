@@ -1,7 +1,11 @@
 import { Todo } from "@/models/Todo";
 import { User } from "@/models/User";
-import { TodoType } from "@/app/ui/todoCard/TodoCard.model";
+import { TodoType, TodoTypes } from "@/app/ui/todoCard/TodoCard.model";
 import { AppDataSource } from "@/typeorm/typeorm";
+import { EpicRepository } from "./epicRepository";
+import { FeatureRepository } from "./featureRepository";
+import { StoryRepository } from "./storyRepository";
+import { BugRepository } from "./bugRepository";
 
 const todoRepository = AppDataSource.getRepository(Todo);
 const userRepository = AppDataSource.getRepository(User);
@@ -22,6 +26,19 @@ export const TodoRepository = {
         }); 
         await todoRepository.save(todo);
         return todo;
+    },
+     async fetchAllItems() : Promise<TodoTypes> {
+        const epics = await EpicRepository.getAllEpics();
+        const features = await FeatureRepository.getAllFeatures();
+        const stories = await StoryRepository.getAllStory();
+        const bugs = await BugRepository.getAllBugs();
+    
+        return {
+            epics,
+            features,
+            stories,
+            bugs,
+        };
     },
     async updateTodo(id: number, todo: Partial<TodoType>): Promise<Todo> {
         const updatedTodo = await todoRepository.findOneBy({id : id});

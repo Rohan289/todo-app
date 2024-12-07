@@ -2,7 +2,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 import { User } from './User';
 import { Story } from './Story';
-import { TodoStatus } from '@/app/ui/todoCard/TodoCard.model';
+import { TodoPriority, TodoStatus } from '@/app/ui/todoCard/TodoCard.model';
 
 @Entity('feature')
 export class Feature {
@@ -27,6 +27,13 @@ export class Feature {
     default: TodoStatus.OPEN, // Set a default value if needed
   })
   status?: string;
+
+  @Column({
+    type: 'varchar', // Specify the type as varchar
+    enum: TodoPriority, // Inform TypeORM about the enum
+    default: TodoPriority.LOW, // Set a default value if needed
+  })
+  priority: string;
 
   @CreateDateColumn({ type: 'timestamp' }) // Automatically sets the time of record creation
   createdAt!: Date;

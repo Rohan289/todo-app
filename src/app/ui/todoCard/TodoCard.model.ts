@@ -1,3 +1,7 @@
+import { Bug } from "@/models/Bug";
+import { Epic } from "@/models/Epic";
+import { Feature } from "@/models/Feature";
+import { Story } from "@/models/Story";
 
 export interface UserType {
     id : number;
@@ -43,6 +47,13 @@ export interface TodoType {
     priority : TodoPriority | string;
     comments?:TodoComment[];
     createdAt:string; 
+}
+
+export interface TodoTypes {
+   epics : Epic[];
+   stories : Story[];
+   bugs : Bug[];
+   features : Feature[]
 }
 
 export interface CreateTodoType {
