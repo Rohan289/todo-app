@@ -1,5 +1,6 @@
 
 'use client';
+import { TodoSubTaskType, TodoTaskType } from '@/app/ui/todoCard/TodoCard.model';
 import React, { createContext, useContext, useReducer } from 'react';
 
 // Define the User type
@@ -13,11 +14,13 @@ interface User {
 interface UserDetailsContextType {
   user: User | null;
   isAuthenticated: boolean;
+  currentTodoType : TodoTaskType | TodoSubTaskType | null;
 }
 
 // Define the action types
 type Action =
   | { type: 'SET_USER'; payload: User }
+  | {type : 'SET_CURRENT_TODO_TYPE'; payload : TodoTaskType | TodoSubTaskType | null}
   | { type: 'LOGOUT' };
 
 // Create the context
@@ -30,6 +33,7 @@ const UserDetailsContext = createContext<{
 const initialState: UserDetailsContextType = {
   user: null,
   isAuthenticated: false,
+  currentTodoType : null
 };
 
 // Reducer function
@@ -37,6 +41,8 @@ const userReducer = (state: UserDetailsContextType, action: Action): UserDetails
   switch (action.type) {
     case 'SET_USER':
       return { ...state, user: action.payload, isAuthenticated: true };
+    case 'SET_CURRENT_TODO_TYPE' : 
+      return { ...state, currentTodoType: action.payload };
     case 'LOGOUT':
       return { ...state, user: null, isAuthenticated: false };
     default:

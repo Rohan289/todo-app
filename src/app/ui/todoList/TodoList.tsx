@@ -42,11 +42,14 @@ const TodoCardComponent: React.FC<TodoCardComponentProps> = ({ todo,isAuthentica
 
 const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, refetchTodo,isAuthenticated }) => {
     const router = useRouter();
+    const { dispatch } = useUserDetails();
 
-    const handleTodoClick = (todoId : number) => {
+    const handleTodoClick = (todo : TransformedType) => {
+        const {formattedId,type}  = todo;
         // Navigate to the Todo details page using the todoId
+        dispatch({ type: 'SET_CURRENT_TODO_TYPE', payload: type });
         if (isAuthenticated) {
-            router.push(`/todo/${todoId}`);
+            router.push(`/todo/${formattedId}`);
         }
     };
 
@@ -88,7 +91,7 @@ const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, refetchTodo,isAu
             <h2>{status.charAt(0).toUpperCase() + status.slice(1)}</h2>
             <ul>
                 {todos.map((todo, index) => (
-                    <li key={index} onClick={() => handleTodoClick(todo.id)} style={{ cursor: 'pointer' }}>
+                    <li key={index} onClick={() => handleTodoClick(todo)} style={{ cursor: 'pointer' }}>
                     <TodoCardComponent isAuthenticated={isAuthenticated} key={index} index={index} todo={todo} />
                     </li>
                 ))}
