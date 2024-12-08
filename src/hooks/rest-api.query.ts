@@ -18,8 +18,13 @@ const fetchTodos: (queryString : string,pathParam: string) => Promise<unknown> =
 };
 
 const fetchAllTodos: (queryString : string,pathParam: string) => Promise<unknown> = async (queryString : string,pathParam: string) => {
-
-    const url = `/api/todo${pathParam ? `/${pathParam}` : queryString ? `?${queryString}` : ''}`;
+    let url = `/api/todo`;
+    if(pathParam){
+        url = `${url}/${pathParam}`;
+    }
+    if(queryString){
+        url = `${url}?${queryString}`;
+    }
     const response = await fetch(url, {
         cache: 'no-store',
     });

@@ -23,7 +23,7 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
   const [assignedTo, setAssignedTo] = useState<string>(''); // State for assigned user ID
 
   const { data: users } = useUsers(); // Fetch users
-  const { isFetching: isTodoFetching, data: todoData, refetch: refetchTodo } = useTodos<TodoType>({ pathParam: id });
+  const { isFetching: isTodoFetching, data: todoData, refetch: refetchTodo } = useTodos<TodoType>({ pathParam: id, queryString : `findBy=true` });
   const { mutate: updateTodo } = useUpdateTodo(() => {
     refetchTodo();
   });
