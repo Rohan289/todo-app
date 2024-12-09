@@ -12,7 +12,7 @@ export class Feature {
   @Column({ default : null }) 
   formattedId: string; // New field for formatted ID
 
-  @ManyToOne(() => User, (user) => user.featureList, { nullable: false }) // Establish a Many-to-One relationship
+  @ManyToOne(() => User, (user) => user.featureList, { nullable: true }) // Establish a Many-to-One relationship
   assignedTo: User; // Changed from createdBy to assignedTo
 
   @Column()

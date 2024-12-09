@@ -13,7 +13,7 @@ export class Epic {
   formattedId: string; // New field for formatted ID
 
 
-  @ManyToOne(() => User, (user) => user.epicList, { nullable: false }) // Establish a Many-to-One relationship
+  @ManyToOne(() => User, (user) => user.epicList, { nullable: true }) // Establish a Many-to-One relationship
   assignedTo: User; // Changed from createdBy to assignedTo
 
   @Column()

@@ -13,10 +13,10 @@ export class Story {
   @Column({ default : null }) 
   formattedId: string; // New field for formatted ID
 
-  @ManyToOne(() => User, (user) => user.storyList, { nullable: false }) // Establish a Many-to-One relationship
+  @ManyToOne(() => User, (user) => user.storyList, { nullable: true }) // Establish a Many-to-One relationship
   assignedTo: User; // Changed from createdBy to assignedTo
 
-  @ManyToOne(() => Epic, (epic) => epic.stories, { nullable: false }) // Establish a Many-to-One relationship
+  @ManyToOne(() => Epic, (epic) => epic.stories, { nullable: true }) // Establish a Many-to-One relationship
   epic: Epic; 
 
   @Column()
