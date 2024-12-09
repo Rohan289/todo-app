@@ -45,23 +45,24 @@ export const TodoRepository = {
         };
     },
     async findIdType(id: string): Promise<TodoTaskType | TodoSubTaskType | null> {
-        const epicRepo = AppDataSource.getRepository(Epic);
-        const featureRepo = AppDataSource.getRepository(Feature);
-        const storyRepo = AppDataSource.getRepository(Story);
-        const bugRepo = AppDataSource.getRepository(Bug);
-    
-        // Check in each table
-        const isEpic = await epicRepo.findOne({ where: { formattedId: id } });
-        if (isEpic) return TodoTaskType.EPIC;
-    
-        const isFeature = await featureRepo.findOne({ where: { formattedId: id } });
-        if (isFeature) return TodoSubTaskType.FEATURE
-    
-        const isStory = await storyRepo.findOne({ where: { formattedId: id } });
-        if (isStory) return TodoTaskType.STORY
-    
-        const isBug = await bugRepo.findOne({ where: { formattedId: id } });
-        if (isBug) return TodoSubTaskType.BUG;
+        // Determine the type based on the prefix of the id
+        if (id.startsWith('EPIC-')) {
+            const epicRepo = AppDataSource.getRepository(Epic);
+            const isEpic = await epicRepo.findOne({ where: { formattedId: id } });
+            if (isEpic) return TodoTaskType.EPIC;
+        } else if (id.startsWith('FEATURE-')) {
+            const featureRepo = AppDataSource.getRepository(Feature);
+            const isFeature = await featureRepo.findOne({ where: { formattedId: id } });
+            if (isFeature) return TodoSubTaskType.FEATURE;
+        } else if (id.startsWith('STORY-')) {
+            const storyRepo = AppDataSource.getRepository(Story);
+            const isStory = await storyRepo.findOne({ where: { formattedId: id } });
+            if (isStory) return TodoTaskType.STORY;
+        } else if (id.startsWith('BUG-')) {
+            const bugRepo = AppDataSource.getRepository(Bug);
+            const isBug = await bugRepo.findOne({ where: { formattedId: id } });
+            if (isBug) return TodoSubTaskType.BUG;
+        }
     
         return null; // ID not found in any table
     },

@@ -146,7 +146,7 @@ const TodoList: React.FC = () => {
     useEffect(() => {
         async function fetchData() {
             if (todoData) {
-                const resultTodo = (transformData(todoData) as []).reduce((acc: {
+                const resultTodo = (todoData as unknown as TransformedType[]).reduce((acc: {
                     [TodoStatus.OPEN]: TransformedType[];
                     [TodoStatus.IN_PROGRESS]: TransformedType[];
                     [TodoStatus.DONE]: TransformedType[];
