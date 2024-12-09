@@ -42,6 +42,6 @@ export class Bug {
   updatedAt!: Date;
 
 
-  @ManyToOne(() => Story, (story) => story.bugs, { nullable: false }) // Establish a Many-to-One relationship
+  @ManyToOne(() => Story, (story) => story.bugs, { nullable: true }) // Establish a Many-to-One relationship
   story: Story; 
 }
