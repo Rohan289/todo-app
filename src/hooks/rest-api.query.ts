@@ -2,20 +2,6 @@
 import { TodoTaskType, TodoSubTaskType } from '@/app/ui/todoCard/TodoCard.model';
 import { useQuery } from '@tanstack/react-query';
 
-const fetchTodos: (queryString : string,pathParam: string) => Promise<unknown> = async (queryString : string,pathParam: string) => {
-
-    const url = `/api/todo${pathParam ? `/${pathParam}` : queryString ? `?${queryString}` : ''}`;
-    const response = await fetch(url, {
-        cache: 'no-store',
-    });
-
-    if (!response.ok) {
-        throw new Error('Failed to fetch todos');
-    }
-
-    const data = await response.json();
-    return data.data; // Adjust based on your API response structure
-};
 
 const fetchAllTodos: (queryString : string,pathParam: string) => Promise<unknown> = async (queryString : string,pathParam: string) => {
     let url = `/api/todo`;

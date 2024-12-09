@@ -3,7 +3,7 @@ import { TransformedType } from "../todo/Todo.model";
 import styles from "./TodoCard.module.css";
 import { getPriorityClass, getStatusClass, getStatusIcon } from "./TodoCard.util";
 
-export default function TodoCard({ id, title, assignedTo, priority, status,type }: TransformedType) {
+export default function TodoCard({ id, title, assignedTo, priority, status }: TransformedType) {
     return (
         <div className={styles.todoCard} key={id}>
             <div className={styles.todoHeader}>

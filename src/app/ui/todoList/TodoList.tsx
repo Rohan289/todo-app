@@ -16,7 +16,6 @@ import CreateTodo from '../createTodo/CreateTodo';
 import { User } from '@/models/User';
 import { useRouter } from 'next/navigation';
 import { useUserDetails } from '@/app/common/context/UserDetailsContext';
-import { transformData } from '../filter/Filter.util';
 import { TransformedType } from '../todo/Todo.model';
 
 const ItemType = {
