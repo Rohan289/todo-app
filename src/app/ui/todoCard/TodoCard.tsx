@@ -1,15 +1,14 @@
 // TodoCard.tsx
-import { TodoType } from "./TodoCard.model";
+import { TransformedType } from "../todo/Todo.model";
 import styles from "./TodoCard.module.css";
 import { getPriorityClass, getStatusClass, getStatusIcon } from "./TodoCard.util";
 
-export default function TodoCard({ id, title, assignedTo, priority, status }: TodoType) {
-
+export default function TodoCard({ id, title, assignedTo, priority, status }: TransformedType) {
     return (
         <div className={styles.todoCard} key={id}>
             <div className={styles.todoHeader}>
                 <h1 className={styles.todoHeaderh1}>{title}</h1>
-                <span className={`${styles.priorityIndicator} ${getPriorityClass(priority,styles)}`} data-priority={priority}></span>
+              {priority &&  <span className={`${styles.priorityIndicator} ${getPriorityClass(priority,styles)}`} data-priority={priority}></span> }
             </div>
             <div className={styles.todoDetails}>
             <div className={`${styles.statusBadge} ${getStatusClass(status,styles)}`}>
@@ -17,9 +16,10 @@ export default function TodoCard({ id, title, assignedTo, priority, status }: To
                     <span className={styles.statusText}>{status}</span>
                 </div>
                 <h3 className={styles.createdBy}>Assigned To: {assignedTo.name}</h3>
-                <span className={`${styles.priorityLabel} ${getPriorityClass(priority,styles)}`} data-priority={priority}>
+               {priority && <span className={`${styles.priorityLabel} ${getPriorityClass(priority,styles)}`} data-priority={priority}>
                     {priority}
                 </span>
+                }
             </div>
         </div>
     );

@@ -1,3 +1,4 @@
+import { transformData } from "@/app/ui/filter/Filter.util";
 import { TodoRepository } from "@/repositories/todoRepository";
 import { initializeDb } from "@/typeorm/typeorm";
 import { NextRequest, NextResponse } from "next/server";
@@ -11,12 +12,12 @@ export async function GET(request: NextRequest) {
     assignedTo: searchParams.get('assignedTo') ? decodeURIComponent(decodeURIComponent(searchParams.get('assignedTo') as string))?.toLowerCase() : undefined
   };
 
-  const todos = (await TodoRepository.getAllTodos()).filter(todo => 
+  const todoList = await  TodoRepository.fetchAllItems();
+  const todos = transformData(todoList).filter(todo => 
     (!filters.status || (todo.status && todo.status.toLowerCase() === filters.status)) &&
     (!filters.priority || (todo.priority && todo.priority.toLowerCase() === filters.priority)) &&
     (!filters.assignedTo || todo.assignedTo.id.toString() === filters.assignedTo)
   );
-
   return NextResponse.json({ data: todos });
 }
 

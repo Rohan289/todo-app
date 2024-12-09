@@ -1,3 +1,7 @@
+import { Bug } from "@/models/Bug";
+import { Epic } from "@/models/Epic";
+import { Feature } from "@/models/Feature";
+import { Story } from "@/models/Story";
 
 export interface UserType {
     id : number;
@@ -9,6 +13,17 @@ export enum TodoStatus {
     OPEN = 'OPEN',
     IN_PROGRESS = 'IN_PROGRESS',
     DONE = 'DONE'
+}
+
+export enum TodoTaskType {
+    TASK = 'TASK',
+    EPIC = 'EPIC',
+    STORY = 'STORY'
+}
+
+export enum TodoSubTaskType {
+    FEATURE = 'FEATURE',
+    BUG = 'BUG',
 }
 
 export enum TodoPriority {
@@ -34,13 +49,28 @@ export interface TodoType {
     createdAt:string; 
 }
 
+export interface TodoTypes {
+   epics : Epic[];
+   stories : Story[];
+   bugs : Bug[];
+   features : Feature[]
+}
+
 export interface CreateTodoType {
     title: string;
     assignedTo : {
         id : number;
     };
     content : string;
-    priority : TodoPriority;
+    priority? : TodoPriority;
+    type : TodoTaskType;
+    subType?:TodoSubTaskType;
+    epic? : {
+        id? : number;
+    }
+    story?:{
+        id ? :number;
+    }
 }
 
 export interface CreateUser {

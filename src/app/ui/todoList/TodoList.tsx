@@ -6,7 +6,7 @@ import styles from './todoList.module.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { TodoCardComponentProps, TodoColumnProps } from '@/app/ui/todoList/todoList.types';
 import TodoCard from '../todoCard/TodoCard';
-import { TodoStatus, TodoType } from '../todoCard/TodoCard.model';
+import { TodoStatus, TodoType, TodoTypes } from '../todoCard/TodoCard.model';
 import { useTodos, useUsers } from '@/hooks/rest-api.query';
 import { useCreateTodo, useUpdateTodo } from '@/hooks/rest-api.mutation';
 import Loader from '@/app/common/loader/Loader';
@@ -16,6 +16,7 @@ import CreateTodo from '../createTodo/CreateTodo';
 import { User } from '@/models/User';
 import { useRouter } from 'next/navigation';
 import { useUserDetails } from '@/app/common/context/UserDetailsContext';
+import { TransformedType } from '../todo/Todo.model';
 
 const ItemType = {
     TODO: 'TODO',
@@ -40,11 +41,14 @@ const TodoCardComponent: React.FC<TodoCardComponentProps> = ({ todo,isAuthentica
 
 const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, refetchTodo,isAuthenticated }) => {
     const router = useRouter();
+    const { dispatch } = useUserDetails();
 
-    const handleTodoClick = (todoId : number) => {
+    const handleTodoClick = (todo : TransformedType) => {
+        const {formattedId,type}  = todo;
         // Navigate to the Todo details page using the todoId
+        dispatch({ type: 'SET_CURRENT_TODO_TYPE', payload: type });
         if (isAuthenticated) {
-            router.push(`/todo/${todoId}`);
+            router.push(`/todo/${formattedId}`);
         }
     };
 
@@ -86,7 +90,7 @@ const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, refetchTodo,isAu
             <h2>{status.charAt(0).toUpperCase() + status.slice(1)}</h2>
             <ul>
                 {todos.map((todo, index) => (
-                    <li key={index} onClick={() => handleTodoClick(todo.id)} style={{ cursor: 'pointer' }}>
+                    <li key={index} onClick={() => handleTodoClick(todo)} style={{ cursor: 'pointer' }}>
                     <TodoCardComponent isAuthenticated={isAuthenticated} key={index} index={index} todo={todo} />
                     </li>
                 ))}
@@ -97,9 +101,9 @@ const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, refetchTodo,isAu
 const TodoList: React.FC = () => {
     const { state: {  isAuthenticated } } = useUserDetails();
     const [todos, setTodos] = useState<{
-        [TodoStatus.OPEN]: TodoType[];
-        [TodoStatus.IN_PROGRESS]: TodoType[];
-        [TodoStatus.DONE]: TodoType[];
+        [TodoStatus.OPEN]: TransformedType[];
+        [TodoStatus.IN_PROGRESS]: TransformedType[];
+        [TodoStatus.DONE]: TransformedType[];
     }>({
         [TodoStatus.OPEN]: [],
         [TodoStatus.IN_PROGRESS]: [],
@@ -110,7 +114,8 @@ const TodoList: React.FC = () => {
     const [assignedUsers, setAssignedUsers] = useState<User[]>([]);
     const [showCreateTodoModal, setShowCreateTodoModal] = useState(false);
     const queryClient = new QueryClient();
-    const { isFetching: isTodoFetching, data: todoData, refetch: refetchTodo } = useTodos<TodoType[]>({queryString});
+    const { isFetching: isTodoFetching, data: todoData, refetch: refetchTodo } = useTodos<TodoTypes>({queryString});
+    console.log('todo data : ',todos);
     const searchParams = useSearchParams(); // Access search parameters directly
 
     const { data: users } = useUsers();
@@ -140,11 +145,11 @@ const TodoList: React.FC = () => {
     useEffect(() => {
         async function fetchData() {
             if (todoData) {
-                const resultTodo = (todoData as []).reduce((acc: {
-                    [TodoStatus.OPEN]: TodoType[];
-                    [TodoStatus.IN_PROGRESS]: TodoType[];
-                    [TodoStatus.DONE]: TodoType[];
-                }, todo: TodoType) => {
+                const resultTodo = (todoData as unknown as TransformedType[]).reduce((acc: {
+                    [TodoStatus.OPEN]: TransformedType[];
+                    [TodoStatus.IN_PROGRESS]: TransformedType[];
+                    [TodoStatus.DONE]: TransformedType[];
+                }, todo: TransformedType) => {
                     acc[todo.status as TodoStatus] = acc[todo.status as TodoStatus] || [];
                     acc[todo.status as TodoStatus].push(todo);
                     return acc;
