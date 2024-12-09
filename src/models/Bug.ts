@@ -12,7 +12,7 @@ export class Bug {
   @Column({ default : null }) // Ensure the formatted ID is unique
   formattedId?: string; // New field for formatted ID
 
-  @ManyToOne(() => User, (user) => user.bugList, { nullable: false }) // Establish a Many-to-One relationship
+  @ManyToOne(() => User, (user) => user.bugList, { nullable: true }) // Establish a Many-to-One relationship
   assignedTo: User; // Changed from createdBy to assignedTo
 
   @Column()

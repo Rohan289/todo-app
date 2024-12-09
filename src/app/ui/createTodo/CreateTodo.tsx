@@ -21,7 +21,7 @@ const CreateTodo = ({ onClose, users, createTodo }: CreateTodoProps) => {
   const [priority, setPriority] = useState(TODO_PRIORITY_FILTER[0]?.value || '');
   const [errors, setErrors] = useState({ title: '', content: '', story: '',epic : '' });
   const [taskType, setTaskType] = useState<TodoTaskType>(TODO_TASK_FILTER[0].value);
-  const [subTaskType, setSubTaskType] = useState<TodoSubTaskType | null>(null);
+  const [subTaskType, setSubTaskType] = useState<TodoSubTaskType | null>(TODO_SUB_TASK_FILTER[0].value);
   const [callStoriesApi, setCallStoriesApi] = useState(false);
   const [storyId, setStoryId] = useState<number | null>(null);
   const [epicId, setEpicId] = useState<number | null>(null);
