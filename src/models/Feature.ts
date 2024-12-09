@@ -42,6 +42,6 @@ export class Feature {
   updatedAt!: Date;
 
 
-  @ManyToOne(() => Story, (story) => story.features, { nullable: false }) // Establish a Many-to-One relationship
+  @ManyToOne(() => Story, (story) => story.features, { nullable: true }) // Establish a Many-to-One relationship
   story: Story; 
 }
