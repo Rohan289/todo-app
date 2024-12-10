@@ -1,10 +1,30 @@
 // hooks/useUpdateTodo.ts
+import { TransformedType } from '@/app/ui/todo/Todo.model';
 import { CreateTodoType, CreateUser, LoginUser, TodoSubTaskType, TodoTaskType, TodoType } from '@/app/ui/todoCard/TodoCard.model';
 import { User } from '@/models/User';
 import { useMutation } from '@tanstack/react-query';
 
-const updateTodo = async (id: number, todo: Partial<TodoType>) => {
-    const response = await fetch(`/api/todo/${id}`, {
+const updateTodo = async (todoData : TransformedType, id: number, todo: Partial<TodoType>) => {
+
+    let endpoint = '';
+    const {type} = todoData;
+    // Determine the endpoint based on type 
+    if (type === TodoSubTaskType.BUG) {
+            endpoint = '/api/bug';
+        }
+    else if (type === TodoSubTaskType.FEATURE) {
+            endpoint = '/api/feature';
+        }  
+    else if (type === TodoTaskType.EPIC) {
+        endpoint = '/api/epic';
+    } else if (type === TodoTaskType.STORY) {
+        endpoint = '/api/story';
+    } else {
+        throw new Error('Invalid task type');
+    }
+
+
+    const response = await fetch(`${endpoint}/${id}`, {
         method: 'PUT', // Use PUT for updates
         headers: {
             'Content-Type': 'application/json',
@@ -67,7 +87,7 @@ export const useUpdateTodo = (onSuccess?: () => void) => {
                 onSuccess();
             }
         },
-        mutationFn: ({ id, todo }: { id: number; todo: Partial<TodoType> }) => updateTodo(id, todo),
+        mutationFn: ({todoData, id, todo }: {todoData :TransformedType;  id: number; todo: Partial<TodoType> }) => updateTodo(todoData, id, todo),
     });
 };
 
