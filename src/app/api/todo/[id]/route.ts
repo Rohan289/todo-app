@@ -53,7 +53,7 @@ export async function GET(request: NextRequest,{ params }: { params: { id: strin
         return NextResponse.json({ error: 'Todo not found' }, { status: 404 });
     }
     
-    return NextResponse.json({ data: todo });
+    return NextResponse.json({ data: {...todo , type : type} });
   } else {
     const filters = {
       id: todoId ? parseInt(todoId) : undefined, // Parse the id as an integer

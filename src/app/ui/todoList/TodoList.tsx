@@ -6,7 +6,7 @@ import styles from './todoList.module.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { TodoCardComponentProps, TodoColumnProps } from '@/app/ui/todoList/todoList.types';
 import TodoCard from '../todoCard/TodoCard';
-import { TodoStatus, TodoType, TodoTypes } from '../todoCard/TodoCard.model';
+import { TodoStatus,  TodoTypes } from '../todoCard/TodoCard.model';
 import { useTodos, useUsers } from '@/hooks/rest-api.query';
 import { useCreateTodo, useUpdateTodo } from '@/hooks/rest-api.mutation';
 import Loader from '@/app/common/loader/Loader';
@@ -54,9 +54,9 @@ const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, refetchTodo,isAu
 
     const [, drop] = useDrop({
         accept: ItemType.TODO,
-        drop(item: { todo: TodoType }) {
+        drop(item: { todo: TransformedType }) {
             if (!isAuthenticated) return; // Prevent drop if not authenticated
-            const {status : todoStatus} = item.todo as TodoType;
+            const {status : todoStatus} = item.todo as TransformedType;
             if(todoStatus !== status) {
                 moveTodo(item.todo, status);
             }
@@ -65,8 +65,8 @@ const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, refetchTodo,isAu
 
     const { mutate: updateTodo } = useUpdateTodo();
 
-    const handleUpdateTodo = (todoId: number, newStatus: TodoStatus) => {
-        updateTodo({ id: todoId, todo: {status : newStatus} }, {
+    const handleUpdateTodo = (todo : TransformedType, todoId: number, newStatus: TodoStatus) => {
+        updateTodo({todoData : todo, id: todoId, todo: {status : newStatus} }, {
             onSuccess: () => {
                 // Handle success (e.g., show a success message)
                 refetchTodo();
@@ -79,9 +79,10 @@ const TodoColumn: React.FC<TodoColumnProps> = ({ todos, status, refetchTodo,isAu
     };
 
 
-    const moveTodo = (todo: TodoType, updatedStatus: TodoStatus) => {
+    const moveTodo = (todo: TransformedType, updatedStatus: TodoStatus) => {
+        console.log("todo",todo);
         const {id}  =todo;
-        handleUpdateTodo(id,updatedStatus);         
+        handleUpdateTodo(todo,id,updatedStatus);         
     };
 
 
@@ -115,7 +116,6 @@ const TodoList: React.FC = () => {
     const [showCreateTodoModal, setShowCreateTodoModal] = useState(false);
     const queryClient = new QueryClient();
     const { isFetching: isTodoFetching, data: todoData, refetch: refetchTodo } = useTodos<TodoTypes>({queryString});
-    console.log('todo data : ',todos);
     const searchParams = useSearchParams(); // Access search parameters directly
 
     const { data: users } = useUsers();

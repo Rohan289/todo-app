@@ -31,7 +31,7 @@ export interface TransformedType {
     formattedId: string;
     content: string;
     title: string;
-    status: string;
+    status: TodoStatus;
     createdAt: string;
     comments?:TodoComment[];
     updatedAt: string;

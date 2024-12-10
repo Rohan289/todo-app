@@ -4,11 +4,12 @@ import { useRouter } from 'next/navigation'; // Import useRouter
 import { useTodos, useUsers } from '@/hooks/rest-api.query';
 import { FaPen,FaUser, FaCalendarAlt, FaCommentDots } from 'react-icons/fa';
 import styles from './TodoDetails.module.css';
-import { TodoComment, TodoPriority, TodoStatus, TodoType } from '../todoCard/TodoCard.model';
+import { TodoComment, TodoPriority, TodoStatus } from '../todoCard/TodoCard.model';
 import { useUpdateTodo } from '@/hooks/rest-api.mutation';
 import { TODO_PRIORITY_FILTER, TODO_STATUS_FILTER } from '../filter/Filter.util';
 import { User } from '@/models/User';
 import { useUserDetails } from '@/app/common/context/UserDetailsContext';
+import { TransformedType } from '../todo/Todo.model';
 
 const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
   const { state: {  isAuthenticated,user } } = useUserDetails();
@@ -23,7 +24,7 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
   const [assignedTo, setAssignedTo] = useState<string>(''); // State for assigned user ID
 
   const { data: users } = useUsers(); // Fetch users
-  const { isFetching: isTodoFetching, data: todoData, refetch: refetchTodo } = useTodos<TodoType>({ pathParam: id, queryString : `findBy=true` });
+  const { isFetching: isTodoFetching, data: todoData, refetch: refetchTodo } = useTodos<TransformedType>({ pathParam: id, queryString : `findBy=true` });
   const { mutate: updateTodo } = useUpdateTodo(() => {
     refetchTodo();
   });
@@ -41,11 +42,13 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
 
   if (isTodoFetching) return <div>Loading...</div>;
 
-  const handleEditClick = () => {
+  const handleEditClick = (todoData : TransformedType) => {
     if (isEditing) {
+      const {id : todoId}  = todoData;
       // If editing is true, update the todo with new data
       updateTodo({
-        id: parseInt(id),
+        todoData , 
+        id: todoId,
         todo: {
           title,
           content,
@@ -61,10 +64,10 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
     setIsEditing(!isEditing); // Toggle edit mode
   };
 
-  const handleCommentAdd = () => {
+  const handleCommentAdd = (todoData : TransformedType) => {
     if (newComment.trim()) {
       const newCommentValue: TodoComment = { userEmail: user?.email || 'Unknown', commentText: newComment };
-      updateTodo({ id: parseInt(id), todo: { comments: [...comments, newCommentValue] } });
+      updateTodo({todoData, id: parseInt(id), todo: { comments: [...comments, newCommentValue] } });
       setNewComment('');
     }
   };
@@ -98,7 +101,7 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
           className={styles.titleInput}
           disabled={!isEditing}  // Disable input if not in edit mode
         />
-        <button className={styles.editButton} onClick={handleEditClick}>
+        <button className={styles.editButton} onClick={() => todoData && handleEditClick(todoData)}>
           <FaPen /> {isEditing ? 'Save' : 'Edit'}
         </button>
       </div>
@@ -172,7 +175,7 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
             placeholder="Add a comment"
             className={styles.commentInput}
           />
-          <button onClick={handleCommentAdd} className={styles.addButton}>Add Comment</button>
+          <button onClick={() => todoData && handleCommentAdd(todoData)} className={styles.addButton}>Add Comment</button>
         </div>
       </div>
     </div>
