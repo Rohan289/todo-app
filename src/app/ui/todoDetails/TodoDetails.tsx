@@ -41,9 +41,11 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
       setTitle(todoData.title);
       setContent(todoData.content);
       setStatus(todoData.status as TodoStatus);
-      setPriority(todoData.priority as TodoPriority);
+      if (todoData.priority) {
+        setPriority(todoData.priority as TodoPriority);
+      }
       setComments(todoData.comments || []);
-      setAssignedTo((todoData?.assignedTo.id as unknown as string)?.toString()); // Set the assigned user ID
+      setAssignedTo((todoData?.assignedTo?.id?.toString() as string) || ''); // Set the assigned user ID
     }
     if(todoData?.type === TodoTaskType.STORY) {
       setCallChildTask(true);
