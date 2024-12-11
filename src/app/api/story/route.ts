@@ -13,7 +13,7 @@ export async function GET(request : NextRequest) {
   
     if (epicId) {
       // If epicId is provided, fetch stories by epicId
-      stories = await StoryRepository.getStoriesByEpicId(Number(epicId));
+      stories = await StoryRepository.getStoriesByEpicId(epicId);
     } else {
       // Otherwise, fetch all stories
       stories = await StoryRepository.getAllStory();
