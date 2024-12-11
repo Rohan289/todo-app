@@ -32,7 +32,8 @@ export const BugRepository = {
     
             const bug = bugRepository.create({
                 ...bugData,
-                assignedTo: user
+                assignedTo: user,
+                story : story
             });
     
             await bugRepository.save(bug);
