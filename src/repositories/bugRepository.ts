@@ -16,19 +16,27 @@ export const BugRepository = {
             formattedId : storyId
         }}, relations : ['assignedTo']});       
     },
-    async createBug(bugData : Omit<Bug,'id'>): Promise<Bug> {
-        const user = await userRepository.findOneBy({id : bugData.assignedTo.id});
-        if(!user) {
-            throw new Error("User not found");
+    async createBug(bugData: Omit<Bug, 'id'>): Promise<Bug> {
+        try {
+            const user = await userRepository.findOneBy({ id: bugData.assignedTo.id });
+            if (!user) {
+                throw new Error("User not found");
+            }
+    
+            const bug = bugRepository.create({
+                ...bugData,
+                assignedTo: user
+            });
+    
+            await bugRepository.save(bug);
+            bug.formattedId = `BUG-${bug.id}`;
+    
+            await bugRepository.save(bug); // Save again to update the formattedId
+            return bug;
+        } catch (error) {
+            console.error("Error creating bug:", error);
+            throw error; // Rethrow the error after logging
         }
-        const bug = bugRepository.create({
-            ...bugData,
-            assignedTo : user
-        }); 
-        await bugRepository.save(bug);
-        bug.formattedId = `BUG-${bug.id}`;
-        await bugRepository.save(bug); // Save again to update the formattedId
-        return bug;
     },
     async updateBug(id: number, bug: Partial<BugType>): Promise<Bug> {
         const updatedBug= await bugRepository.findOneBy({id : id});
