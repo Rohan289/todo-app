@@ -11,6 +11,11 @@ export const BugRepository = {
         return await bugRepository.createQueryBuilder('bug')
         .leftJoinAndSelect('bug.assignedTo','assignedTo').leftJoinAndSelect('bug.story','story').getMany();
     },
+    async getBugByStoryId(storyId: string): Promise<Bug | null> {
+        return await bugRepository.findOneBy({story : {
+            formattedId : storyId
+        }});       
+    },
     async createBug(bugData : Omit<Bug,'id'>): Promise<Bug> {
         const user = await userRepository.findOneBy({id : bugData.assignedTo.id});
         if(!user) {

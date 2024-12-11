@@ -1,21 +1,24 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter
-import { useTodos, useUsers } from '@/hooks/rest-api.query';
+import { useChildTasks, useTodos, useUsers } from '@/hooks/rest-api.query';
 import { FaPen,FaUser, FaCalendarAlt, FaCommentDots } from 'react-icons/fa';
 import styles from './TodoDetails.module.css';
-import { TodoComment, TodoPriority, TodoStatus } from '../todoCard/TodoCard.model';
+import { TodoComment, TodoPriority, TodoStatus, TodoTaskType } from '../todoCard/TodoCard.model';
 import { useUpdateTodo } from '@/hooks/rest-api.mutation';
 import { TODO_PRIORITY_FILTER, TODO_STATUS_FILTER } from '../filter/Filter.util';
 import { User } from '@/models/User';
 import { useUserDetails } from '@/app/common/context/UserDetailsContext';
 import { TransformedType } from '../todo/Todo.model';
+import { Bug } from '@/models/Bug';
+import { Feature } from 'typeorm';
 
 const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
   const { state: {  isAuthenticated,user } } = useUserDetails();
   const router = useRouter(); // Initialize useRouter
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [callChildTask, setCallChildTask] = useState(false);
   const [status, setStatus] = useState<TodoStatus | ''>('');
   const [priority, setPriority] = useState<TodoPriority | ''>('');
   const [comments, setComments] = useState<TodoComment[]>([]);
@@ -29,6 +32,10 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
     refetchTodo();
   });
 
+  const {isFetching: isChildTasksFetching, data: childTasksData} = useChildTasks<{bugs : Bug, features : Feature}>(callChildTask,id,() => {
+    setCallChildTask(false);
+  },() => setCallChildTask(false))
+
   useEffect(() => {
     if (todoData) {
       setTitle(todoData.title);
@@ -37,6 +44,9 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
       setPriority(todoData.priority as TodoPriority);
       setComments(todoData.comments || []);
       setAssignedTo((todoData?.assignedTo.id as unknown as string)?.toString()); // Set the assigned user ID
+    }
+    if(todoData?.type === TodoTaskType.STORY) {
+      setCallChildTask(true);
     }
   }, [todoData]);
 
