@@ -68,8 +68,10 @@ export function transformData(input: InputData): TransformedType[] {
     const result: TransformedType[] = [];
 
     for (const [key, items] of Object.entries(input)) {
-        const typeKey = key.endsWith('s') ? key.slice(0, -1).toUpperCase() : key.toUpperCase();
-
+        let typeKey = key.endsWith('s') ? key.slice(0, -1).toUpperCase() : key.toUpperCase();
+        if(key === 'stories') {
+            typeKey = TodoTaskType.STORY;
+        }
         // Determine the type based on the enums
         let type: string | undefined;
         if (typeKey in TodoTaskType) {
