@@ -2,9 +2,11 @@ import { User } from "@/models/User";
 import { AppDataSource } from "@/typeorm/typeorm";
 import { Bug } from "@/models/Bug";
 import { BugType } from "@/app/ui/bug/Bug.model";
+import { Story } from "@/models/Story";
 
 const bugRepository = AppDataSource.getRepository(Bug);
 const userRepository = AppDataSource.getRepository(User);
+const storyRepository = AppDataSource.getRepository(Story);
 
 export const BugRepository = {
     async getAllBugs() : Promise<Bug[]> {
@@ -21,6 +23,11 @@ export const BugRepository = {
             const user = await userRepository.findOneBy({ id: bugData.assignedTo.id });
             if (!user) {
                 throw new Error("User not found");
+            }
+
+            const story = await storyRepository.findOneBy({ id: bugData.story.id });
+            if (!story) {
+                throw new Error("Story not found");
             }
     
             const bug = bugRepository.create({
