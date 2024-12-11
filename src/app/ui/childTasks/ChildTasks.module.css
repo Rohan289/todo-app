@@ -1,0 +1,74 @@
+/* ChildTasks.module.css */
+.childTasksContainer {
+    margin-top: 20px;
+    padding: 16px;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.header {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+    color: #333;
+}
+
+.taskSection {
+    margin-top: 10px;
+}
+
+.subHeader {
+    font-size: 1.25rem;
+    margin-bottom: 8px;
+    color: #0070f3; /* Jira-like blue color */
+}
+
+.taskList {
+    list-style: none;
+    padding: 0;
+}
+
+.taskItem {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.taskItem:last-child {
+    border-bottom: none; /* Remove last border */
+}
+
+.taskIcon {
+    margin-right: 8px;
+    color: #ff3e00; /* Bug icon color */
+}
+
+.taskLink {
+    text-decoration: none;
+    color: #0070f3; /* Link color */
+    transition: color 0.2s;
+    margin-right: 10px; /* Add space between link and assigned user */
+}
+
+.taskLink:hover {
+    color: #005bb5; /* Darker blue on hover */
+}
+
+.assignedToContainer {
+    display: flex;
+    align-items: center;
+    margin-left: 10px; /* Space between task link and assigned user */
+}
+
+.avatar {
+    width: 24px; /* Set a fixed width for the avatar */
+    height: 24px; /* Set a fixed height for the avatar */
+    border-radius: 50%; /* Make the avatar circular */
+    margin-right: 5px; /* Space between avatar and username */
+}
+
+.assignedTo {
+    font-size: 0.9rem; /* Smaller font size for assigned user */
+    color: #555; /* Gray color for the assigned user text */
+}

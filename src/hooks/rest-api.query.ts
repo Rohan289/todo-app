@@ -70,6 +70,21 @@ const fetchChildTasks: (storyId: string) => Promise<unknown> = async (storyId: s
     return data.data; // Adjust based on your API response structure
 };
 
+const fetchChildStories: (epicId: string) => Promise<unknown> = async (epicId: string) => {
+
+    const url = `/api/epic/childStory/${epicId}`;
+    const response = await fetch(url, {
+        cache: 'no-store',
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch todos');
+    }
+
+    const data = await response.json();
+    return data.data; // Adjust based on your API response structure
+};
+
 const fetchUsers: () => Promise<unknown> = async () => {
 
     const response = await fetch('/api/user', {
@@ -154,6 +169,23 @@ export const useChildTasks = <T> (enableQuery : boolean, storyId : string,onSucc
     return useQuery({
         queryKey: ['childTasks', storyId],
         queryFn: () => fetchChildTasks(storyId) as Promise<T>,
+        ...options
+    });
+  };
+
+  export const useChildStories = <T> (enableQuery : boolean, epicId : string,onSuccess?:() => void, onFailure?:() => void) => {
+    const options = {
+        enabled : enableQuery,
+        onSuccess : () => {
+            onSuccess?.();
+        },
+        onFailure : () => {
+            onFailure?.();
+        }
+    }
+    return useQuery({
+        queryKey: ['childStories', epicId],
+        queryFn: () => fetchChildStories(epicId) as Promise<T>,
         ...options
     });
   };

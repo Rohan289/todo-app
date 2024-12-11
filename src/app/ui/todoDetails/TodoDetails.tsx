@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter
-import { useChildTasks, useTodos, useUsers } from '@/hooks/rest-api.query';
+import { useChildStories, useChildTasks, useTodos, useUsers } from '@/hooks/rest-api.query';
 import { FaPen,FaUser, FaCalendarAlt, FaCommentDots } from 'react-icons/fa';
 import styles from './TodoDetails.module.css';
 import { TodoComment, TodoPriority, TodoStatus, TodoTaskType } from '../todoCard/TodoCard.model';
@@ -11,7 +11,10 @@ import { User } from '@/models/User';
 import { useUserDetails } from '@/app/common/context/UserDetailsContext';
 import { TransformedType } from '../todo/Todo.model';
 import { Bug } from '@/models/Bug';
-import { Feature } from 'typeorm';
+import ChildTasks from '../childTasks/ChildTasks';
+import { Story } from '@/models/Story';
+import ChildStories from '../childStories/ChildStories';
+import { Feature } from '@/models/Feature';
 
 const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
   const { state: {  isAuthenticated,user } } = useUserDetails();
@@ -19,6 +22,7 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [callChildTask, setCallChildTask] = useState(false);
+  const [callChildStory, setCallChildStory] = useState(false);
   const [status, setStatus] = useState<TodoStatus | ''>('');
   const [priority, setPriority] = useState<TodoPriority | ''>('');
   const [comments, setComments] = useState<TodoComment[]>([]);
@@ -32,9 +36,14 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
     refetchTodo();
   });
 
-  const {isFetching: isChildTasksFetching, data: childTasksData} = useChildTasks<{bugs : Bug, features : Feature}>(callChildTask,id,() => {
+  const {isFetching: isChildTasksFetching, data: childTasksData} = useChildTasks<{bugs : Bug[], features : Feature[]}>(callChildTask,id,() => {
     setCallChildTask(false);
   },() => setCallChildTask(false))
+
+
+  const {isFetching: isChildStoryFetching, data: childStoryData} = useChildStories<{stories : Story[]}>(callChildStory,id,() => {
+    setCallChildStory(false);
+  },() => setCallChildStory(false))
 
   useEffect(() => {
     if (todoData) {
@@ -49,6 +58,9 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
     }
     if(todoData?.type === TodoTaskType.STORY) {
       setCallChildTask(true);
+    }
+    if(todoData?.type === TodoTaskType.EPIC) {
+      setCallChildStory(true);
     }
   }, [todoData]);
 
@@ -164,6 +176,12 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
             </select>
           </label>
         </div>
+        {!isChildTasksFetching && todoData?.type === TodoTaskType.STORY && (
+                <ChildTasks bugs={childTasksData?.bugs} features={childTasksData?.features} />
+            )}
+         {!isChildStoryFetching && todoData?.type === TodoTaskType.EPIC && (
+                <ChildStories stories={childStoryData?.stories}  />
+            )}    
         <div className={styles.commentsSection}>
           <h3><FaCommentDots /> Comments</h3>
           <ul className={styles.commentsList}>

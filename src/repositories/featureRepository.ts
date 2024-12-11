@@ -11,10 +11,10 @@ export const FeatureRepository = {
         return await featureRepository.createQueryBuilder('feature')
         .leftJoinAndSelect('feature.assignedTo','assignedTo').leftJoinAndSelect('feature.story','story').getMany();
     },
-    async getFeatureByStoryId(storyId: string): Promise<Feature | null> {
-        return await featureRepository.findOneBy({story : {
+    async getFeaturesByStoryId(storyId: string): Promise<Feature[] | null> {
+        return await featureRepository.find({where : {story : {
             formattedId : storyId
-        }});       
+        }}, relations : ['assignedTo']});            
     },
     async createFeature(featureData : Omit<Feature,'id'>): Promise<Feature> {
         const user = await userRepository.findOneBy({id : featureData.assignedTo.id});
