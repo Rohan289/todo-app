@@ -15,6 +15,7 @@ export class Bug {
   @ManyToOne(() => User, (user) => user.bugList, { nullable: true }) // Establish a Many-to-One relationship
   assignedTo: User; // Changed from createdBy to assignedTo
 
+
   @Column()
   content: string;
 
@@ -40,8 +41,4 @@ export class Bug {
 
   @UpdateDateColumn({ type: 'timestamp' }) // Automatically sets the time of record update
   updatedAt!: Date;
-
-
-  @ManyToOne(() => Story, (story) => story.bugs, { nullable: true }) // Establish a Many-to-One relationship
-  story: Story; 
 }
