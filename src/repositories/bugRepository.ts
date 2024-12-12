@@ -9,7 +9,7 @@ const userRepository = AppDataSource.getRepository(User);
 export const BugRepository = {
     async getAllBugs() : Promise<Bug[]> {
         return await bugRepository.createQueryBuilder('bug')
-        .leftJoinAndSelect('bug.assignedTo','assignedTo').leftJoinAndSelect('bug.story','story').getMany();
+        .leftJoinAndSelect('bug.assignedTo','assignedTo').getMany();
     },
     async createBug(bugData: Omit<Bug, 'id'>): Promise<Bug> {
         try {
