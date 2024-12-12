@@ -20,6 +20,9 @@ export const StoryRepository = {
             formattedId : epicId
         }}, relations : ['assignedTo']});       
     },
+    getStoryIdFromFormattedId(formattedId: string): Promise<Story | null> {
+        return storyRepository.findOne({ where: { formattedId } });
+    },
     async createStory(storyData : Omit<Story,'id'>): Promise<Story> {
         const user = await userRepository.findOneBy({id : storyData.assignedTo.id});
         const epic = await epicRepository.findOneBy({id : storyData.epic.id});

@@ -11,12 +11,10 @@ const storyRepository = AppDataSource.getRepository(Story);
 export const BugRepository = {
     async getAllBugs() : Promise<Bug[]> {
         return await bugRepository.createQueryBuilder('bug')
-        .leftJoinAndSelect('bug.assignedTo','assignedTo').leftJoinAndSelect('bug.story','story').getMany();
+        .leftJoinAndSelect('bug.assignedTo','assignedTo').getMany();
     },
     async getBugsByStoryId(storyId: string): Promise<Bug[] | null> {
-        return await bugRepository.find({where : {story : {
-            formattedId : storyId
-        }}, relations : ['assignedTo']});       
+        return await bugRepository.find({where : {storyId : parseInt(storyId)}, relations : ['assignedTo']});       
     },
     async createBug(bugData: Omit<Bug, 'id'>): Promise<Bug> {
         try {
@@ -25,7 +23,7 @@ export const BugRepository = {
                 throw new Error("User not found");
             }
 
-            const story = await storyRepository.findOneBy({ id: bugData.story.id });
+            const story = await storyRepository.findOneBy({ id: bugData.storyId });
             if (!story) {
                 throw new Error("Story not found");
             }
@@ -33,7 +31,6 @@ export const BugRepository = {
             const bug = bugRepository.create({
                 ...bugData,
                 assignedTo: user,
-                story : story
             });
     
             await bugRepository.save(bug);

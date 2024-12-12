@@ -68,9 +68,7 @@ export interface CreateTodoType {
     epic? : {
         id? : number;
     }
-    story?:{
-        id ? :number;
-    }
+    storyId?: number;
 }
 
 export interface CreateUser {

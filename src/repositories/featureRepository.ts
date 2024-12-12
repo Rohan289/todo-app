@@ -9,12 +9,10 @@ const userRepository = AppDataSource.getRepository(User);
 export const FeatureRepository = {
     async getAllFeatures() : Promise<Feature[]> {
         return await featureRepository.createQueryBuilder('feature')
-        .leftJoinAndSelect('feature.assignedTo','assignedTo').leftJoinAndSelect('feature.story','story').getMany();
+        .leftJoinAndSelect('feature.assignedTo','assignedTo').getMany();
     },
     async getFeaturesByStoryId(storyId: string): Promise<Feature[] | null> {
-        return await featureRepository.find({where : {story : {
-            formattedId : storyId
-        }}, relations : ['assignedTo']});            
+        return await featureRepository.find({where : {storyId : parseInt(storyId)}, relations : ['assignedTo']});            
     },
     async createFeature(featureData : Omit<Feature,'id'>): Promise<Feature> {
         const user = await userRepository.findOneBy({id : featureData.assignedTo.id});
