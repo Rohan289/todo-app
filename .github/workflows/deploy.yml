@@ -25,6 +25,7 @@ jobs:
         env:
           NEXT_OPENAI_API_KEY: ${{ secrets.NEXT_OPENAI_API_KEY }}
         run: |
+          rm -rf .next node_modules
           yarn install
           yarn build
 
