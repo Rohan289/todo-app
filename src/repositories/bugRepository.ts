@@ -25,15 +25,11 @@ export const BugRepository = {
                 throw new Error("User not found");
             }
 
-            const story = await storyRepository.findOneBy({ id: bugData.story.id });
-            if (!story) {
-                throw new Error("Story not found");
-            }
     
             const bug = bugRepository.create({
                 ...bugData,
                 assignedTo: user,
-                story : story
+               
             });
     
             await bugRepository.save(bug);
