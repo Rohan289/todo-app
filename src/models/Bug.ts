@@ -1,6 +1,7 @@
 // models/User.ts
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 import { User } from './User';
+import { Story } from './Story';
 import { TodoPriority, TodoStatus } from '@/app/ui/todoCard/TodoCard.model';
 
 @Entity('bug')
@@ -14,6 +15,9 @@ export class Bug {
   @ManyToOne(() => User, (user) => user.bugList, { nullable: true }) // Establish a Many-to-One relationship
   assignedTo: User; // Changed from createdBy to assignedTo
 
+
+  @ManyToOne(() => Story, (story) => story.bugs, { nullable: true }) // Establish a Many-to-One relationship
+  story: Story; 
 
   @Column()
   content: string;
