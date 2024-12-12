@@ -16,6 +16,9 @@ export class Bug {
   assignedTo: User; // Changed from createdBy to assignedTo
 
 
+  @ManyToOne(() => Story, (story) => story.bugs, { nullable: true }) // Establish a Many-to-One relationship
+  story: Story; 
+
   @Column()
   content: string;
 
