@@ -37,6 +37,6 @@ export interface TransformedType {
     updatedAt: string;
     assignedTo: UserType;
     priority?:TodoPriority;
-    story?: Story; // Optional for features
+    storyId?: number; // Optional for features
     epic?: Epic;   // Optional for stories
 }

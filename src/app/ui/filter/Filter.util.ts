@@ -47,6 +47,11 @@ export const TODO_SUB_TASK_FILTER = [
     }
 ]
 
+export const STATUS_PRIORITY = {
+    [TodoStatus.OPEN]: 1,
+    [TodoStatus.IN_PROGRESS]: 2,
+    [TodoStatus.DONE]: 3,
+};
 
 
 export const TODO_PRIORITY_FILTER = [
