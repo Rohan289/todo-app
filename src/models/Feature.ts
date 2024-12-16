@@ -1,7 +1,6 @@
 // models/User.ts
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 import { User } from './User';
-import { Story } from './Story';
 import { TodoPriority, TodoStatus } from '@/app/ui/todoCard/TodoCard.model';
 
 @Entity('feature')
@@ -42,6 +41,6 @@ export class Feature {
   updatedAt!: Date;
 
 
-  @ManyToOne(() => Story, (story) => story.features, { nullable: true }) // Establish a Many-to-One relationship
-  story: Story; 
+  @Column()
+  storyId: number; 
 }

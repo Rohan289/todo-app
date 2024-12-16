@@ -87,7 +87,7 @@ const CreateTodo = ({ onClose, users, createTodo }: CreateTodoProps) => {
       ...(taskType === TodoTaskType.TASK && { priority }),
       type: taskType as TodoTaskType,
       ...(taskType === TodoTaskType.TASK && { subType : subTaskType as TodoSubTaskType }),
-      ...(taskType === TodoTaskType.TASK && { story: { id: storyId as number } }),
+      ...(taskType === TodoTaskType.TASK && { storyId : storyId as number } ),
       ...(taskType === TodoTaskType.STORY && { epic: { id: epicId as number } }),
 
     };
