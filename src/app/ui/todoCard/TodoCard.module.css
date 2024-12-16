@@ -117,3 +117,18 @@
     font-size: 1.2rem; /* Adjust icon size */
     color: black;
 }
+
+.typeIcon {
+    margin-right: 5px;
+    font-size: 1.2rem; /* Adjust size as needed */
+}
+
+.typeLabel {
+    font-weight: bold;
+}
+.assignedRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Align items vertically centered */
+    margin-top: 5px; /* Space between status badge and assigned row */
+}
