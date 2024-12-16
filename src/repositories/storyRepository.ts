@@ -14,7 +14,9 @@ export const StoryRepository = {
         .leftJoinAndSelect('story.assignedTo','assignedTo').leftJoinAndSelect
         ('story.epic','stories').getMany();
     },
-
+    async getStoryById(storyId: string): Promise<Story | null> {
+        return await storyRepository.findOne({where : {id : parseInt(storyId)},relations : ['epic']});       
+    },
     async getStoriesByEpicId(epicId: string): Promise<Story[] | null> {
         return await storyRepository.find({where : {epic : {
             formattedId : epicId
