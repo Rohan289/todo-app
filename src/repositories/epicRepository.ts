@@ -11,6 +11,9 @@ export const EpicRepository = {
         return await epicRepository.createQueryBuilder('epic')
         .leftJoinAndSelect('epic.assignedTo','assignedTo').getMany();
     },
+        async getEpicById(epicId: string): Promise<Epic | null> {
+            return await epicRepository.findOneBy({id : parseInt(epicId)});       
+        },
     async createEpic(epicData : Omit<Epic,'id'>): Promise<Epic> {
         const user = await userRepository.findOneBy({id : epicData.assignedTo.id});
         if(!user) {

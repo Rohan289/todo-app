@@ -1,9 +1,11 @@
 import { TodoStatus } from "@/app/ui/todoCard/TodoCard.model";
+import { Epic } from "@/models/Epic";
+import { Story } from "@/models/Story";
 
 interface EventPayloadData {
     newStatus : TodoStatus;
-    storyId? : number;
-    epicId? : number;
+    story? : Story;
+    epic? : Epic;
 }
 
 interface EventData {

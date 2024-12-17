@@ -7,6 +7,9 @@ const featureRepository = AppDataSource.getRepository(Feature);
 const userRepository = AppDataSource.getRepository(User);
 
 export const FeatureRepository = {
+    async getFeatureById(featureId: string): Promise<Feature | null> {
+        return await featureRepository.findOneBy({id : parseInt(featureId)});       
+    },
     async getAllFeatures() : Promise<Feature[]> {
         return await featureRepository.createQueryBuilder('feature')
         .leftJoinAndSelect('feature.assignedTo','assignedTo').getMany();
