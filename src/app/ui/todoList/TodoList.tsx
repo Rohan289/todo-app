@@ -47,6 +47,20 @@ const TodoColumn: React.FC<TodoColumnProps> = ({todoList, todos, status, refetch
     const [showBanner, setShowBanner] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
+    const { mutate: updateTodo } = useUpdateTodo();
+
+    const handleUpdateTodo = (todo: TransformedType, todoId: number, newStatus: TodoStatus) => {
+        updateTodo({ todoData: todo, id: todoId, todo: { status: newStatus } }, {
+            onSuccess: () => {
+                refetchTodo();
+            },
+            onError: (error) => {
+                console.error('Error updating todo:', error);
+            },
+        });
+    };
+    
+
     const handleTodoClick = (todo: TransformedType) => {
         const { formattedId, type } = todo;
         dispatch({ type: 'SET_CURRENT_TODO_TYPE', payload: type });
@@ -62,10 +76,18 @@ const TodoColumn: React.FC<TodoColumnProps> = ({todoList, todos, status, refetch
         eventSource.onmessage = (event) => {
             const data = JSON.parse(event.data);
             if (data.type === 'TASK_UPDATE') {
-                const {  newStatus, storyId, epicId } = data.payload;
-                console.log(newStatus, storyId, epicId);
-                // Logic to update the corresponding story and epic based on the task update
-                ;
+                let {  newStatus, story, epic } = data.payload;
+                console.log(newStatus, story, epic);
+                const storyPriority = STATUS_PRIORITY[story?.status as TodoStatus];
+                const epicPriority = STATUS_PRIORITY[epic?.status as TodoStatus];
+                const taskPriority = STATUS_PRIORITY[newStatus as TodoStatus];
+                if (storyPriority > taskPriority) {
+                    handleUpdateTodo({...story,type : TodoTaskType.STORY},story.id,newStatus);
+                }
+
+                if (epicPriority > taskPriority) {
+                    handleUpdateTodo({...epic,type : TodoTaskType.EPIC},epic.id,newStatus);
+                }
             }
         };
 
@@ -118,18 +140,7 @@ const TodoColumn: React.FC<TodoColumnProps> = ({todoList, todos, status, refetch
         },
     });
 
-    const { mutate: updateTodo } = useUpdateTodo();
 
-    const handleUpdateTodo = (todo: TransformedType, todoId: number, newStatus: TodoStatus) => {
-        updateTodo({ todoData: todo, id: todoId, todo: { status: newStatus } }, {
-            onSuccess: () => {
-                refetchTodo();
-            },
-            onError: (error) => {
-                console.error('Error updating todo:', error);
-            },
-        });
-    };
 
     const moveTodo = (todo: TransformedType, updatedStatus: TodoStatus) => {
         const { id } = todo;

@@ -5,6 +5,9 @@ import { initializeDb } from "@/typeorm/typeorm";
 import { NextRequest, NextResponse } from "next/server";
 import { StoryRepository } from "@/repositories/storyRepository";
 import { broadcastEvent } from "@/lib/sseHelper";
+import { Story } from "@/models/Story";
+import { EpicRepository } from "@/repositories/epicRepository";
+import { Epic } from "@/models/Epic";
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
     await initializeDb();
@@ -18,7 +21,8 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     const newStatusPriority = STATUS_PRIORITY[todo?.status as TodoStatus];
     if (newStatusPriority < STATUS_PRIORITY[fetchedTodo?.status as TodoStatus]) {
        const story = await StoryRepository.getStoryById(fetchedTodo?.storyId?.toString()  || '');
-      broadcastEvent({type : 'TASK_UPDATE',payload : {newStatus :  updatedTodo.status as TodoStatus,storyId : parseInt(story?.id.toString() || '0') , epicId : parseInt(story?.epic?.id.toString() || '0')}});
+       const epic = await EpicRepository.getEpicById(story?.epic?.id.toString() || '0');
+      broadcastEvent({type : 'TASK_UPDATE',payload : {newStatus :  todo.status as TodoStatus,story : story as Story , epic : epic as Epic}});
     }
     return NextResponse.json({ todo: updatedTodo }, { status: 200 });
   } catch (error : unknown ) {
