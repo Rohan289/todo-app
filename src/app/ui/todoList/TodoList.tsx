@@ -55,6 +55,26 @@ const TodoColumn: React.FC<TodoColumnProps> = ({todoList, todos, status, refetch
         }
     };
 
+       // Listen for SSE events
+       useEffect(() => {
+        const eventSource = new EventSource('/api/events');
+
+        eventSource.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === 'TASK_UPDATE') {
+                const {  newStatus, storyId, epicId } = data.payload;
+                console.log(newStatus, storyId, epicId);
+                // Logic to update the corresponding story and epic based on the task update
+                ;
+            }
+        };
+
+        return () => {
+            eventSource.close();
+        };
+    }, []);
+    
+
     const triggerError = () => {
         setShowBanner(true);
         // You can also set a timeout to hide it after 3 seconds
