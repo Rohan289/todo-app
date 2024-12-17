@@ -1,26 +1,15 @@
-import { addClient, removeClient } from '@/app/api/sseEvent';
+import { addClient } from '@/lib/sseHelper';
 import { NextResponse } from 'next/server';
+
+export const dynamic = 'force-dynamic'; // Ensures this API route is always dynamically rendered
 
 export async function GET(req: Request) {
     const stream = new ReadableStream<string>({
         start(controller) {
-            // Add the client
-            const clientId = addClient(controller);
+            addClient(controller, req.signal);
 
-            // Handle connection close
-            req.signal.addEventListener('abort', () => {
-                removeClient(clientId);
-            });
-
-            // Keep the connection alive
-            const intervalId = setInterval(() => {
-                controller.enqueue(`: keep-alive\n\n`);
-            }, 30000);
-
-            // Cleanup on abort
-            req.signal.addEventListener('abort', () => {
-                clearInterval(intervalId);
-            });
+            // Send an initial message to confirm the connection
+            controller.enqueue(`data: ${JSON.stringify({ message: 'Connected to SSE' })}\n\n`);
         },
     });
 

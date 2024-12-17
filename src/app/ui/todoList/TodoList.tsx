@@ -62,8 +62,7 @@ const TodoColumn: React.FC<TodoColumnProps> = ({todoList, todos, status, refetch
         eventSource.onmessage = (event) => {
             const data = JSON.parse(event.data);
             if (data.type === 'TASK_UPDATE') {
-                const {  newStatus, storyId, epicId } = data;
-                console.log("xxxxxxx",newStatus,storyId,epicId);
+                const {  newStatus, storyId, epicId } = data.payload;
                 // Logic to update the corresponding story and epic based on the task update
                 ;
             }

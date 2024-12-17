@@ -4,7 +4,7 @@ import { BugRepository } from "@/repositories/bugRepository";
 import { initializeDb } from "@/typeorm/typeorm";
 import { NextRequest, NextResponse } from "next/server";
 import { StoryRepository } from "@/repositories/storyRepository";
-import { updateTask } from "../../sseEvent";
+import { broadcastEvent } from "@/lib/sseHelper";
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
     await initializeDb();
@@ -17,8 +17,8 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     const updatedTodo = await BugRepository.updateBug(parseInt(todoId), todo);
     const newStatusPriority = STATUS_PRIORITY[todo?.status as TodoStatus];
     if (newStatusPriority < STATUS_PRIORITY[fetchedTodo?.status as TodoStatus]) {
-      const story = await StoryRepository.getStoryById(fetchedTodo?.storyId?.toString()  || '');
-      updateTask(updatedTodo.status as TodoStatus,parseInt(story?.id.toString() || '0') , parseInt(story?.epic?.id.toString() || '0'))
+       const story = await StoryRepository.getStoryById(fetchedTodo?.storyId?.toString()  || '');
+      broadcastEvent({type : 'TASK_UPDATE',payload : {newStatus :  updatedTodo.status as TodoStatus,storyId : parseInt(story?.id.toString() || '0') , epicId : parseInt(story?.epic?.id.toString() || '0')}});
     }
     return NextResponse.json({ todo: updatedTodo }, { status: 200 });
   } catch (error : unknown ) {
