@@ -76,8 +76,7 @@ const TodoColumn: React.FC<TodoColumnProps> = ({todoList, todos, status, refetch
         eventSource.onmessage = (event) => {
             const data = JSON.parse(event.data);
             if (data.type === 'TASK_UPDATE') {
-                let {  newStatus, story, epic } = data.payload;
-                console.log(newStatus, story, epic);
+                const {  newStatus, story, epic } = data.payload;
                 const storyPriority = STATUS_PRIORITY[story?.status as TodoStatus];
                 const epicPriority = STATUS_PRIORITY[epic?.status as TodoStatus];
                 const taskPriority = STATUS_PRIORITY[newStatus as TodoStatus];
