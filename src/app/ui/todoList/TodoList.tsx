@@ -88,6 +88,14 @@ const TodoColumn: React.FC<TodoColumnProps> = ({todoList, todos, status, refetch
                     handleUpdateTodo({...epic,type : TodoTaskType.EPIC},epic.id,newStatus);
                 }
             }
+            if(data.type === 'STORY_UPDATE') {
+                const {  newStatus, epic } = data.payload;
+                const epicPriority = STATUS_PRIORITY[epic?.status as TodoStatus];
+                const storyPriority = STATUS_PRIORITY[newStatus as TodoStatus];
+                if (epicPriority > storyPriority) {
+                    handleUpdateTodo({...epic,type : TodoTaskType.EPIC},epic.id,newStatus);
+                }
+            }
         };
 
         return () => {
