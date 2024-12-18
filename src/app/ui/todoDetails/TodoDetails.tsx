@@ -91,7 +91,7 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
   const handleCommentAdd = (todoData : TransformedType) => {
     if (newComment.trim()) {
       const newCommentValue: TodoComment = { userEmail: user?.email || 'Unknown', commentText: newComment };
-      updateTodo({todoData, id: parseInt(id), todo: { comments: [...comments, newCommentValue] } });
+      updateTodo({todoData, id: todoData.id, todo: { comments: [...comments, newCommentValue] } });
       setNewComment('');
     }
   };

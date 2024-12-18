@@ -34,6 +34,12 @@ export class Feature {
   })
   priority: string;
 
+  @Column({
+    type: 'jsonb', // Use jsonb to store an array of objects
+    default: () => "'[]'", // Default to an empty JSON array
+  })
+  comments?: { userEmail: string; commentText: string }[]; // Define the new type
+
   @CreateDateColumn({ type: 'timestamp' }) // Automatically sets the time of record creation
   createdAt!: Date;
 
