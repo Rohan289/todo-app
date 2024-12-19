@@ -15,6 +15,8 @@ import ChildTasks from '../childTasks/ChildTasks';
 import { Story } from '@/models/Story';
 import ChildStories from '../childStories/ChildStories';
 import { Feature } from '@/models/Feature';
+import CommentEditor from '../commentEditor/CommentEditor';
+import DOMPurify from 'dompurify';
 
 const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
   const { state: {  isAuthenticated,user } } = useUserDetails();
@@ -191,7 +193,7 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
                   <FaUser className={styles.avatarIcon} />
                   <div className={styles.commentContent}>
                     <strong className={styles.commentContentStrong}>{comment.userEmail}</strong>
-                    <p className={styles.commentContentP}>{comment.commentText}</p>
+                    <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(comment.commentText) }}  className={styles.commentContentP} />
                   </div>
                 </li>
               ))
@@ -199,11 +201,8 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
               <p>No comments yet.</p>
             )}
           </ul>
-          <textarea
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Add a comment"
-            className={styles.commentInput}
+          <CommentEditor
+          onContentChange={(value) => setNewComment(value)}
           />
           <button onClick={() => todoData && handleCommentAdd(todoData)} className={styles.addButton}>Add Comment</button>
         </div>

@@ -2,6 +2,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 import { User } from './User';
 import { TodoPriority, TodoStatus } from '@/app/ui/todoCard/TodoCard.model';
+import { Comment } from './Comment';
 
 @Entity('bug')
 export class Bug {
@@ -42,7 +43,7 @@ export class Bug {
     type: 'jsonb', // Use jsonb to store an array of objects
     default: () => "'[]'", // Default to an empty JSON array
   })
-  comments?: { userEmail: string; commentText: string }[]; // Define the new type
+  comments?: Comment;
 
   @CreateDateColumn({ type: 'timestamp' }) // Automatically sets the time of record creation
   createdAt!: Date;
