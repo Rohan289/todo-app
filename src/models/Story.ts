@@ -34,12 +34,7 @@ export class Story {
   @Column()
   title: string;
 
-  @Column({
-    type: 'jsonb', // Use jsonb to store an array of objects
-    default: () => "'[]'", // Default to an empty JSON array
-  })
-  comments?: Comment;
-
+  comments?: Comment[];
 
   @CreateDateColumn({ type: 'timestamp' }) // Automatically sets the time of record creation
   createdAt!: Date;

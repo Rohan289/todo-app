@@ -4,8 +4,8 @@ import { useRouter } from 'next/navigation'; // Import useRouter
 import { useChildStories, useChildTasks, useTodos, useUsers } from '@/hooks/rest-api.query';
 import { FaPen,FaUser, FaCalendarAlt, FaCommentDots } from 'react-icons/fa';
 import styles from './TodoDetails.module.css';
-import { TodoComment, TodoPriority, TodoStatus, TodoTaskType } from '../todoCard/TodoCard.model';
-import { useUpdateTodo } from '@/hooks/rest-api.mutation';
+import {  TodoPriority, TodoStatus, TodoTaskType } from '../todoCard/TodoCard.model';
+import { useTodoComment, useUpdateTodo } from '@/hooks/rest-api.mutation';
 import { TODO_PRIORITY_FILTER, TODO_STATUS_FILTER } from '../filter/Filter.util';
 import { User } from '@/models/User';
 import { useUserDetails } from '@/app/common/context/UserDetailsContext';
@@ -17,6 +17,7 @@ import ChildStories from '../childStories/ChildStories';
 import { Feature } from '@/models/Feature';
 import CommentEditor from '../commentEditor/CommentEditor';
 import DOMPurify from 'dompurify';
+import { Comment } from '@/models/Comment';
 
 const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
   const { state: {  isAuthenticated,user } } = useUserDetails();
@@ -27,7 +28,8 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
   const [callChildStory, setCallChildStory] = useState(false);
   const [status, setStatus] = useState<TodoStatus | ''>('');
   const [priority, setPriority] = useState<TodoPriority | ''>('');
-  const [comments, setComments] = useState<TodoComment[]>([]);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [commentImages, setCommentImages] = useState<string[]>([]);
   const [newComment, setNewComment] = useState<string>('');
   const [isEditing, setIsEditing] = useState(false); // State to track edit mode
   const [assignedTo, setAssignedTo] = useState<string>(''); // State for assigned user ID
@@ -35,6 +37,10 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
   const { data: users } = useUsers(); // Fetch users
   const { isFetching: isTodoFetching, data: todoData, refetch: refetchTodo } = useTodos<TransformedType>({ pathParam: id, queryString : `findBy=true` });
   const { mutate: updateTodo } = useUpdateTodo(() => {
+    refetchTodo();
+  });
+
+  const { mutate: updateTodoComment } = useTodoComment(() => {
     refetchTodo();
   });
 
@@ -90,13 +96,27 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
     setIsEditing(!isEditing); // Toggle edit mode
   };
 
-  const handleCommentAdd = (todoData : TransformedType) => {
-    if (newComment.trim()) {
-      const newCommentValue: TodoComment = { userEmail: user?.email || 'Unknown', commentText: newComment };
-      updateTodo({todoData, id: todoData.id, todo: { comments: [...comments, newCommentValue] } });
-      setNewComment('');
+  const handleCommentAdd = (todoData: TransformedType) => {
+
+    // Create a new comment object conditionally
+    const newCommentValue: Partial<Comment> = {
+        userEmail: user?.email || 'Unknown',
+        ...(newComment.trim().length > 0 && { content: newComment }), // Include content if it exists
+        ...(commentImages.length > 0 && { imageUrl: commentImages }), // Include imageUrl if it exists
+    };
+
+    // Check if there's any valid content or image to add
+    if (newCommentValue.content || newCommentValue.imageUrl) {
+        updateTodoComment({ 
+            todoData, 
+            comment : newCommentValue 
+        });
+        
+        // Clear the states after adding the comment
+        setNewComment('');
+        setCommentImages([]);
     }
-  };
+};
 
   const handleBackClick = () => {
     router.push('/todoList'); // Navigate back to the Todo list page
@@ -193,7 +213,7 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
                   <FaUser className={styles.avatarIcon} />
                   <div className={styles.commentContent}>
                     <strong className={styles.commentContentStrong}>{comment.userEmail}</strong>
-                    <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(comment.commentText) }}  className={styles.commentContentP} />
+                    <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(comment?.content) }}  className={styles.commentContentP} />
                   </div>
                 </li>
               ))
@@ -202,6 +222,7 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
             )}
           </ul>
           <CommentEditor
+          onImageUpload={(image) => setCommentImages((prevImages) => [...prevImages, image])}
           onContentChange={(value) => setNewComment(value)}
           />
           <button onClick={() => todoData && handleCommentAdd(todoData)} className={styles.addButton}>Add Comment</button>

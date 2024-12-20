@@ -1,44 +1,62 @@
-import { NextResponse } from 'next/server';
-import cloudinary from 'cloudinary';
-import formidable from 'formidable';
+import { NextRequest, NextResponse } from 'next/server';
+import { v2 as cloudinary } from 'cloudinary';
 
-// Configure Cloudinary
-cloudinary.v2.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
+interface CloudinaryResponse {
+  public_id: string;
+  secure_url: string;
+}
+
+interface ApiResponse {
+  success: boolean;
+  message: string;
+  data?: CloudinaryResponse;
+}
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
+  api_key: process.env.CLOUDINARY_API_KEY!,
+  api_secret: process.env.CLOUDINARY_API_SECRET!,
 });
 
-// Disable Next.js's default body parsing
-export const config = {
-    api: {
-        bodyParser: false,
-    },
-};
+export const POST = async (req: NextRequest): Promise<NextResponse> => {
+  try {
+    // Parse the incoming form data
+    const formData = await req.formData();
+    const file = formData.get('file') as File | null;
 
-export async function POST(req: Request) {
-    const form = new formidable.IncomingForm();
+    if (!file) {
+      return NextResponse.json(
+        { success: false, message: 'No file provided' } as ApiResponse,
+        { status: 400 }
+      );
+    }
 
-    // Return a promise to handle the asynchronous parsing
-    return new Promise((resolve, reject) => {
-        form.parse(req as any, async (err, fields, files) => { // Cast req to 'any'
-            if (err) {
-                return reject(NextResponse.json({ message: 'Error parsing file' }, { status: 500 }));
-            }
+    const buffer = Buffer.from(await file.arrayBuffer());
 
-            const file = files?.file?.[0]; // Access the uploaded file
+    // Upload the file to Cloudinary
+    const uploadResult = await new Promise<CloudinaryResponse>((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: 'collaborative-todo-app' }, // Specify the folder where you want to store the image
+        (error, result) => {
+          if (error) return reject(error);
+          if (result) resolve({ public_id: result.public_id, secure_url: result.secure_url });
+        }
+      );
 
-            try {
-                // Upload the image to Cloudinary
-                const result = await cloudinary.v2.uploader.upload(file?.filepath || '', {
-                    folder: 'uploads', // Optional: specify a folder in Cloudinary
-                });
-
-                // Return the URL of the uploaded image
-                return resolve(NextResponse.json({ imageUrl: result.secure_url }, { status: 200 }));
-            } catch (uploadError) {
-                return reject(NextResponse.json({ message: 'Error uploading to Cloudinary' }, { status: 500 }));
-            }
-        });
+      // Pass the buffer into the upload stream
+      uploadStream.end(buffer);
     });
-}
+
+    return NextResponse.json({
+      success: true,
+      message: 'Image uploaded successfully',
+      data: uploadResult,
+    } as ApiResponse);
+  } catch (error) {
+    console.error('Error uploading image to Cloudinary:', error);
+    return NextResponse.json(
+      { success: false, message: 'Failed to upload image' } as ApiResponse,
+      { status: 500 }
+    );
+  }
+};

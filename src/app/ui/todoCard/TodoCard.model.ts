@@ -34,7 +34,8 @@ export enum TodoPriority {
 
 export interface TodoComment {
     userEmail : string;
-    commentText : string;
+    commentText? : string;
+    imageUrl? : string[];
 }
 
 export interface TodoType {

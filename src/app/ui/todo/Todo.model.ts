@@ -1,8 +1,9 @@
 import { Epic } from "@/models/Epic";
-import { TodoComment, TodoPriority, TodoStatus, TodoSubTaskType, TodoTaskType } from "../todoCard/TodoCard.model";
+import {  TodoPriority, TodoStatus, TodoSubTaskType, TodoTaskType } from "../todoCard/TodoCard.model";
 import { Story } from "@/models/Story";
 import { Feature } from "@/models/Feature";
 import { Bug } from "@/models/Bug";
+import { Comment } from "@/models/Comment";
 
 export interface UserType {
     id : number;
@@ -33,7 +34,7 @@ export interface TransformedType {
     title: string;
     status: TodoStatus;
     createdAt: string;
-    comments?:TodoComment[];
+    comments?:Comment[];
     updatedAt: string;
     assignedTo: UserType;
     priority?:TodoPriority;

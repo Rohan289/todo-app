@@ -1,3 +1,4 @@
+import { Comment } from "@/models/Comment";
 import { StoryType } from "../story/Story.model";
 import { TodoPriority, TodoStatus, UserType } from "../todoCard/TodoCard.model";
 
@@ -11,4 +12,5 @@ export interface BugType {
     createdAt:string; 
     priority : TodoPriority;
     status : TodoStatus;
+    comments?:Partial<Comment>[];
 }
