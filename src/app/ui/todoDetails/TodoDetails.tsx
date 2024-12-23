@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'; // Import useRouter
 import { useChildStories, useChildTasks, useTodos, useUsers } from '@/hooks/rest-api.query';
 import { FaPen,FaUser, FaCalendarAlt, FaCommentDots } from 'react-icons/fa';
 import styles from './TodoDetails.module.css';
-import {  TodoPriority, TodoStatus, TodoTaskType } from '../todoCard/TodoCard.model';
+import {  CreateCommentType, TodoPriority, TodoStatus, TodoTaskType } from '../todoCard/TodoCard.model';
 import { useTodoComment, useUpdateTodo } from '@/hooks/rest-api.mutation';
 import { TODO_PRIORITY_FILTER, TODO_STATUS_FILTER } from '../filter/Filter.util';
 import { User } from '@/models/User';
@@ -89,7 +89,6 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
           assignedTo : {
             id : parseInt(assignedTo),
           }, // Include assigned user ID
-          comments, // You may want to ensure that the comments are not modified in the edit operation if you want to keep them intact
         },
       });
     }
@@ -98,26 +97,27 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
 
   const handleCommentAdd = (todoData: TransformedType) => {
 
-    // Create a new comment object conditionally
-    const newCommentValue: Partial<Comment> = {
-        userEmail: user?.email || 'Unknown',
-        ...(newComment.trim().length > 0 && { content: newComment }), // Include content if it exists
-        ...(commentImages.length > 0 && { imageUrl: commentImages }), // Include imageUrl if it exists
-    };
+      // Create a new comment object conditionally
+      const newCommentValue: CreateCommentType = {
+        assignedTo : {id : user?.id  || 0},
+        taskId : todoData?.id || 0,
+        type : todoData.type,
+          ...(newComment.trim().length > 0 && { content: newComment }), // Include content if it exists
+          ...(commentImages.length > 0 && { imageUrl: commentImages }), // Include imageUrl if it exists, joining array into a string
+      };
 
-    // Check if there's any valid content or image to add
-    if (newCommentValue.content || newCommentValue.imageUrl) {
-        updateTodoComment({ 
-            todoData, 
-            comment : newCommentValue 
-        });
+      // Check if there's any valid content or image to add
+      if (newCommentValue.content?.length || newCommentValue.imageUrl?.length) {
+          updateTodoComment({ 
+              todoData, 
+              comment : newCommentValue 
+          });
         
-        // Clear the states after adding the comment
-        setNewComment('');
-        setCommentImages([]);
-    }
-};
-
+          // Clear the states after adding the comment
+          setNewComment('');
+          setCommentImages([]);
+      }
+  };
   const handleBackClick = () => {
     router.push('/todoList'); // Navigate back to the Todo list page
   };
@@ -212,7 +212,7 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
                 <li key={index} className={styles.commentItem}>
                   <FaUser className={styles.avatarIcon} />
                   <div className={styles.commentContent}>
-                    <strong className={styles.commentContentStrong}>{comment.userEmail}</strong>
+                    <strong className={styles.commentContentStrong}>{comment.assignedTo?.email}</strong>
                     <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(comment?.content) }}  className={styles.commentContentP} />
                   </div>
                 </li>

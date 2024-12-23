@@ -1,7 +1,6 @@
 // hooks/useUpdateTodo.ts
 import { TransformedType } from '@/app/ui/todo/Todo.model';
-import { CreateTodoType, CreateUser, LoginUser, TodoSubTaskType, TodoTaskType, TodoType } from '@/app/ui/todoCard/TodoCard.model';
-import { Comment } from '@/models/Comment';
+import { CreateCommentType, CreateTodoType, CreateUser, LoginUser, TodoSubTaskType, TodoTaskType, TodoType } from '@/app/ui/todoCard/TodoCard.model';
 import { User } from '@/models/User';
 import { useMutation } from '@tanstack/react-query';
 
@@ -41,7 +40,7 @@ const updateTodo = async (todoData : TransformedType, id: number, todo: Partial<
     return data; // Adjust based on your API response structure
 };
 
-const updateComment = async (todoData : TransformedType, comment : Partial<Comment>) => {
+const updateComment = async (todoData : TransformedType, comment : CreateCommentType) => {
     const response = await fetch(`/api/comment`, {
         method: 'POST', // Use PUT for updates
         headers: {
@@ -207,7 +206,7 @@ export const useLoginUser = (onSuccess?: (data: User) => void, onError?: () => v
 };
 
 export const useTodoComment = (onSuccess?: () => void, onError?: () => void) => {
-    return useMutation<unknown, Error, { todoData: TransformedType; comment: Partial<Comment> }>({
+    return useMutation<unknown, Error, { todoData: TransformedType; comment: CreateCommentType }>({
         mutationFn: ({ todoData, comment }) => updateComment(todoData, comment),
         onSuccess: () => {
             // Handle success here

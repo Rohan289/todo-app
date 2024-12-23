@@ -72,6 +72,18 @@ export interface CreateTodoType {
     storyId?: number;
 }
 
+export interface CreateCommentType {
+    assignedTo : {
+        id : number;
+    };
+    content? : string;
+    imageUrl?:string[];
+    taskId : number;
+    type: TodoTaskType | TodoSubTaskType;
+}
+
+
+
 export interface CreateUser {
     name: string;
     email : string;
