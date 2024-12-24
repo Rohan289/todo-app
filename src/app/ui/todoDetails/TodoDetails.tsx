@@ -35,7 +35,7 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
 
   const { data: users } = useUsers(); // Fetch users
   const { isFetching: isTodoFetching, data: todoData, refetch: refetchTodo } = useTodos<TransformedType>({ pathParam: id, queryString : `findBy=true` });
-  const { data : comments } = useComments({ pathParam: id });
+  const { data : comments, refetch : refetchComments } = useComments({ pathParam: id });
 
     console.log("xcoccc",comments);
   const { mutate: updateTodo } = useUpdateTodo(() => {
@@ -44,6 +44,7 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
 
   const { mutate: updateTodoComment } = useTodoComment(() => {
     refetchTodo();
+    refetchComments();
   });
 
   const {isFetching: isChildTasksFetching, data: childTasksData} = useChildTasks<{bugs : Bug[], features : Feature[]}>(callChildTask,id,() => {
