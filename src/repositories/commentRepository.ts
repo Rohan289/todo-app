@@ -18,6 +18,14 @@ export const CommentRepository = {
     async getCommentById(commentId: string): Promise<Comment | null> {
         return await commentRepository.findOneBy({id : parseInt(commentId)});       
     },
+    async getCommentsByFormattedId(formattedId: string): Promise<Comment[]> {
+        return await commentRepository.find({
+            where: {
+                formattedTaskId: formattedId
+            },
+            relations: ['assignedTo']
+        });
+    },    
     async createComment(commentData: CreateCommentType): Promise<Comment> {
         const user = await userRepository.findOneBy({ id: commentData.assignedTo.id });
         if (!user) {

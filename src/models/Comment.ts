@@ -17,6 +17,9 @@ export class Comment {
     @Column('text')
     content: string; // This will store the rich text as HTML
 
+    @Column()
+    formattedTaskId: string; // This will store the rich text as HTML
+
     @Column({ type: 'jsonb', nullable: true }) // Use jsonb to store an array of image URLs
     imageUrl?: string[]; // This will store the image URL if needed
 

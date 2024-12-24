@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter
-import { useChildStories, useChildTasks, useTodos, useUsers } from '@/hooks/rest-api.query';
+import { useChildStories, useChildTasks, useComments, useTodos, useUsers } from '@/hooks/rest-api.query';
 import { FaPen,FaUser, FaCalendarAlt, FaCommentDots } from 'react-icons/fa';
 import styles from './TodoDetails.module.css';
 import {  CreateCommentType, TodoPriority, TodoStatus, TodoTaskType } from '../todoCard/TodoCard.model';
@@ -28,7 +28,6 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
   const [callChildStory, setCallChildStory] = useState(false);
   const [status, setStatus] = useState<TodoStatus | ''>('');
   const [priority, setPriority] = useState<TodoPriority | ''>('');
-  const [comments, setComments] = useState<Comment[]>([]);
   const [commentImages, setCommentImages] = useState<string[]>([]);
   const [newComment, setNewComment] = useState<string>('');
   const [isEditing, setIsEditing] = useState(false); // State to track edit mode
@@ -36,6 +35,9 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
 
   const { data: users } = useUsers(); // Fetch users
   const { isFetching: isTodoFetching, data: todoData, refetch: refetchTodo } = useTodos<TransformedType>({ pathParam: id, queryString : `findBy=true` });
+  const { data : comments } = useComments({ pathParam: id });
+
+    console.log("xcoccc",comments);
   const { mutate: updateTodo } = useUpdateTodo(() => {
     refetchTodo();
   });
@@ -61,7 +63,7 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
       if (todoData.priority) {
         setPriority(todoData.priority as TodoPriority);
       }
-      setComments(todoData.comments || []);
+      // setComments(todoData.comments || []);
       setAssignedTo((todoData?.assignedTo?.id?.toString() as string) || ''); // Set the assigned user ID
     }
     if(todoData?.type === TodoTaskType.STORY) {
@@ -102,6 +104,7 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
         assignedTo : {id : user?.id  || 0},
         taskId : todoData?.id || 0,
         type : todoData.type,
+        formattedTaskId : todoData.formattedId,
           ...(newComment.trim().length > 0 && { content: newComment }), // Include content if it exists
           ...(commentImages.length > 0 && { imageUrl: commentImages }), // Include imageUrl if it exists, joining array into a string
       };
@@ -207,8 +210,8 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
         <div className={styles.commentsSection}>
           <h3><FaCommentDots /> Comments</h3>
           <ul className={styles.commentsList}>
-            {comments.length > 0 ? (
-              comments.map((comment, index) => (
+            {comments?.length > 0 ? (
+              comments?.map((comment : Comment, index : number) => (
                 <li key={index} className={styles.commentItem}>
                   <FaUser className={styles.avatarIcon} />
                   <div className={styles.commentContent}>

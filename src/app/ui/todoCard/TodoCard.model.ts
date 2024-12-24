@@ -79,6 +79,7 @@ export interface CreateCommentType {
     content? : string;
     imageUrl?:string[];
     taskId : number;
+    formattedTaskId?:string;
     type: TodoTaskType | TodoSubTaskType;
 }
 
