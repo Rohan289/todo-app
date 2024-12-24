@@ -34,7 +34,8 @@ export enum TodoPriority {
 
 export interface TodoComment {
     userEmail : string;
-    commentText : string;
+    commentText? : string;
+    imageUrl? : string[];
 }
 
 export interface TodoType {
@@ -70,6 +71,19 @@ export interface CreateTodoType {
     }
     storyId?: number;
 }
+
+export interface CreateCommentType {
+    assignedTo : {
+        id : number;
+    };
+    content? : string;
+    imageUrl?:string[];
+    taskId : number;
+    formattedTaskId?:string;
+    type: TodoTaskType | TodoSubTaskType;
+}
+
+
 
 export interface CreateUser {
     name: string;

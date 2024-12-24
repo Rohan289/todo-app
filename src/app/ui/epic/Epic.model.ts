@@ -1,3 +1,4 @@
+import { Comment } from "@/models/Comment";
 import { TodoStatus, UserType } from "../todoCard/TodoCard.model";
 
 export interface EpicType {
@@ -8,4 +9,5 @@ export interface EpicType {
     assignedTo : Partial<UserType>;
     createdAt:string; 
     status : TodoStatus;
+    comments?:Partial<Comment>[];
 }

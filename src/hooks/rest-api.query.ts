@@ -22,6 +22,26 @@ const fetchAllTodos: (queryString : string,pathParam: string) => Promise<unknown
     const data = await response.json();
     return data.data; // Adjust based on your API response structure
 };
+const fetchComments = async (pathParam: string) => {
+    const url = `/api/comment/${pathParam}`;
+    try {
+        const response = await fetch(url, {
+            cache: 'no-store',
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error fetching comments: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        // Check if data.data exists
+        return data.data || []; // Return an empty array if data.data is undefined
+    } catch (error) {
+        console.error('Failed to fetch comments:', error);
+        return []; // Return an empty array on error
+    }
+};
 
 
 
@@ -146,6 +166,14 @@ export const useEpics = <T>({ enableQuery = false, queryString = '', pathParam =
         queryKey: ['epics', queryString, pathParam],
         queryFn: () => fetchEpics(queryString, pathParam) as Promise<T>,
         ...options
+    });
+};
+
+export const useComments = ({ pathParam = '' }: {pathParam : string}) => {
+    return useQuery({
+        queryKey: ['comments'],
+        queryFn: () => fetchComments(pathParam) 
+        
     });
 };
 

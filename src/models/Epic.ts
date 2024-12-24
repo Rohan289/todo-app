@@ -3,6 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { User } from './User';
 import { Story } from './Story';
 import { TodoStatus } from '@/app/ui/todoCard/TodoCard.model';
+import { Comment } from './Comment';
 
 @Entity('epic')
 export class Epic {
@@ -30,12 +31,7 @@ export class Epic {
   })
   status?: string;
 
-  @Column({
-    type: 'jsonb', // Use jsonb to store an array of objects
-    default: () => "'[]'", // Default to an empty JSON array
-  })
-  comments?: { userEmail: string; commentText: string }[]; // Define the new type
-
+  comments?: Comment[];
 
   @CreateDateColumn({ type: 'timestamp' }) // Automatically sets the time of record creation
   createdAt!: Date;

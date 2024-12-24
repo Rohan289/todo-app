@@ -4,6 +4,7 @@ import { Todo } from './Todo';
 import { Epic } from './Epic';
 import { Story } from './Story';
 import { Bug } from './Bug';
+import { Comment } from './Comment';
   
 @Entity('users')
 export class User {
@@ -34,5 +35,7 @@ export class User {
   bugList? : Bug[];
 
   featureList? : Feature[];
+
+  comments?: Comment[]
 
 }
