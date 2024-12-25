@@ -21,6 +21,9 @@ const CommentEditor: React.FC<CommentEditorProps> = ({
     onContentChange(content);
   };
 
+  console.log("comment editor", process.env.NEXT_PUBLIC_TINYMCE_API_KEY);
+  console.log("env", process.env);
+
   return (
     <TinyMCEEditor
       apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
