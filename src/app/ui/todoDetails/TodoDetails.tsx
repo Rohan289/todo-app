@@ -19,6 +19,8 @@ import CommentEditor from '../commentEditor/CommentEditor';
 import DOMPurify from 'dompurify';
 import { Comment } from '@/models/Comment';
 
+const imgRegex = /<img[^>]+src="([^">]+)"[^>]*>/g;
+
 const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
   const { state: {  isAuthenticated,user } } = useUserDetails();
   const router = useRouter(); // Initialize useRouter
@@ -126,6 +128,18 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
     router.push('/todoList'); // Navigate back to the Todo list page
   };
 
+  const getImageUrl = (comment: Comment) => { 
+    const commentContent = comment?.content || '';
+    const imageUrls = [];
+    let match;
+
+    // Find all matches and push the URLs to the imageUrls array
+    while ((match = imgRegex.exec(commentContent)) !== null) {
+      imageUrls.push(match[1]);
+    }
+    return imageUrls;
+  }
+
     // Check authentication
     if (!isAuthenticated) {
       return (
@@ -216,8 +230,13 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
                 <li key={index} className={styles.commentItem}>
                   <FaUser className={styles.avatarIcon} />
                   <div className={styles.commentContent}>
-                    <strong className={styles.commentContentStrong}>{comment.assignedTo?.email}</strong>
-                    <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(comment?.content) }}  className={styles.commentContentP} />
+                  <strong className={styles.commentContentStrong}>{comment.assignedTo?.email}</strong>
+                  <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(comment?.content?.replace(imgRegex, '')).trim() }} className={styles.commentContentP} />
+                  <div className={styles.commentImages}>
+                    {getImageUrl(comment)?.map((image, imgIndex) => (
+                      <img key={imgIndex} src={image} alt={`Comment Image ${imgIndex}`} className={styles.commentImage} style={{ width: '500px', height: '300px' }} />
+                    ))}
+                  </div>
                   </div>
                 </li>
               ))
@@ -233,7 +252,6 @@ const TodoDetails: React.FC<{ id: string }> = ({ id }) => {
         </div>
       </div>
     </div>
-  );
-};
+  );};
 
 export default TodoDetails;

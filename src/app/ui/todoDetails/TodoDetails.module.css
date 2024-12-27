@@ -239,3 +239,20 @@
   text-align: center;
   padding: 20px;
 }
+
+.commentImages {
+  display: flex;
+  flex-wrap: wrap; /* Allow images to wrap to the next line */
+  margin-top: 8px; /* Space between the comment text and images */
+}
+
+.commentImage {
+  width: 50px; /* Set width of the image */
+  height: 50px; /* Set height of the image */
+  object-fit: cover; /* Ensure the image covers the box */
+  border-radius: 4px; /* Optional: Add rounded corners */
+  margin-right: 4px; /* Space between images */
+  margin-bottom: 4px; /* Space below each image */
+  border: 1px solid #ddd; /* Optional: Border around images */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Optional: Add subtle shadow */
+}
