@@ -19,7 +19,10 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     const fetchedTodo = await StoryRepository.getStoryById(storyId);
     const updatedStory = await StoryRepository.updateStory(parseInt(storyId), todo);
     const newStatusPriority = STATUS_PRIORITY[todo?.status as TodoStatus];
+    console.log('newStatusPriority',newStatusPriority);
+    console.log('STATUS_PRIORITY[fetchedTodo?.status as TodoStatus]',STATUS_PRIORITY[fetchedTodo?.status as TodoStatus]);
     if (newStatusPriority < STATUS_PRIORITY[fetchedTodo?.status as TodoStatus]) {
+      console.log('entered here : : :');
        const epic = await EpicRepository.getEpicById(fetchedTodo?.epic?.id.toString() || '0');
       broadcastEvent({type : 'STORY_UPDATE',payload : {newStatus :  todo.status as TodoStatus, epic : epic as Epic}});
     }
