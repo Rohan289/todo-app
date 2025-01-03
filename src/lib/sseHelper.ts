@@ -41,6 +41,7 @@ export const addClient = (controller: ReadableStreamDefaultController<string>, s
 // Function to broadcast events to all clients
 export const broadcastEvent = (event: EventData) => {
     clients.forEach((client) => {
+        console.log('broadcasting event to client',client.id);
         client.controller.enqueue(`data: ${JSON.stringify(event)}\n\n`);
     });
 };
